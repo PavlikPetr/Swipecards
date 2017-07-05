@@ -11,9 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.InterstitialCallbacks;
-import com.appodeal.ads.utils.Log;
 import com.google.android.gms.ads.AdActivity;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
@@ -30,6 +28,7 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.ui.dialogs.OwnFullscreenPopup;
 import com.topface.topface.ui.external_libs.appodeal.AppodealManager;
+import com.topface.topface.ui.external_libs.appodeal.IFullscreen;
 import com.topface.topface.utils.IStateSaverRegistratorKt;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -53,12 +52,11 @@ public class FullscreenController {
     private static final String FROM = "from";
     private static final String APPODEAL_IN_PROGRESS = "appodeal_in_progress";
 
-    @Inject
-    AppodealManager mAppodealManager;
-
+    private AppodealManager mAppodealManager;
     private String mFrom;
     private Activity mActivity;
     private String mCurrentBannerType;
+    private IFullscreen mAppodealFullscreenCallback;
 
     private static boolean isFullScreenBannerVisible = false;
     private boolean mIsAppodealInProgress = false;
@@ -214,6 +212,7 @@ public class FullscreenController {
 
     public FullscreenController(Activity activity) {
         mActivity = activity;
+        mAppodealManager = App.getAppComponent().appodealManager();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             mActivityLifecycleCallbacks = new Utils.ActivityLifecycleCallbacksAdapter() {
                 @Override
@@ -263,21 +262,27 @@ public class FullscreenController {
     }
 
     private void requestAppodealFullscreen() {
-        Appodeal.setAutoCache(Appodeal.INTERSTITIAL, false);
-        Appodeal.initialize(mActivity, AppodealProvider.APPODEAL_APP_KEY, Appodeal.INTERSTITIAL);
-        Appodeal.setTesting(false);
-        Appodeal.setLogLevel(Log.LogLevel.verbose);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             App.get().registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
         }
-        Appodeal.cache(mActivity, Appodeal.INTERSTITIAL);
-        Appodeal.setInterstitialCallbacks(createAppodealInterstitialCallbacks());
+        if (mAppodealFullscreenCallback == null) {
+            mAppodealFullscreenCallback = createAppodealInterstitialCallbacks();
+            mAppodealManager.addInterstitialCallback(mAppodealFullscreenCallback);
+        }
+        mAppodealManager.showFullscreen(mActivity);
     }
 
-    private InterstitialCallbacks createAppodealInterstitialCallbacks() {
-        return new InterstitialCallbacks() {
+    private IFullscreen createAppodealInterstitialCallbacks() {
+        return new IFullscreen() {
+            @Override
+            public void initSuccessfull() {
+            }
+
+            @Override
+            public void startInit() {
+            }
+
             public void onInterstitialLoaded(boolean isPrecache) {
-                Appodeal.show(mActivity, Appodeal.INTERSTITIAL);
                 if (mFullScreenBannerListener != null) {
                     mFullScreenBannerListener.onLoaded();
                 }
@@ -396,7 +401,11 @@ public class FullscreenController {
 
     public void onResume() {
         if (mIsAppodealInProgress) {
-            Appodeal.setInterstitialCallbacks(createAppodealInterstitialCallbacks());
+            if (mAppodealFullscreenCallback != null) {
+                mAppodealManager.removeInterstitialCallback(mAppodealFullscreenCallback);
+            }
+            mAppodealFullscreenCallback = createAppodealInterstitialCallbacks();
+            mAppodealManager.addInterstitialCallback(mAppodealFullscreenCallback);
         }
         continuePopupSequence();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {

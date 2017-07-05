@@ -203,6 +203,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IBanner
         mCountersDataProvider.unsubscribe();
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(mHasFeedAdReceiver);
         mHasFeedAdReceiver = null;
+        mBannersController.release();
         IStateSaverRegistratorKt.unregisterLifeCycleDelegate(getActivity(), mBannersController);
     }
 

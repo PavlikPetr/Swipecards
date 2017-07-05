@@ -17,18 +17,26 @@ import com.topface.topface.banners.AbstractAdsProvider;
 import com.topface.topface.banners.AdProvidersFactory;
 import com.topface.topface.banners.IBannerAds;
 import com.topface.topface.data.Profile;
+import com.topface.topface.ui.external_libs.appodeal.AppodealManager;
+import com.topface.topface.ui.external_libs.appodeal.IBanner;
+import com.topface.topface.ui.external_libs.appodeal.IFullscreen;
 import com.topface.topface.utils.FormItem;
+
+import org.jetbrains.annotations.NotNull;
+
+import javax.inject.Inject;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
     public static final String APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
 
+    private AppodealManager mAppodealManager;
+    private IBanner mBannerCallback;
+
     @Override
     public boolean injectBannerInner(final IBannerAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
-        Appodeal.setTesting(false);
-        Appodeal.setLogLevel(Log.LogLevel.verbose);
-        Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
+        mAppodealManager = App.getAppComponent().appodealManager();
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
         UserSettings userSettings = Appodeal.getUserSettings(activity.getApplicationContext());
@@ -40,7 +48,15 @@ public class AppodealProvider extends AbstractAdsProvider {
         if (Appodeal.isLoaded(Appodeal.BANNER_VIEW)) {
             bannerLoaded(page, callbacks, adView);
         }
-        Appodeal.setBannerCallbacks(new BannerCallbacks() {
+        mBannerCallback = new IBanner() {
+
+            @Override
+            public void initSuccessfull() {
+            }
+
+            @Override
+            public void startInit() {
+            }
 
             @Override
             public void onBannerLoaded(int i, boolean b) {
@@ -67,7 +83,8 @@ public class AppodealProvider extends AbstractAdsProvider {
                     callbacks.onAdClick();
                 }
             }
-        });
+        };
+        mAppodealManager.addBannerCallback(mBannerCallback);
         return true;
     }
 
@@ -77,7 +94,7 @@ public class AppodealProvider extends AbstractAdsProvider {
     }
 
     private void bannerLoaded(IBannerAds page, IAdProviderCallbacks callbacks, BannerView adView) {
-        Appodeal.show(page.getActivity(), Appodeal.BANNER_VIEW);
+        mAppodealManager.showBanner(page.getActivity());
         if (callbacks != null) {
             callbacks.onAdLoadSuccess(adView);
         }
@@ -93,5 +110,11 @@ public class AppodealProvider extends AbstractAdsProvider {
             Debug.log("BANNER_SETTINGS : set segment " + fullscreenSegment);
             Appodeal.setCustomRule(fullscreenSegment, 0);
         }
+    }
+
+    @Override
+    public void clean(@NotNull IBannerAds page) {
+        mAppodealManager.removeBannerCallback(mBannerCallback);
+        mAppodealManager.hideBanner(page.getActivity());
     }
 }

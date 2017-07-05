@@ -49,8 +49,12 @@ class BannersController(private val mPage: IBannerAds) : ILifeCycle, RunningStat
 
     override fun onAppForeground(timeOnStart: Long) = sendSettingsRequest()
 
-    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) =
-            mBannerSubscription?.safeUnsubscribe() ?: Unit
+    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
+        mBannerSubscription?.safeUnsubscribe()
+        mFeedBannersInjector.cleanUp()
+    }
+
+    fun release() = mFeedBannersInjector.cleanUp()
 
     override fun onResume() {
         super.onResume()

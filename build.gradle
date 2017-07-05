@@ -504,10 +504,11 @@ dependencies {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile("com.ampiri.sdk:ampiri-sdk-mediation-unityads:$ampiri") {
-        exclude group: 'com.google.android.gms'
-        exclude group: 'javax.inject'
-    }
+//    Временно отключаю до решения конфликта с версией unity_ads в appodeal
+//    compile("com.ampiri.sdk:ampiri-sdk-mediation-unityads:$ampiri") {
+//        exclude group: 'com.google.android.gms'
+//        exclude group: 'javax.inject'
+//    }
     compile("com.ampiri.sdk:ampiri-sdk-mediation-applovin:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'

@@ -15,15 +15,20 @@ class BannerInjector : IBannerInjector {
     }
 
     private var mCurrentAdsProvider: IAdsProvider? = null
+    private var mPage: IBannerAds? = null
     private var mBannerName = AdProvidersFactory.Companion.BANNER_NONE
 
     override fun injectBanner(bannerName: String, provider: IAdsProvider, container: IBannerAds) {
+        mPage = container
         mBannerName = bannerName
         mCurrentAdsProvider = provider
         showAd(container, provider)
     }
 
     override fun cleanUp() {
+        mPage?.let {
+            cleanUp(it)
+        }
     }
 
     private fun showAd(page: IBannerAds, provider: IAdsProvider) = showAd(page, provider, false)

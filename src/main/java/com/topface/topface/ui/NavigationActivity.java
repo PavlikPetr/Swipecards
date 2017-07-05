@@ -118,7 +118,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     @Inject
     WeakStorage mWeakStorage;
     @Inject
-    AppodealManager mAppodealManager;
+    AppodealManager appodealManager;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     public static boolean isPhotoAsked;
     private CompositeSubscription mSubscription = new CompositeSubscription();
@@ -215,7 +215,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         initNavigationManager(savedInstanceState);
         initDrawerLayout();
-        mAppodealManager.initAppodeal(this);
+        appodealManager.initAppodeal(this);
         initFullscreen();
         initAppsFlyer();
         isPhotoAsked = false;
