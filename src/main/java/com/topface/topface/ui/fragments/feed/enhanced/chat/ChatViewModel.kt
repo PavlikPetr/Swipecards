@@ -418,6 +418,7 @@ class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
 
 
     private fun addMessages(newData: History): ArrayList<HistoryItem> {
+        App.getAppComponent().suspiciousUserCache().setUserIsSuspiciousIfNeed(newData.user.id.toInt(), newData.isSuspiciousUser)
         val items = ArrayList<HistoryItem>()
         newData.items.forEach {
             it.isMutual = mIsNeedShowMutualDivider
