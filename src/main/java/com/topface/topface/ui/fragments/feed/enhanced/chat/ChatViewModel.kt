@@ -502,26 +502,19 @@ class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
     fun onMessage() = mUser?.let {
         val message = message.get()
         if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
-            mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
-                    .doOnSubscribe {
-                        mHasStubItems = true
-                        mIsSendMessage = true
-                        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
-                            chatData.clear()
-                            mBlockChatType = NO_BLOCK
-                        }
-                        if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
-                            ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
-                        }
-                        chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION,
-                                isMutual = mIsNeedShowMutualDivider)))
-                        this.message.set(EMPTY)
-                    }
-                    .subscribe(shortSubscription({
-                    }, {
-                        chatResult?.setResult(createResultIntent())
-                    })))
+            val item = wrapHistoryItem(HistoryItem(text = message,
+                    created = System.currentTimeMillis() / SERVER_TIME_CORRECTION,
+                    isMutual = mIsNeedShowMutualDivider))
+            mEventBus.setData(SendHistoryItemEvent(item))
+            this.message.set(EMPTY)
+            if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                chatData.clear()
+                mBlockChatType = NO_BLOCK
+            }
+            if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
+            }
+            chatData.add(0, item)
         } else {
             navigator?.showUserIsTooPopularLock(it)
         }
