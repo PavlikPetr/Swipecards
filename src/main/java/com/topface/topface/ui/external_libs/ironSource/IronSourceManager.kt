@@ -80,6 +80,14 @@ class IronSourceManager {
         IntegrationHelper.validateIntegration(activity);
     }
 
+    fun onResume(activity: Activity) {
+        IronSource.onResume(activity)
+    }
+
+    fun onPause(activity: Activity) {
+        IronSource.onPause(activity)
+    }
+
     fun showOfferwall(plc: String, from: String) {
         IronSourceStatisticsGeneratedStatistics.sendNow_IRON_SOURCE_SHOW_OFFERS(Slices().apply {
             putSlice("ref", plc.getIronSourceType())
