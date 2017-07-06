@@ -11,7 +11,7 @@ import com.topface.topface.utils.ActivityLifeCycleReporter;
  * Created by ppavlik on 04.04.16.
  * Observe activity lifecycle
  */
-public abstract class TrackedLifeCycleActivity extends CrashReportActivity {
+public abstract class TrackedLifeCycleActivity extends IronSrcIntegrationActivity {
 
     private ActivityLifeCycleReporter mLifeCycleReporter = new ActivityLifeCycleReporter(getClass().getName());
     private boolean mIsActivityRestoredState = false;

@@ -146,7 +146,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        mIronSourceManager.onResume(getActivity());
         mVipOpenSubscription = NewProductsKeysGeneratedStatistics.sendPost_VIP_OPEN(getActivity().getApplicationContext());
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(OpenIabFragment.UPDATE_RESOURCE_INFO));
@@ -157,7 +156,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-        mIronSourceManager.onPause(getActivity());
         RxUtils.safeUnsubscribe(mVipOpenSubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
