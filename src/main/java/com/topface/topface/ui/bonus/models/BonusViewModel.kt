@@ -36,6 +36,7 @@ class BonusViewModel : BaseViewModel() {
                             it.type == IronSourceOfferwallEvent.OFFERWALL_CLOSED ||
                             it.type == IronSourceOfferwallEvent.OFFERWALL_OPENED
                 }
+                .distinctUntilChanged()
                 .applySchedulers()
                 .subscribe(shortSubscription {
                     when (it.type) {
