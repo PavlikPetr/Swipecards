@@ -1,10 +1,12 @@
 package com.topface.topface.ui.fragments.feed.enhanced.fans
 
+import android.view.View
 import com.topface.topface.api.FeedRequestFactory
 import com.topface.topface.api.IApi
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.api.responses.GetFeedBookmarkListResponse
 import com.topface.topface.api.responses.IBaseFeedResponse
+import com.topface.topface.api.responses.Visitor
 import com.topface.topface.data.CountersData
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
 import com.topface.topface.utils.config.FeedsCache
@@ -29,4 +31,6 @@ class FansViewModel(api: IApi) : BaseFeedFragmentModel<FeedBookmark>(api) {
 
     override fun considerDuplicates(first: FeedBookmark, second: FeedBookmark) =
             first.user?.id == second.user?.id
+    override fun itemClick(view: View?, itemPosition: Int, data: FeedBookmark?, from: String) =
+            navigator?.showProfile(data, from)
 }
