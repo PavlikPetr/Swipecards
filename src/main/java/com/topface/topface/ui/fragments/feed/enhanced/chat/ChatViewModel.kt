@@ -576,7 +576,7 @@ class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
                 chatData.clear()
                 isSendGiftEnable.set(true)
                 isEditTextEnable.set(true)
-                update(createUpdateObject(mUser?.id ?: -1))
+                update(createUpdateObject(mUser?.id ?: -1, true))
             }
             ComplainsActivity.REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
