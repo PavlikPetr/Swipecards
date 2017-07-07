@@ -16,6 +16,7 @@ class LoaderStubComponent : AdapterComponent<ItemLoaderBinding, ChatLoader>() {
         get() = ItemLoaderBinding::class.java
 
     override fun bind(binding: ItemLoaderBinding, data: ChatLoader?, position: Int) {
+        binding.plc = "NewChatMainLoader"
         binding.root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                 StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
     }
