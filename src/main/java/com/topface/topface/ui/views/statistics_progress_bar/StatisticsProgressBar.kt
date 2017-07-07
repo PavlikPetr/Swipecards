@@ -12,9 +12,8 @@ import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Emitter
 import rx.Observable
+import rx.Subscription
 import rx.lang.kotlin.withIndex
-import rx.subscriptions.CompositeSubscription
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -30,7 +29,7 @@ open class StatisticsProgressBar : ProgressBar {
 
     private var mPlc = PLC_UNDEFINED
     private var mEmitter: Emitter<Boolean>? = null
-    private var mSubscription = CompositeSubscription()
+    private var mStateSubscription: Subscription? = null
     private var mIsNeedSendPost: AtomicBoolean = AtomicBoolean(false)
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
@@ -54,13 +53,14 @@ open class StatisticsProgressBar : ProgressBar {
     constructor(context: Context) : super(context)
 
     init {
-        mSubscription.add(Observable.fromEmitter<Boolean>({ emitter ->
+        mStateSubscription = Observable.fromEmitter<Boolean>({ emitter ->
             mEmitter = emitter
         }, Emitter.BackpressureMode.LATEST)
                 .distinctUntilChanged()
                 .withIndex()
                 .filter { !(!it.value && it.index == 0) }
                 .map { it.value }
+                .distinctUntilChanged()
                 .timeInterval()
                 .subscribe(shortSubscription {
                     it?.let {
@@ -74,10 +74,7 @@ open class StatisticsProgressBar : ProgressBar {
                             sendHideEvent(it.intervalInMilliseconds)
                         }
                     }
-                }))
-        // костыль на случай если не сработал onVisibilityChanged
-        mSubscription.add(Observable.interval(1000, TimeUnit.MILLISECONDS)
-                .subscribe(shortSubscription { mEmitter?.onNext(visibility == View.VISIBLE && alpha > 0) }))
+                })
     }
 
     private fun parseAttribute(attrs: AttributeSet, defStyleAttr: Int) {
@@ -95,7 +92,7 @@ open class StatisticsProgressBar : ProgressBar {
         super.onDetachedFromWindow()
         mEmitter?.onNext(false)
         mEmitter?.onCompleted()
-        mSubscription.safeUnsubscribe()
+        mStateSubscription.safeUnsubscribe()
     }
 
     override fun onVisibilityChanged(changedView: View?, visibility: Int) {
