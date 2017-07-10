@@ -836,6 +836,14 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             mStubsController.checkMessage(history);
         }
         mLastDispatchedHistoryItem = history;
+        // set result with new read msg here
+        // because setting result in OnPause not working sometimes
+        Intent intent = new Intent();
+        intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+        intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
+        intent.putExtra(SEND_MESSAGE, isSendMessage);
+        intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+        getActivity().setResult(Activity.RESULT_OK, intent);
     }
 
     private void removeOutdatedItems(HistoryListData data) {
@@ -981,6 +989,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
         // Если адаптер пустой или пользователя нет, грузим с сервера
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
+            // чтобы после успешной покупки випа, снялась блокировка чата и запрос ушел с leave=false
+            if (App.get().getProfile().premium && mUserType == ChatStabsController.LOCK_CHAT) {
+                mUserType = ChatStabsController.NO_BLOCK;
+            }
             update(false, ChatUpdateType.INITIAL);
         } else {
             if (mStubsController == null || !mStubsController.isChatLocked()) {
@@ -1002,6 +1014,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @FuckingVoodooMagic(description = "принудительно скрываем клаву(вдруг на home нажмем), и " +
             "убиреем листенер, т.к. в этом случае не нужно учитывать изменение состояния")
     public void onPause() {
+        //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+        // к сожалению, сеттинг резалта здесь не сработает
+        // но это не точно, может быть не затрагивает какие-то из версий андроида
         if (isAdded() && (mLastDispatchedHistoryItem != null || mDispatchedGifts != null)) {
             Intent intent = new Intent();
             intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);

@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.ObservableBoolean
