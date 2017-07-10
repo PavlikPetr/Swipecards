@@ -1,6 +1,7 @@
 package com.topface.topface.ui.views.image_switcher
 
 import android.content.Context
+import android.support.annotation.IntDef
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PagerSnapHelper
@@ -9,6 +10,7 @@ import android.support.v7.widget.SnapHelper
 import android.util.AttributeSet
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.Glide
+import com.topface.topface.R
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
 import com.topface.topface.glide.RecyclerViewPreloader
@@ -20,17 +22,24 @@ import kotlin.properties.Delegates
  * Created by ppavlik on 13.02.17.
  */
 
-class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
-    constructor(context: Context) : this(context, null)
+class ImageLoader : RecyclerView {
 
     companion object {
         const val PRELOAD_SIZE = 3 // указываем кол-во фоток которые будем предзагружать в кеш
+
+        const val CROP_TYPE_NONE = 0L
+        const val CROP_TYPE_MATCH_VIEW = 1L
+
+        @IntDef(CROP_TYPE_NONE, CROP_TYPE_MATCH_VIEW)
+        annotation class CropType
     }
 
     private var mHeight = 0
     private var mWidth = 0
     private var mOnPageChangeListener: ViewPager.OnPageChangeListener? = null
     private var mScrollDx = 0
+    @CropType
+    private var mCropType = CROP_TYPE_NONE
     private var mIsReadyToPreload = false
     // по умолчанию загрузку пачки фото на старте 1..PRELOAD_SIZE разрешаем
     private var mIsNeedToPreloadOnStart = true
@@ -41,7 +50,7 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     }
 
     private val mPhotoAlbumAdapter: PhotoAlbumAdapter by lazy {
-        PhotoAlbumAdapter(mRequestBuilder) {
+        PhotoAlbumAdapter(mRequestBuilder, mCropType) {
             mIsReadyToPreload = true
             preload()
         }
@@ -63,6 +72,37 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
 
     private val mPreloader: RecyclerViewPreloader<String> by lazy {
         RecyclerViewPreloader(mPhotoAlbumAdapter, mPhotoAlbumAdapter, PRELOAD_SIZE)
+    }
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr) {
+        attrs?.let {
+            parseAttribute(it, defStyleAttr)
+        }
+    }
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        attrs?.let {
+            parseAttribute(it, defStyleAttr)
+        }
+    }
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        attrs?.let {
+            parseAttribute(it, 0)
+        }
+    }
+
+    constructor(context: Context) : super(context)
+
+    private fun parseAttribute(attrs: AttributeSet, defStyleAttr: Int) {
+        val a = context.obtainStyledAttributes(attrs, R.styleable.ImageLoader, defStyleAttr, 0)
+        setCropType(a.getInt(R.styleable.ImageLoader_cropType, CROP_TYPE_NONE.toInt()).toLong())
+        a.recycle()
+    }
+
+    fun setCropType(@CropType cropType: Long) {
+        mCropType = cropType
+        mPhotoAlbumAdapter.setCropType(mCropType)
     }
 
     init {

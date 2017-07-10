@@ -22,6 +22,7 @@
             android:layout_height="match_parent"
             app:currentItemImmediately="@{model.currentItem}"
             app:data="@{model.albumData}"
+            app:cropType="@{model.cropType}"
             app:necessityPreloadOnStart="@{model.isNeedPreloadOnStart}"
             app:onPageChangeListener="@{model}"/>
 

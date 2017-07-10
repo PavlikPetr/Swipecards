@@ -29,7 +29,9 @@ import com.topface.topface.utils.extensions.loadLinkToSameCache
  * Created by ppavlik on 13.02.17.
  */
 
-class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, private val readyToPreload: () -> Unit) : BaseRecyclerViewAdapter<AlbumImageBinding, String>(),
+class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>,
+                        @ImageLoader.Companion.CropType private var mCropType: Long = ImageLoader.CROP_TYPE_NONE,
+                        private val readyToPreload: () -> Unit) : BaseRecyclerViewAdapter<AlbumImageBinding, String>(),
         PreloadModelProvider<String>, PreloadSizeProvider<String> {
 
     companion object {
@@ -52,7 +54,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
 
     override fun bindData(binding: AlbumImageBinding?, position: Int) {
         binding?.let { bind ->
-            val viewModel = AlbumImageViewModel()
+            val viewModel = AlbumImageViewModel(mCropType)
             bind.viewModel = viewModel
             getDataItem(position)?.let {
                 mTargets[position].clear()
@@ -116,6 +118,10 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
     override fun clearData() {
         super.clearData()
         release()
+    }
+
+    fun setCropType(@ImageLoader.Companion.CropType cropType: Long) {
+        mCropType = cropType
     }
 
     fun release() {

@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
+import com.topface.topface.ui.views.image_switcher.ImageLoader
 
 /**
  * Binding adapters using Kotlin
@@ -35,8 +36,9 @@ fun setViewBackgroundColor(view: View, backgroundColor: Int) =
 fun setImageByGlideWithFitCenter(view: ImageView, res: String) =
         Glide.with(view.context.applicationContext).load(res).fitCenter().into(view)
 
-@BindingAdapter(value = *arrayOf("glidePreloadedSrc", "isCropTopEnabled"), requireAll = false)
-fun setPreloadedGlideImageWithCrop(view: ImageView, resource: GlideDrawable?, isCropTopEnabled: Boolean = false) = resource?.let {
+@BindingAdapter(value = *arrayOf("glidePreloadedSrc", "imageCropType"), requireAll = false)
+fun setPreloadedGlideImageWithCrop(view: ImageView, resource: GlideDrawable?,
+                                   @ImageLoader.Companion.CropType cropType: Long = ImageLoader.CROP_TYPE_NONE) = resource?.let {
 
     fun getCropTopMatrix(dest: PointF, source: PointF) = Matrix().apply {
         val scale: Float
@@ -53,7 +55,7 @@ fun setPreloadedGlideImageWithCrop(view: ImageView, resource: GlideDrawable?, is
     }
 
     view.post {
-        if (isCropTopEnabled) {
+        if (cropType == ImageLoader.CROP_TYPE_MATCH_VIEW) {
             view.imageMatrix = getCropTopMatrix(PointF(view.measuredWidth.toFloat(), view.measuredHeight.toFloat())
                     , PointF(it.minimumWidth.toFloat(), it.minimumHeight.toFloat()))
             view.scaleType = ImageView.ScaleType.MATRIX

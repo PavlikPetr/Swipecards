@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.databinding.ObservableLong
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.content.LocalBroadcastManager
@@ -42,6 +43,7 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.image_switcher.ImageClick
+import com.topface.topface.ui.views.image_switcher.ImageLoader
 import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter
 import com.topface.topface.ui.views.image_switcher.PreloadPhoto
 import com.topface.topface.utils.FlurryManager
@@ -102,6 +104,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val albumData = ObservableField<Photos>()
     val isNeedAnimateLoader = ObservableBoolean(false)
     val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
+    val cropType = ObservableLong(if (App.get().options.cropAndGalleryEnabled) ImageLoader.CROP_TYPE_MATCH_VIEW else ImageLoader.CROP_TYPE_NONE)
 
     private val mAppState by lazy {
         App.getAppComponent().appState()
