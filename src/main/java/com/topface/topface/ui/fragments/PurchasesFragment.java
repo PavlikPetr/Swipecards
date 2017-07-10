@@ -236,8 +236,7 @@ public class PurchasesFragment extends BaseFragment {
             tabs = new Options.TabsList();
             tabs.list.addAll(options.payments.other.list);
         }
-        removeExcessTabs(tabs.list);
-        //Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
+        removeExcessTabs(tabs.list);//Убираем табы в которых нет продуктов и бонусную вкладку, если фрагмент для покупки випа
         createTabList(tabs.list);
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
