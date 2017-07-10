@@ -1,106 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="UniversalFrameImageView">
-        <attr name="frameSrc" format="reference" />
+        <attr name="frameSrc" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="SoftKeyBoardListenerView">
-        <attr name="estimatedLayoutHeight" format="integer" />
+        <attr name="estimatedLayoutHeight" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="ImageViewRemote">
-        <attr name="stubResId" format="reference" />
+        <attr name="stubResId" format="reference"/>
         <!--attr name="imageForEmptyUri" format="reference" /-->
-        <attr name="remoteSrc" format="string" />
-        <attr name="cornersRadius" format="dimension" />
-        <attr name="clipMask" format="reference" />
-        <attr name="blurRadius" format="integer" />
-        <attr name="border" format="reference" />
-        <attr name="android:maxHeight" />
-        <attr name="android:maxWidth" />
+        <attr name="remoteSrc" format="string"/>
+        <attr name="cornersRadius" format="dimension"/>
+        <attr name="clipMask" format="reference"/>
+        <attr name="blurRadius" format="integer"/>
+        <attr name="border" format="reference"/>
+        <attr name="android:maxHeight"/>
+        <attr name="android:maxWidth"/>
         <attr name="postProcessor">
-            <flag name="none" value="0" />
-            <flag name="rounded" value="1" />
-            <flag name="roundCorners" value="2" />
-            <flag name="mask" value="3" />
-            <flag name="leftMenuClip" value="4" />
-            <flag name="squared" value="5" />
-            <flag name="cropped" value="6" />
-            <flag name="inscribedAvatar" value="8" />
-            <flag name="blur" value="9" />
+            <flag name="none" value="0"/>
+            <flag name="rounded" value="1"/>
+            <flag name="roundCorners" value="2"/>
+            <flag name="mask" value="3"/>
+            <flag name="leftMenuClip" value="4"/>
+            <flag name="squared" value="5"/>
+            <flag name="cropped" value="6"/>
+            <flag name="inscribedAvatar" value="8"/>
+            <flag name="blur" value="9"/>
         </attr>
         <attr name="preProcessor">
-            <flag name="none" value="0" />
-            <flag name="rounded" value="1" />
-            <flag name="roundCorners" value="2" />
-            <flag name="mask" value="3" />
-            <flag name="leftMenuClip" value="4" />
-            <flag name="squared" value="5" />
-            <flag name="cropped" value="6" />
-            <flag name="roundAvatar" value="7" />
-            <flag name="inscribedAvatar" value="8" />
-            <flag name="blur" value="9" />
+            <flag name="none" value="0"/>
+            <flag name="rounded" value="1"/>
+            <flag name="roundCorners" value="2"/>
+            <flag name="mask" value="3"/>
+            <flag name="leftMenuClip" value="4"/>
+            <flag name="squared" value="5"/>
+            <flag name="cropped" value="6"/>
+            <flag name="roundAvatar" value="7"/>
+            <flag name="inscribedAvatar" value="8"/>
+            <flag name="blur" value="9"/>
         </attr>
-        <attr name="roundedImgBorderColor" format="color" />
-        <attr name="roundedImgBorderWidth" format="dimension" />
+        <attr name="roundedImgBorderColor" format="color"/>
+        <attr name="roundedImgBorderWidth" format="dimension"/>
     </declare-styleable>
 
     <declare-styleable name="ServicesTextView">
-        <attr name="maxChars" format="integer" />
-        <attr name="charPadding" format="integer" />
-        <attr name="text" format="string" />
-        <attr name="image" format="reference" />
-        <attr name="fontSize" format="integer" />
-        <attr name="textWithoutBackground" format="string" />
+        <attr name="maxChars" format="integer"/>
+        <attr name="charPadding" format="integer"/>
+        <attr name="text" format="string"/>
+        <attr name="image" format="reference"/>
+        <attr name="fontSize" format="integer"/>
+        <attr name="textWithoutBackground" format="string"/>
     </declare-styleable>
 
     <declare-styleable name="com.inneractive.api.ads.InneractiveAd">
-        <attr name="appID" format="string" />
+        <attr name="appID" format="string"/>
         <attr name="adType">
-            <enum name="Banner" value="0" />
-            <enum name="Text" value="1" />
-            <enum name="Interstitial" value="2" />
-            <enum name="Rectangle" value="3" />
+            <enum name="Banner" value="0"/>
+            <enum name="Text" value="1"/>
+            <enum name="Interstitial" value="2"/>
+            <enum name="Rectangle" value="3"/>
         </attr>
         <attr name="adAlignment">
-            <enum name="TOP_LEFT" value="0" />
-            <enum name="TOP_CENTER" value="1" />
-            <enum name="TOP_RIGHT" value="2" />
-            <enum name="BOTTOM_LEFT" value="3" />
-            <enum name="BOTTOM_CENTER" value="4" />
-            <enum name="BOTTOM_RIGHT" value="5" />
-            <enum name="CENTER_LEFT" value="6" />
-            <enum name="CENTER" value="7" />
-            <enum name="CENTER_RIGHT" value="8" />
+            <enum name="TOP_LEFT" value="0"/>
+            <enum name="TOP_CENTER" value="1"/>
+            <enum name="TOP_RIGHT" value="2"/>
+            <enum name="BOTTOM_LEFT" value="3"/>
+            <enum name="BOTTOM_CENTER" value="4"/>
+            <enum name="BOTTOM_RIGHT" value="5"/>
+            <enum name="CENTER_LEFT" value="6"/>
+            <enum name="CENTER" value="7"/>
+            <enum name="CENTER_RIGHT" value="8"/>
         </attr>
-        <attr name="refreshInterval" format="integer" />
-        <attr name="age" format="string" />
-        <attr name="gender" format="string" />
-        <attr name="keywords" format="string" />
-        <attr name="requiredAdWidth" format="integer" />
-        <attr name="requiredAdHeight" format="integer" />
-        <attr name="optionalAdWidth" format="integer" />
-        <attr name="optionalAdHeight" format="integer" />
+        <attr name="refreshInterval" format="integer"/>
+        <attr name="age" format="string"/>
+        <attr name="gender" format="string"/>
+        <attr name="keywords" format="string"/>
+        <attr name="requiredAdWidth" format="integer"/>
+        <attr name="requiredAdHeight" format="integer"/>
+        <attr name="optionalAdWidth" format="integer"/>
+        <attr name="optionalAdHeight" format="integer"/>
 
     </declare-styleable>
 
     <declare-styleable name="Theme.Topface">
-        <attr name="blueButtonStyle" format="reference" />
-        <attr name="grayButtonStyle" format="reference" />
+        <attr name="blueButtonStyle" format="reference"/>
+        <attr name="grayButtonStyle" format="reference"/>
     </declare-styleable>
     <declare-styleable name="RangeSeekBar">
-        <attr name="textSize" format="dimension" />
-        <attr name="minValue" format="integer" />
-        <attr name="maxValue" format="integer" />
-        <attr name="maxValueTitle" format="string" />
-        <attr name="minValueTitle" format="string" />
-        <attr name="textPadding" format="dimension" />
-        <attr name="textColor" format="color" />
-        <attr name="currentMinValue" format="integer" />
-        <attr name="currentMaxValue" format="integer" />
-        <attr name="range" format="integer" />
+        <attr name="textSize" format="dimension"/>
+        <attr name="minValue" format="integer"/>
+        <attr name="maxValue" format="integer"/>
+        <attr name="maxValueTitle" format="string"/>
+        <attr name="minValueTitle" format="string"/>
+        <attr name="textPadding" format="dimension"/>
+        <attr name="textColor" format="color"/>
+        <attr name="currentMinValue" format="integer"/>
+        <attr name="currentMaxValue" format="integer"/>
+        <attr name="range" format="integer"/>
     </declare-styleable>
     <declare-styleable name="StatisticsProgressBar">
-        <attr name="plc" format="string" />
+        <attr name="plc" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="ImageLoader">
+        <attr name="cropType">
+            <flag name="none" value="0"/>
+            <flag name="matchContainer" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>

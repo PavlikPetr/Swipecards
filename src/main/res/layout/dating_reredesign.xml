@@ -32,6 +32,7 @@
                     android:id="@+id/dating_album"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:cropType="@{viewModel.cropType}"
                     app:currentItemImmediately="@{viewModel.currentItem}"
                     app:data="@{viewModel.albumData}"
                     app:necessityPreloadOnStart="@{viewModel.isNeedPreloadOnStart}"
@@ -156,6 +157,6 @@
             android:background="@drawable/loader_bg"
             android:theme="@style/CircularProgress"
             android:visibility="@{viewModel.isDatingProgressBarVisible, default = gone}"
-            app:plc="dating_redesign_loader" />
+            app:plc="dating_redesign_loader"/>
     </RelativeLayout>
 </layout>

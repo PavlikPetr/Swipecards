@@ -6,6 +6,7 @@ import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.databinding.ObservableLong
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.view.ViewPager
@@ -25,6 +26,7 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.image_switcher.ImageClick
+import com.topface.topface.ui.views.image_switcher.ImageLoader
 import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter
 import com.topface.topface.ui.views.image_switcher.PreloadPhoto
 import com.topface.topface.utils.ILifeCycle
@@ -58,6 +60,7 @@ class DatingAlbumViewModel(private val mContext: Context, private val mApi: Feed
     val isNeedAnimateLoader = ObservableBoolean(false)
     val currentItem = ObservableInt(0)
     val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
+    val cropType = ObservableLong(if (App.get().options.cropAndGalleryEnabled) ImageLoader.CROP_TYPE_MATCH_VIEW else ImageLoader.CROP_TYPE_NONE)
 
     private var mPreloadTarget: Target<GlideDrawable>? = null
     private var mOnImageClickSubscription: Subscription? = null
