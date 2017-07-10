@@ -257,7 +257,7 @@ class DialogContactsItemViewModel(private val mContactsStubItem: DialogContactsS
         if (data.observableList.isNotEmpty()) {
             val item = data.observableList.first()
             if (item is DialogContactsItem) {
-                loadMutual(from = item.id)
+                loadMutual(to = item.id)
             }
         }
     }
