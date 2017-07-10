@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
-import android.content.Context
 import android.content.Intent
 import android.databinding.Observable.OnPropertyChangedCallback
 import android.databinding.ObservableField
@@ -177,7 +176,9 @@ class DialogContactsItemViewModel(private val mContactsStubItem: DialogContactsS
      */
     private fun addFooterGoDatingItem(more: Boolean) {
         if (!more) {
-            data.observableList.add(data.observableList.count(), GoDatingContactsStubItem())
+            if (!(data.observableList.last() is GoDatingContactsStubItem)) {
+                data.observableList.add(data.observableList.count(), GoDatingContactsStubItem())
+            }
         }
     }
 
