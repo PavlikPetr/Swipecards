@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 app:plc="new_feed_fragment_base_loader"
-                android:visibility="@{viewModel.isFeedProgressBarVisible}"/>
+                android:visibility="@{viewModel.isFeedProgressBarVisible, default = gone}"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh"
@@ -50,7 +50,7 @@
                 android:id="@+id/loading_feed_locker"
                 style="@style/LoadingLocker"
                 app:plc="new_feed_fragment_base_locker_view"
-                android:visibility="@{viewModel.isLockViewVisible}"/>
+                android:visibility="@{viewModel.isLockViewVisible, default=gone}"/>
 
         <ViewStub
             android:id="@+id/empty_feed_stub"

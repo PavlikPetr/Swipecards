@@ -442,7 +442,9 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     protected void onResumeFragments() {
         super.onResumeFragments();
         PopupManager.INSTANCE.restoreState();
-        tryPostponedStartFragment();
+        if (!AuthToken.getInstance().isEmpty()) {
+            tryPostponedStartFragment();
+        }
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
             if (PopupManager.INSTANCE.isSequenceComplete(NAVIGATION_ACTIVITY_POPUPS_TAG) &&

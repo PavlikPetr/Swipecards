@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:paddingTop="15dp"
-            android:visibility="@{viewModel.isRequestInProgress}"
+            android:visibility="@{viewModel.isRequestInProgress, default = gone}"
             app:plc="city_search_popup_load_cities_list" />
 
         <android.support.v7.widget.RecyclerView

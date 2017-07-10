@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/loader_bg"
                 android:theme="@style/CircularProgress"
-                android:visibility="@{model.isDatingProgressBarVisible}"
+                android:visibility="@{model.isDatingProgressBarVisible, default = gone}"
                 app:plc="@string/dating_fragment_loader" />
         </FrameLayout>
 

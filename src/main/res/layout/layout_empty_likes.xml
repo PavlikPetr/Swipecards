@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="lockViewModel"
-            type="com.topface.topface.ui.fragments.feed.likes.LikesLockScreenViewModel" />
+            type="com.topface.topface.ui.fragments.feed.likes.LikesLockScreenViewModel"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -26,8 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:visibility="@{lockViewModel.likesAccessProgressVisibility}"
-                app:plc="empty_likes_buy_vip_progress" />
+                android:visibility="@{lockViewModel.likesAccessProgressVisibility, default = gone}"
+                app:plc="empty_likes_buy_vip_progress"/>
 
             <ViewFlipper
                 android:id="@+id/vfEmptyViews"
@@ -47,7 +47,7 @@
                         style="@style/LandscapePortraitImagesVisibility"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_sympathy_back" />
+                        android:src="@drawable/ic_sympathy_back"/>
 
                     <TextView
                         android:id="@+id/tvText"
@@ -58,7 +58,7 @@
                         android:layout_marginBottom="24dp"
                         android:layout_marginTop="20dp"
                         android:gravity="center"
-                        android:text="@string/likes_can_help_you" />
+                        android:text="@string/likes_can_help_you"/>
 
                     <Button
                         android:id="@+id/btn_buy_coins"
@@ -66,7 +66,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:onClick="@{() -> lockViewModel.onBuyCoins()}"
-                        android:text="@string/buy_resources" />
+                        android:text="@string/buy_resources"/>
 
                 </LinearLayout>
 
@@ -82,7 +82,7 @@
                         style="@style/ListItemEmptyText.Bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center" />
+                        android:gravity="center"/>
 
                     <LinearLayout
                         style="@style/LandscapePortraitImagesVisibility"
@@ -97,22 +97,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:src="@{lockViewModel.firstMuzzle}" />
+                            android:src="@{lockViewModel.firstMuzzle}"/>
 
                         <com.topface.topface.ui.views.ImageViewRemote
                             android:id="@+id/ivTwo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:src="@{lockViewModel.secondMuzzle}" />
+                            android:src="@{lockViewModel.secondMuzzle}"/>
 
                         <com.topface.topface.ui.views.ImageViewRemote
                             android:id="@+id/ivThree"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:src="@{lockViewModel.thirdMuzzle}" />
-
+                            android:src="@{lockViewModel.thirdMuzzle}"/>
                     </LinearLayout>
 
                     <TextView
@@ -123,7 +122,7 @@
                         android:layout_marginTop="16dp"
                         android:gravity="center"
                         android:maxWidth="300dp"
-                        android:text="@{lockViewModel.message}" />
+                        android:text="@{lockViewModel.message}"/>
 
                     <Button
                         android:id="@+id/btn_unlock_by_coins"
@@ -132,15 +131,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:onClick="@{() -> lockViewModel.onBuyVipClick()}"
-                        android:text="@{lockViewModel.buttonMessage}" />
-
+                        android:text="@{lockViewModel.buttonMessage}"/>
                 </LinearLayout>
 
-                <include layout="@layout/layout_paid_likes_for_vip" />
-
+                <include layout="@layout/layout_paid_likes_for_vip"/>
             </ViewFlipper>
-
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
-
 </layout>

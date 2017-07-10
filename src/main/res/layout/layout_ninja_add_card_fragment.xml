@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     app:plc="pn_add_card_requests_in_progress"
                     android:layout_gravity="center"
-                    android:visibility="@{viewModel.progressVisibility}"/>
+                    android:visibility="@{viewModel.progressVisibility, default = gone}"/>
             </FrameLayout>
 
             <!-- connection info -->

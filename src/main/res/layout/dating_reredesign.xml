@@ -155,7 +155,7 @@
             android:layout_marginBottom="-20dp"
             android:background="@drawable/loader_bg"
             android:theme="@style/CircularProgress"
-            android:visibility="@{viewModel.isDatingProgressBarVisible}"
+            android:visibility="@{viewModel.isDatingProgressBarVisible, default = gone}"
             app:plc="dating_redesign_loader" />
     </RelativeLayout>
 </layout>

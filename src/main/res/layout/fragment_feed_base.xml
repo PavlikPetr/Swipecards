@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:documentation="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:documentation="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel" />
+        <import type="com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel"/>
 
-        <import type="com.topface.topface.data.FeedItem" />
+        <import type="com.topface.topface.data.FeedItem"/>
 
         <variable
             name="viewModel"
@@ -21,14 +21,14 @@
         android:layout_height="match_parent"
         android:background="@color/bg_white">
 
-            <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
-                android:id="@+id/background_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="@{viewModel.isFeedProgressBarVisible}"
-                app:plc="fragment_feed_base_loader"
-                documentation:info="следует разделить по типам фидов" />
+        <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
+            android:id="@+id/background_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.isFeedProgressBarVisible, default = gone}"
+            app:plc="fragment_feed_base_loader"
+            documentation:info="следует разделить по типам фидов"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh"
@@ -48,11 +48,11 @@
                 android:visibility="@{viewModel.isListVisible}"/>
         </android.support.v4.widget.SwipeRefreshLayout>
 
-            <com.topface.topface.ui.views.locker_view.LockerView
-                android:id="@+id/loading_feed_locker"
-                style="@style/LoadingLocker"
-                android:visibility="@{viewModel.isLockViewVisible}"
-                app:plc="@string/feed_fragment_locker_view" />
+        <com.topface.topface.ui.views.locker_view.LockerView
+            android:id="@+id/loading_feed_locker"
+            style="@style/LoadingLocker"
+            android:visibility="@{viewModel.isLockViewVisible, default=gone}"
+            app:plc="@string/feed_fragment_locker_view"/>
 
         <ViewStub
             android:id="@+id/empty_feed_stub"
