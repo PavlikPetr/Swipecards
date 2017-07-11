@@ -315,7 +315,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
                             if (it.isMutualPossible && mIsMutualPopupEnabled) {
-                                mNavigator.showMutualPopup(it)
+                                mNavigator.showMutualPopup(it, R.string.start_dialog.getString(), R.string.continue_to_meet.getString())
                             }
                         }
 

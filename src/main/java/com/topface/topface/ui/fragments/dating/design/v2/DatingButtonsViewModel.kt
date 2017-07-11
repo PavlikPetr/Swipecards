@@ -36,6 +36,7 @@ import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.EasyTracker
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
@@ -172,7 +173,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutV2Binding,
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
                             if (it.isMutualPossible && mIsMutualPopupEnabled) {
-                                mNavigator.showMutualPopup(it)
+                                mNavigator.showMutualPopup(it, R.string.start_dialog.getString(), R.string.continue_to_meet.getString())
                             }
                         }
 

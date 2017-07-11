@@ -221,8 +221,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
     }
 
-    override fun showMutualPopup(mutualUser: FeedUser) {
-        val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment.getInstance(mutualUser)
+    override fun showMutualPopup(mutualUser: FeedUser, goToButtonText: String, borderlessButtonText: String) {
+        val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment.getInstance(mutualUser, goToButtonText, borderlessButtonText)
         mMutualPopupFragment.show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
     }
 
@@ -331,8 +331,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     override fun showSelectCityPopup(defaultCities: ArrayList<City>?, onCitySelectedAction: (City) -> Unit) =
-        with(CitySearchPopup.newInstance(null, defaultCities)) {
-            setOnCitySelected { onCitySelectedAction(it) }
-            show(mActivityDelegate.supportFragmentManager, CitySearchPopup.TAG)
-        }
+            with(CitySearchPopup.newInstance(null, defaultCities)) {
+                setOnCitySelected { onCitySelectedAction(it) }
+                show(mActivityDelegate.supportFragmentManager, CitySearchPopup.TAG)
+            }
 }

@@ -11,12 +11,14 @@ import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getDimen
 
-class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUser, val iDialogCloser: IDialogCloser) {
+class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUser, val iDialogCloser: IDialogCloser, goToButtonText: String, closeButtonText: String) {
 
     val userPhoto = App.get().profile.photo
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val userPlaceholderRes = ObservableInt((if (App.get().profile.sex == User.BOY) R.drawable.dialogues_av_man_big
     else R.drawable.dialogues_av_girl_small))
+    val greenButtonText = ObservableField<String>(goToButtonText)
+    val borderlessButtonText = ObservableField<String>(closeButtonText)
 
     val mutualUserPhoto = ObservableField(mutualUser.photo)
     val mutualPlaceholderRes = ObservableInt(if (mutualUser.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)

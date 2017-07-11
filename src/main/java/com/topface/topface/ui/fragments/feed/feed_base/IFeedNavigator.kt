@@ -46,7 +46,7 @@ interface IFeedNavigator {
     fun showDialogpopupMenu(item: FeedDialog)
     fun showPurchaseProduct(skuId: String, from: String)
     fun showPurchaseSuccessfullFragment(type: String)
-    fun showMutualPopup(mutualUser: FeedUser)
+    fun showMutualPopup(mutualUser: FeedUser, goToButtonText: String, borderlessButtonText: String)
     fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct? = null, source: String, isTestPurchase: Boolean = false, is3DSPurchase: Boolean = false)
     fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData)
     fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit)
@@ -61,5 +61,5 @@ interface IFeedNavigator {
     fun showComplainScreen(userId: Int, feedId: String? = null, isNeedResult: Boolean? = null)
     fun showUserIsTooPopularLock(user: FeedUser)
     fun showBlackList()
-    fun showSelectCityPopup(defaultCities: ArrayList<City>?, onCitySelectedAction: (City) -> Unit )
+    fun showSelectCityPopup(defaultCities: ArrayList<City>?, onCitySelectedAction: (City) -> Unit)
 }
