@@ -1,5 +1,6 @@
 package com.topface.topface.statistics
 
+import com.topface.statistics.android.Slices
 import com.topface.statistics.android.StatisticsTracker
 import com.topface.topface.App
 import com.topface.topface.BuildConfig
@@ -30,7 +31,7 @@ class CommonSlices private constructor() {
     init {
         StatisticsTracker.getInstance().setPredefinedSlice(CommonSlices.DEFAULT_SLICES)
         mAppState.getObservable(Options::class.java).distinctUntilChanged().subscribe(shortSubscription {
-            StatisticsTracker.getInstance().setPredefinedSlice(it.statisticsSlices.apply {
+            StatisticsTracker.getInstance().setPredefinedSlice(Slices().apply {
                 putAll(CommonSlices.DEFAULT_SLICES)
             })
         })
