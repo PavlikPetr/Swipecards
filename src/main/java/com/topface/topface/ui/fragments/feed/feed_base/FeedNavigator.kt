@@ -331,8 +331,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     override fun showSelectCityPopup(defaultCities: ArrayList<City>?, onCitySelectedAction: (City) -> Unit) =
-        with(CitySearchPopup.newInstance(null, defaultCities)) {
-            setOnCitySelected { onCitySelectedAction(it) }
-            show(mActivityDelegate.supportFragmentManager, CitySearchPopup.TAG)
-        }
+            with(CitySearchPopup.newInstance(null, defaultCities)) {
+                setOnCitySelected { onCitySelectedAction(it) }
+                show(mActivityDelegate.supportFragmentManager, CitySearchPopup.TAG)
+            }
+
+    override fun showVisitors() = mNavigationState.emmitNavigationState(WrappedNavigationData(LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS),
+                    WrappedNavigationData.SELECT_EXTERNALY))
 }
