@@ -176,7 +176,7 @@ class DialogContactsItemViewModel(private val mContactsStubItem: DialogContactsS
      */
     private fun addFooterGoDatingItem(more: Boolean) {
         if (!more) {
-            if (!(data.observableList.last() is GoDatingContactsStubItem)) {
+            if (data.observableList.last() !is GoDatingContactsStubItem) {
                 data.observableList.add(data.observableList.count(), GoDatingContactsStubItem())
             }
         }
