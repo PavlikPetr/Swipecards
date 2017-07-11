@@ -10,16 +10,11 @@ import android.databinding.ObservableField
  * @param greenButtonText    текст на зеленой кнопке
  * @param borderlessButtonText    текст на кнопке без обводки
  * @param onGreenButtonPress    действия по нажатию на зеленую кнопку
- * @param onBorderlessButtonPress    действия по нажатию на кнопку без обводки
+ * @param borderlessButtonPress    действия по нажатию на кнопку без обводки
  */
-class BaseSympathyStubViewModel(stubTitleText: String, stubText: String,
-                                greenButtonText: String, borderlessButtonText: String,
+class BaseSympathyStubViewModel(val stubTitle: String, val stubText: String,
+                                val greenButtonText: String, val borderlessButtonText: String,
                                 val greenButtonAction: () -> Unit, val onBorderlessButtonPress: () -> Unit) {
-
-    val stubTitle = ObservableField<String>(stubTitleText)
-    val stubText = ObservableField<String>(stubText)
-    val greenButtonText = ObservableField<String>(greenButtonText)
-    val borderlessButtonText = ObservableField<String>(borderlessButtonText)
 
     fun borderlessButtonAction() = onBorderlessButtonPress()
 
