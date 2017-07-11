@@ -20,19 +20,14 @@ abstract class BaseStubComponent<D>() : AdapterComponent<BaseSympathyStubLayoutB
     abstract fun greenButtonAction(): Unit
     abstract fun onBorderlessButtonPress(): Unit
 
-    override val itemLayout: Int
-        get() = com.topface.topface.R.layout.base_sympathy_stub_layout
-    override val bindingClass: Class<BaseSympathyStubLayoutBinding>
-        get() = BaseSympathyStubLayoutBinding::class.java
-
-    private var mViewModel: BaseSympathyStubViewModel? = null
+    override val itemLayout = com.topface.topface.R.layout.base_sympathy_stub_layout
+    override val bindingClass = BaseSympathyStubLayoutBinding::class.java
 
     override fun bind(binding: BaseSympathyStubLayoutBinding, data: D?, position: Int) =
             with(binding) {
-                    mViewModel = BaseSympathyStubViewModel(stubTitleText, stubText,
-                            greenButtonText, borderlessButtonText,
-                            { greenButtonAction() }, { onBorderlessButtonPress() })
-                viewModel = mViewModel
+                viewModel = BaseSympathyStubViewModel(stubTitleText, stubText,
+                        greenButtonText, borderlessButtonText,
+                        { greenButtonAction() }, { onBorderlessButtonPress() })
                 root.layoutParams = android.support.v7.widget.StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.WRAP_CONTENT).apply { isFullSpan = true }
             }
