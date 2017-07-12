@@ -22,10 +22,12 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
     companion object {
         const val TAG = "mutual_popup_fragment"
         const val MUTUAL_USER_TAG = "mutual_user_tag"
+        const val POPUP_TAB = "popup_tab"
 
-        fun getInstance(mMutualUser: FeedUser) = MutualPopupFragment().apply {
+        fun getInstance(mMutualUser: FeedUser, @PopupMutualViewModel.MutualPopupType popupType: Long) = MutualPopupFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(MUTUAL_USER_TAG, mMutualUser)
+                putLong(POPUP_TAB, popupType)
             }
         }
     }
@@ -34,7 +36,7 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
         get() = FeedNavigator(activity as IActivityDelegate)
 
     private val mViewModel by lazy {
-        PopupMutualViewModel(getFeedNavigator(), arguments.getParcelable(MUTUAL_USER_TAG), this)
+        PopupMutualViewModel(getFeedNavigator(), arguments.getParcelable(MUTUAL_USER_TAG), this, arguments.getLong(POPUP_TAB))
     }
 
     private var mBinding by Delegates.notNull<PopupMutuallyBinding>()
