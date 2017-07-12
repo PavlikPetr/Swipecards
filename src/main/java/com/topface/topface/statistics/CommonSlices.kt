@@ -31,7 +31,7 @@ class CommonSlices private constructor() {
     init {
         StatisticsTracker.getInstance().setPredefinedSlice(CommonSlices.DEFAULT_SLICES)
         mAppState.getObservable(Options::class.java).distinctUntilChanged().subscribe(shortSubscription {
-            StatisticsTracker.getInstance().setPredefinedSlice(Slices().apply {
+            StatisticsTracker.getInstance().setPredefinedSlice(it.statisticsSlices.apply {
                 putAll(CommonSlices.DEFAULT_SLICES)
             })
         })
