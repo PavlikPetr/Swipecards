@@ -1390,7 +1390,7 @@
     <!--new sympathies stubs-->
     <string name="you_have_not_sympathies">У вас пока нет симпатий</string>
     <string name="become_a_vip_and_many_partners_will_see_you">Стань VIP и тебя увидет много партнеров!</string>
-    <string name="go_to_dating">в знакомства</string>
-    <string name="go_to_guests">к гостям</string>
+    <string name="go_to_dating">В знакомства</string>
+    <string name="go_to_guests">К гостям</string>
     <string name="go_to_dating_and_rate_people">Перейдите в знакомства и оцените людей!</string>
 </resources>
