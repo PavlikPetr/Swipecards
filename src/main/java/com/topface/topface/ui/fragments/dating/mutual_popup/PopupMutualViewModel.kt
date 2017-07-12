@@ -19,32 +19,31 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
     @IntDef(DATING_TYPE, SYMPATHY_TYPE)
     annotation class MutualPopupType
 
-    companion object{
+    companion object {
         const val DATING_TYPE = 1L
         const val SYMPATHY_TYPE = 2L
+    }
+
+    val greenButtonText = ObservableField<String>()
+    val borderlessButtonText = ObservableField<String>()
+
+    init {
+        when (popupType) {
+            DATING_TYPE -> {
+                greenButtonText.set(R.string.start_dialog.getString())
+                borderlessButtonText.set(R.string.continue_to_meet.getString())
+            }
+            SYMPATHY_TYPE -> {
+                greenButtonText.set(R.string.go_to_messages.getString())
+                borderlessButtonText.set(R.string.go_to_sypmathies.getString())
+            }
+        }
     }
 
     val userPhoto = App.get().profile.photo
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val userPlaceholderRes = ObservableInt((if (App.get().profile.sex == User.BOY) R.drawable.dialogues_av_man_big
     else R.drawable.dialogues_av_girl_small))
-
-    val greenButtonText = ObservableField<String>()
-    val borderlessButtonText = ObservableField<String>()
-    init {
-        when(popupType){
-            DATING_TYPE-> {
-                greenButtonText.set(R.string.start_dialog.getString())
-                borderlessButtonText.set(R.string.continue_to_meet.getString())
-            }
-            SYMPATHY_TYPE-> {
-//                greenButtonText.set(R.string.start_dialog.getString())
-//                borderlessButtonText.set(R.string.continue_to_meet.getString())
-            }
-        }
-    }
-
-
     val mutualUserPhoto = ObservableField(mutualUser.photo)
     val mutualPlaceholderRes = ObservableInt(if (mutualUser.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
