@@ -12,3 +12,6 @@ class NoSympButVipStub
 
 // Класс для заглушки "нет взаимных симпатий"
 class NoMutualsStub
+
+// Лоадер для взаимных и васхищений
+data class LoaderStub(var diffTemp: Int = 0)
