@@ -15,3 +15,6 @@ class NoMutualsStub
 
 // Лоадер для взаимных и васхищений
 data class LoaderStub(var diffTemp: Int = 0)
+
+// Класс для заглушки "нет восхищений"
+class NoAdmirationsStub
