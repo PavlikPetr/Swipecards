@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes
 
+import com.topface.topface.utils.Utils
+
 /**
  * Модели для симпатий-взаимных-восхощений
  */
@@ -12,6 +14,9 @@ class NoSympButVipStub
 
 // Класс для заглушки "нет взаимных симпатий"
 class NoMutualsStub
+
+// Лоадер для взаимных и васхищений
+data class LoaderStub(var plc: String)
 
 // Класс для заглушки "нет восхищений"
 class NoAdmirationsStub
