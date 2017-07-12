@@ -15,7 +15,7 @@ class LikeLoaderStubComponent : AdapterComponent<ItemLoaderBinding, LoaderStub>(
     override val bindingClass = ItemLoaderBinding::class.java
 
     override fun bind(binding: ItemLoaderBinding, data: LoaderStub?, position: Int) {
-        binding.plc = "SympathiesLoader"
+        binding.plc = data?.plc
         binding.root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                 StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
     }
