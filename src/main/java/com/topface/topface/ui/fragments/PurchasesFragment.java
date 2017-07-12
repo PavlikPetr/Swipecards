@@ -209,6 +209,11 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void createTabList(ArrayList<PurchasesTabData> list) {
+        // Добавляем таб "Бонус" ориентируясь на настройки оффервола по левому меню
+        if (!App.get().getOptions().getOfferwallWithPlaces().getLeftMenu().isEmpty()) {
+            PurchasesTabData bonusTab = new PurchasesTabData(App.get().getResources().getString(R.string.general_bonus), PurchasesTabData.BONUS);
+            list.add(bonusTab);
+        }
         for (PurchasesTabData tab : list) {
             mPagesTitle.add(tab.name.toUpperCase(App.getCurrentLocale()));
         }
@@ -252,6 +257,10 @@ public class PurchasesFragment extends BaseFragment {
         boolean isVip = getArguments().getBoolean(IS_VIP_PRODUCTS, false);
         for (Iterator<PurchasesTabData> iterator = tabs.iterator(); iterator.hasNext(); ) {
             PurchasesTabData tab = iterator.next();
+            //Выпиливаем таб Бонус, если он пришел с сервера
+            if (TextUtils.equals(tab.type, PurchasesTabData.BONUS)) {
+                iterator.remove();
+            }
             //Удаляем вкладку Google Play, если не доступны Play Services
             if (TextUtils.equals(tab.type, PurchasesTabData.GPLAY) && !new GoogleMarketApiManager().isMarketApiAvailable()) {
                 iterator.remove();
@@ -357,7 +366,7 @@ public class PurchasesFragment extends BaseFragment {
     private Intent getUpdateResourceAndFromInfoTextIntent(String text) {
         Intent intent = new Intent(OpenIabFragment.UPDATE_RESOURCE_INFO);
         intent.putExtra(PurchasesConstants.ARG_RESOURCE_INFO_TEXT, text);
-        intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, getArguments().getString(PurchasesConstants.ARG_TAG_SOURCE,""));
+        intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, getArguments().getString(PurchasesConstants.ARG_TAG_SOURCE, ""));
         return intent;
     }
 }
