@@ -9,3 +9,6 @@ class NoSympNoVipStub
 
 // Класс для заглушки "нет симпатий", но пользователь ВИП
 class NoSympButVipStub
+
+// Класс для заглушки "нет взаимных симпатий"
+class NoMutualsStub
