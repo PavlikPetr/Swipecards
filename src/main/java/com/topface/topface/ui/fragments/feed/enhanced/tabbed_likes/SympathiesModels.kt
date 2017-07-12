@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed.enhanced.sympathy_mutual_admiration
+package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes
 
 /**
  * Модели для симпатий-взаимных-восхощений

@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.enhanced.sympathy_mutual_admiration.stubs.BaseSympathyStubViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.stubs.BaseSympathyStubViewModel"/>
     </data>
 
     <android.support.constraint.ConstraintLayout

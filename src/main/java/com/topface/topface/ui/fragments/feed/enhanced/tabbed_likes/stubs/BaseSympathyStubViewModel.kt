@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed.enhanced.sympathy_mutual_admiration.stubs
+package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.stubs
 
 import android.databinding.ObservableField
 

@@ -1,12 +1,9 @@
-package com.topface.topface.ui.fragments.feed.enhanced.sympathy_mutual_admiration.adapter_component
+package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.adapter_component
 
 import android.support.v7.widget.StaggeredGridLayoutManager
-import com.topface.topface.R
 import com.topface.topface.databinding.BaseSympathyStubLayoutBinding
-import com.topface.topface.ui.fragments.feed.enhanced.sympathy_mutual_admiration.stubs.BaseSympathyStubViewModel
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.stubs.BaseSympathyStubViewModel
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
-import com.topface.topface.utils.extensions.getString
 
 /**
  *  Базовый компонент для стабов

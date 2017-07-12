@@ -1,7 +1,7 @@
-package com.topface.topface.ui.fragments.feed.enhanced.sympathy_mutual_admiration.adapter_component
+package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.adapter_component
 
 import com.topface.topface.R
-import com.topface.topface.ui.fragments.feed.enhanced.sympathy_mutual_admiration.NoSympButVipStub
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.NoSympButVipStub
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getString
 
