@@ -16,7 +16,7 @@ class NoSympButVipStub
 class NoMutualsStub
 
 // Лоадер для взаимных и васхищений
-data class LoaderStub(var diffTemp: Int = 0, var plc: String = Utils.EMPTY)
+data class LoaderStub(var plc: String = Utils.EMPTY)
 
 // Класс для заглушки "нет восхищений"
 class NoAdmirationsStub
