@@ -12,3 +12,6 @@ class NoSympButVipStub
 
 // Класс для заглушки "нет взаимных симпатий"
 class NoMutualsStub
+
+// Класс для заглушки "нет восхищений"
+class NoAdmirationsStub
