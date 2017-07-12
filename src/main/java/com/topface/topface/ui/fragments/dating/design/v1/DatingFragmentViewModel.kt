@@ -39,6 +39,7 @@ import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.DatingFilterFragment
 import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel
 import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
+import com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
@@ -315,7 +316,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
                             if (it.isMutualPossible && mIsMutualPopupEnabled) {
-                                mNavigator.showMutualPopup(it, R.string.start_dialog.getString(), R.string.continue_to_meet.getString())
+                                mNavigator.showMutualPopup(it, PopupMutualViewModel.DATING_TYPE)
                             }
                         }
 

@@ -10,6 +10,7 @@ import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
+import com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
 import java.util.*
 
@@ -46,7 +47,7 @@ interface IFeedNavigator {
     fun showDialogpopupMenu(item: FeedDialog)
     fun showPurchaseProduct(skuId: String, from: String)
     fun showPurchaseSuccessfullFragment(type: String)
-    fun showMutualPopup(mutualUser: FeedUser, goToButtonText: String, borderlessButtonText: String)
+    fun showMutualPopup(mutualUser: FeedUser, @PopupMutualViewModel.MutualPopupType popupType: Long)
     fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct? = null, source: String, isTestPurchase: Boolean = false, is3DSPurchase: Boolean = false)
     fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData)
     fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit)

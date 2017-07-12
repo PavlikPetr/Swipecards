@@ -22,14 +22,12 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
     companion object {
         const val TAG = "mutual_popup_fragment"
         const val MUTUAL_USER_TAG = "mutual_user_tag"
-        const val GO_TO_BUTTON_TEXT = "go_to_button_text"
-        const val BORDERLESS_BUTTON_TEXT = "borderless_button_text"
+        const val POPUP_TAB = "popup_tab"
 
-        fun getInstance(mMutualUser: FeedUser, goToButtonText: String, borderlessButtonText: String) = MutualPopupFragment().apply {
+        fun getInstance(mMutualUser: FeedUser, @PopupMutualViewModel.MutualPopupType popupType: Long) = MutualPopupFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(MUTUAL_USER_TAG, mMutualUser)
-                putString(GO_TO_BUTTON_TEXT, goToButtonText)
-                putString(BORDERLESS_BUTTON_TEXT, borderlessButtonText)
+                putLong(POPUP_TAB, popupType)
             }
         }
     }
@@ -38,7 +36,7 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
         get() = FeedNavigator(activity as IActivityDelegate)
 
     private val mViewModel by lazy {
-        PopupMutualViewModel(getFeedNavigator(), arguments.getParcelable(MUTUAL_USER_TAG), this, arguments.getString(GO_TO_BUTTON_TEXT), arguments.getString(BORDERLESS_BUTTON_TEXT))
+        PopupMutualViewModel(getFeedNavigator(), arguments.getParcelable(MUTUAL_USER_TAG), this, arguments.getLong(POPUP_TAB))
     }
 
     private var mBinding by Delegates.notNull<PopupMutuallyBinding>()
