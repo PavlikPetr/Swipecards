@@ -730,6 +730,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             protected void success(HistoryListData data, IApiResponse response) {
                 Intent intent = new Intent();
                 intent.putExtra(ChatFragment.MUTUAL, data.mutualTime != 0);
+                if (data.user != null) {
+                    intent.putExtra(ChatFragment.INTENT_USER_ID, data.user.id);
+                }
                 getActivity().setResult(Activity.RESULT_OK, intent);
                 mHistoryFeedList = data.items;
                 App.getAppComponent().suspiciousUserCache().setUserIsSuspiciousIfNeed(mUserId, data.isSuspiciousUser);

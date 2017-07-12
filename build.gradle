@@ -561,6 +561,7 @@ dependencies {
     /*APPODEAL start*/
     compile 'com.squareup.picasso:picasso:2.5.2' //for Inmobi
     /*APPODEAL end*/
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta2'
 }
 
 task processorTask(type: Exec) {
