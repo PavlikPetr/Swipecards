@@ -68,16 +68,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/mutualIC"
-            android:layout_toLeftOf="@id/mutualIC"
             android:layout_marginRight="33dp"
+            android:layout_toLeftOf="@id/mutualIC"
             android:src="@drawable/arrow_to_left"/>
 
         <FrameLayout
             android:id="@+id/viewForLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:visibility="invisible"></FrameLayout>
 
         <ImageView
@@ -85,19 +85,19 @@
             android:layout_width="74dp"
             android:layout_height="74dp"
             android:layout_below="@id/viewForLayout"
+            android:layout_marginRight="120dp"
             android:layout_marginTop="50dp"
             android:layout_toLeftOf="@id/viewForLayout"
-            android:layout_marginRight="120dp"
             android:src="@drawable/ic_mutually"/>
 
         <ImageView
             android:id="@+id/icPen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/avatarUserPhoto"
             android:layout_alignBottom="@id/mutualIC"
-            android:layout_toLeftOf="@id/viewForLayout"
+            android:layout_below="@id/avatarUserPhoto"
             android:layout_marginRight="80dp"
+            android:layout_toLeftOf="@id/viewForLayout"
             android:src="@drawable/pen"/>
 
         <ImageView
@@ -113,9 +113,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/viewForLayout"
             android:gravity="center_horizontal"
-            android:layout_centerVertical="true"
             android:orientation="vertical">
 
             <TextView
@@ -129,7 +129,7 @@
                 style="@style/PopupGreenButton.Background"
                 android:layout_marginTop="10dp"
                 android:onClick="@{() -> model.startDialog()}"
-                android:text="@string/start_dialog"
+                android:text="@{model.greenButtonText}"
                 android:textAllCaps="true"
                 android:textSize="18sp"/>
 
@@ -137,7 +137,7 @@
                 android:id="@+id/btnClearFilterDating"
                 style="@style/PopupBorderlessButton"
                 android:onClick="@{() -> model.closePopup()}"
-                android:text="@string/continue_to_meet"/>
+                android:text="@{model.borderlessButtonText}"/>
         </LinearLayout>
     </RelativeLayout>
 

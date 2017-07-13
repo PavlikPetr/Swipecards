@@ -10,6 +10,7 @@ import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
+import com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
 import java.util.*
 
@@ -25,8 +26,9 @@ interface IFeedNavigator {
     fun showProfile(item: FeedUser?, from: String)
     // костыльный метод
     fun showProfileNoChat(item: FeedUser?, from: String)
-    fun <T : FeedItem> showChat(item: T?,from: String)
-    fun showChat(user: FeedUser?, answer: SendGiftAnswer?, from : String)
+
+    fun <T : FeedItem> showChat(item: T?, from: String)
+    fun showChat(user: FeedUser?, answer: SendGiftAnswer?, from: String)
     fun showChatIfPossible(user: FeedUser?, answer: SendGiftAnswer?, from: String)
     fun showDating()
     fun showAddToLeader()
@@ -46,7 +48,7 @@ interface IFeedNavigator {
     fun showDialogpopupMenu(item: FeedDialog)
     fun showPurchaseProduct(skuId: String, from: String)
     fun showPurchaseSuccessfullFragment(type: String)
-    fun showMutualPopup(mutualUser: FeedUser)
+    fun showMutualPopup(mutualUser: FeedUser, @PopupMutualViewModel.MutualPopupType popupType: Long)
     fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct? = null, source: String, isTestPurchase: Boolean = false, is3DSPurchase: Boolean = false)
     fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData)
     fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit)
@@ -61,5 +63,6 @@ interface IFeedNavigator {
     fun showComplainScreen(userId: Int, feedId: String? = null, isNeedResult: Boolean? = null)
     fun showUserIsTooPopularLock(user: FeedUser)
     fun showBlackList()
-    fun showSelectCityPopup(defaultCities: ArrayList<City>?, onCitySelectedAction: (City) -> Unit )
+    fun showSelectCityPopup(defaultCities: ArrayList<City>?, onCitySelectedAction: (City) -> Unit)
+    fun showVisitors()
 }

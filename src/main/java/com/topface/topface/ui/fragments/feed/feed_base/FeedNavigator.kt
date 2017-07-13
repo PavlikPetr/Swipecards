@@ -38,6 +38,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
+import com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
 import com.topface.topface.ui.fragments.feed.enhanced.chat.NeedRelease
@@ -221,8 +222,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
     }
 
-    override fun showMutualPopup(mutualUser: FeedUser) {
-        val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment.getInstance(mutualUser)
+    override fun showMutualPopup(mutualUser: FeedUser, @PopupMutualViewModel.MutualPopupType popupType: Long ) {
+        val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment.getInstance(mutualUser, popupType)
         mMutualPopupFragment.show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
     }
 
@@ -331,8 +332,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     override fun showSelectCityPopup(defaultCities: ArrayList<City>?, onCitySelectedAction: (City) -> Unit) =
-        with(CitySearchPopup.newInstance(null, defaultCities)) {
-            setOnCitySelected { onCitySelectedAction(it) }
-            show(mActivityDelegate.supportFragmentManager, CitySearchPopup.TAG)
-        }
+            with(CitySearchPopup.newInstance(null, defaultCities)) {
+                setOnCitySelected { onCitySelectedAction(it) }
+                show(mActivityDelegate.supportFragmentManager, CitySearchPopup.TAG)
+            }
+
+    override fun showVisitors() = mNavigationState.emmitNavigationState(WrappedNavigationData(LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS),
+                    WrappedNavigationData.SELECT_EXTERNALY))
 }

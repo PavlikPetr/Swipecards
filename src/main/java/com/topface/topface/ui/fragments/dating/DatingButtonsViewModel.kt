@@ -27,12 +27,14 @@ import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
+import com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.EasyTracker
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
@@ -169,7 +171,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
                             if (it.isMutualPossible && mIsMutualPopupEnabled) {
-                                mNavigator.showMutualPopup(it)
+                                mNavigator.showMutualPopup(it, PopupMutualViewModel.DATING_TYPE)
                             }
                         }
 

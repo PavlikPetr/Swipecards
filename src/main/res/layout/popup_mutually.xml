@@ -121,7 +121,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="78dp"
             android:onClick="@{() -> model.startDialog()}"
-            android:text="@string/start_dialog"
+            android:text="@{model.greenButtonText}"
             android:textAllCaps="true"
             android:textSize="18sp"/>
 
@@ -131,7 +131,7 @@
             android:layout_below="@+id/btnChangeFilterDating"
             android:layout_centerHorizontal="true"
             android:onClick="@{() -> model.closePopup()}"
-            android:text="@string/continue_to_meet"/>
+            android:text="@{model.borderlessButtonText}"/>
 
     </RelativeLayout>
 
