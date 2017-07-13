@@ -2,9 +2,13 @@ package com.topface.topface.di.navigation_activity
 
 import com.topface.topface.di.chat.ChatComponent
 import com.topface.topface.di.chat.ChatModule
+import com.topface.topface.di.feed.admiration.AdmirationComponent
+import com.topface.topface.di.feed.admiration.AdmirationModule
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.feed.fans.FansComponent
 import com.topface.topface.di.feed.fans.FansModule
+import com.topface.topface.di.feed.mutual.MutualComponent
+import com.topface.topface.di.feed.mutual.MutualModule
 import com.topface.topface.di.feed.visitors.VisitorsComponent
 import com.topface.topface.di.feed.visitors.VisitorsModule
 import com.topface.topface.di.scope.ActivityScope
@@ -26,4 +30,6 @@ interface NavigationActivityComponent {
     fun add(fansModule: FansModule, baseModule: BaseFeedModule): FansComponent
     fun add(chatModule: ChatModule): ChatComponent
 
+    fun add(mutualModule: MutualModule, baseModule: BaseFeedModule): MutualComponent
+    fun add(admirationModule: AdmirationModule, baseModule: BaseFeedModule): AdmirationComponent
 }

@@ -146,7 +146,7 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
     protected open fun terminateImmortalComponent() {
     }
 
-    protected fun initScreenView(binding: NewFeedFragmentBaseBinding) {
+    protected open fun initScreenView(binding: NewFeedFragmentBaseBinding) {
         with(binding.feedList) {
             itemAnimator = null
             setHasFixedSize(true)
