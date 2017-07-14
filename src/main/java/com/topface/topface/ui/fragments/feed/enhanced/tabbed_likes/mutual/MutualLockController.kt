@@ -5,13 +5,14 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.utils.extensions.getString
 
 class MutualLockController(stub: ViewStubProxy, private val mNavigator: IFeedNavigator) : BaseFeedLockerController<MutualLockScreenViewModel>(stub) {
     override fun initLockedFeedStub(errorCode: Int) {
         mStubModel?.let {
             with(it) {
-                buttonText.set(App.getContext().getString(R.string.buying_vip_status))
-                title.set(App.getContext().getString(R.string.likes_buy_vip))
+                buttonText.set(R.string.buying_vip_status.getString())
+                title.set(R.string.likes_buy_vip.getString())
                 setOnButtonClickListener(android.view.View.OnClickListener {
                     mNavigator.showPurchaseVip("Mutual")
                 })
@@ -22,8 +23,8 @@ class MutualLockController(stub: ViewStubProxy, private val mNavigator: IFeedNav
     override fun initEmptyFeedStub() {
         mStubModel?.let {
             with(it) {
-                buttonText.set(App.getContext().getString(R.string.buy_sympathies))
-                title.set(App.getContext().getString(R.string.buy_more_sympathies))
+                buttonText.set(R.string.buy_sympathies.getString())
+                title.set(R.string.buy_more_sympathies.getString())
                 setOnButtonClickListener(android.view.View.OnClickListener {
                     mNavigator.showPurchaseCoins("Mutual")
                 })

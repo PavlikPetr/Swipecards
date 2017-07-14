@@ -25,7 +25,5 @@ open class BaseLikesFeedViewModel<out T : FeedItem>(private val mItem: T, privat
         mNavigator.showProfile(mItem, feed_type.toLowerCase())
     }
 
-    fun showChat() {
-        mNavigator.showChat(mItem, feed_type.toLowerCase())
-    }
+    fun showChat() = mNavigator.showChat(mItem, feed_type.toLowerCase())
 }

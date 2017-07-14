@@ -104,13 +104,11 @@ class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyT
         components.values.forEach {
             it.onAttachedToRecyclerView(recyclerView)
         }
-        recyclerView?.layoutManager?.let {
-            if (it is LinearLayoutManager) {
-                recyclerView.addOnScrollListener(mOnLinearLayoutManagerScrollListener)
-            } else if (it is StaggeredGridLayoutManager) {
-                recyclerView.addOnScrollListener(mOnStaggeredGridLayoutManagerScrollListener)
-            } else {
-                Debug.debug(this, "Wrong layout manager")
+        recyclerView?.let {
+            when (it.layoutManager) {
+                is LinearLayoutManager -> it.addOnScrollListener(mOnLinearLayoutManagerScrollListener)
+                is StaggeredGridLayoutManager -> it.addOnScrollListener(mOnStaggeredGridLayoutManagerScrollListener)
+                else -> Debug.debug(this, "Wrong layout manager")
             }
         }
     }
