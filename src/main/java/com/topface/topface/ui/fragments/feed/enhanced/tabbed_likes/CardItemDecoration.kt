@@ -36,10 +36,14 @@ class CardItemDecoration : RecyclerView.ItemDecoration() {
                     R.dimen.feed_card_padding_right.getDimen().toInt()
                 else
                     R.dimen.feed_card_padding_right.getDimen().toInt() / 2
-                val bottom = if (position >= it.adapter.itemCount - lm.spanCount)
-                    R.dimen.feed_card_padding_bottom.getDimen().toInt()
-                else
-                    R.dimen.feed_card_padding_bottom.getDimen().toInt() / 2
+//                // TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+//                // сейчас сознательно уменьшен отступ снизу для карточек в конце списка, т.к
+//                // если его оставить, то будем иметь проблему со смещением всего столбца на дозагрузке
+                val bottom = R.dimen.feed_card_padding_bottom.getDimen().toInt() / 2
+//            val bottom = if (position >= it.adapter.itemCount - lm.spanCount)
+//                R.dimen.feed_card_padding_bottom.getDimen().toInt()
+//            else
+//                R.dimen.feed_card_padding_bottom.getDimen().toInt() / 2
                 Rect(left, top, right, bottom)
             }
 }
