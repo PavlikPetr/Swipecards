@@ -6,10 +6,9 @@ import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
-import com.topface.topface.ui.fragments.feed.enhanced.fans.FansFragment
-import com.topface.topface.ui.fragments.feed.enhanced.fans.FansLockController
-import com.topface.topface.ui.fragments.feed.enhanced.fans.FansLockScreenViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.mutual.MutualFragment
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.mutual.MutualLockController
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.mutual.MutualLockScreenViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
@@ -19,7 +18,7 @@ import dagger.Provides
 @Module(includes = arrayOf(BaseFeedModule::class))
 class MutualModule(private val mFragment: MutualFragment) {
 
-    val emptyFeedLayout = R.layout.layout_empty_mutual
+    val emptyFeedLayout = R.layout.base_sympathy_stub_layout
 
     @Provides
     @FragmentScope
@@ -40,14 +39,14 @@ class MutualModule(private val mFragment: MutualFragment) {
     @FragmentScope
     fun providesLockScreenVMFactory(): BaseFeedLockerController.ILockScreenVMFactory =
             object : BaseFeedLockerController.ILockScreenVMFactory {
-                override fun construct() = FansLockScreenViewModel(mFragment)
+                override fun construct() = MutualLockScreenViewModel(mFragment)
             }
 
     @Provides
     @FragmentScope
     fun providesVisitorsLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory, navigator: IFeedNavigator)
             : BaseFeedLockerController<*> {
-        return FansLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy, navigator).apply {
+        return MutualLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy, navigator).apply {
             lockScreenFactory = lockerFactory
             setLockerLayout(emptyFeedLayout)
         }

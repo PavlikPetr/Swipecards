@@ -1,15 +1,41 @@
 package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.stubs
 
+import android.databinding.ObservableField
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseLockScreenViewModel
+import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
+
 /**
  *  Базовая заглушка дял симпатий-восхущений-взаимных
- *
- * @param stubTitle    текст заголовка заглушки
- * @param stubText          текст самой заглушки
- * @param greenButtonText    текст на зеленой кнопке
- * @param borderlessButtonText    текст на кнопке без обводки
- * @param greenButtonAction    действия по нажатию на зеленую кнопку
- * @param onBorderlessButtonPress    действия по нажатию на кнопку без обводки
  */
-class BaseSympathyStubViewModel(val stubTitle: String, val stubText: String,
-                                val greenButtonText: String, val borderlessButtonText: String,
-                                val greenButtonAction: () -> Unit, val onBorderlessButtonPress: () -> Unit)
+open class BaseSympathyStubViewModel(mIFeedUnlocked: IFeedUnlocked) : BaseLockScreenViewModel(mIFeedUnlocked) {
+
+    /**
+     * текст заголовка заглушки
+     */
+    val stubTitleText = ObservableField("")
+
+    /**
+     * текст самой заглушки
+     */
+    val stubText = ObservableField("")
+
+    /**
+     * текст на зеленой кнопке
+     */
+    val greenButtonText = ObservableField("")
+
+    /**
+     * текст на кнопке без обводки
+     */
+    val borderlessButtonText = ObservableField("")
+
+    /**
+     * действия по нажатию на зеленую кнопку
+     */
+    var greenButtonAction: () -> Unit = {}
+
+    /**
+     * действия по нажатию на кнопку без обводки
+     */
+    var onBorderlessButtonPress: () -> Unit = {}
+}
