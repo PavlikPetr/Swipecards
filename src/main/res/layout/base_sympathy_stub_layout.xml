@@ -4,7 +4,7 @@
     <data>
 
         <variable
-            name="viewModel"
+            name="lockViewModel"
             type="com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.stubs.BaseSympathyStubViewModel"/>
     </data>
 
@@ -35,7 +35,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="@{viewModel.stubTitle}"
+            android:text="@{lockViewModel.stubTitleText}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -52,7 +52,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="@{viewModel.stubText}"
+            android:text="@{lockViewModel.stubText}"
             android:textColor="@color/google_grey_500"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -68,8 +68,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="24dp"
-            android:onClick="@{() -> viewModel.greenButtonAction.invoke()}"
-            android:text="@{viewModel.greenButtonText}"
+            android:onClick="@{() -> lockViewModel.greenButtonAction.invoke()}"
+            android:text="@{lockViewModel.greenButtonText}"
             android:textAllCaps="true"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -86,8 +86,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:onClick="@{() -> viewModel.onBorderlessButtonPress.invoke()}"
-            android:text="@{viewModel.borderlessButtonText}"
+            android:onClick="@{() -> lockViewModel.onBorderlessButtonPress.invoke()}"
+            android:text="@{lockViewModel.borderlessButtonText}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintLeft_toLeftOf="parent"

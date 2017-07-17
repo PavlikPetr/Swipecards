@@ -347,4 +347,15 @@
     <dimen name="offerwall_button_get_fee">56dp</dimen>
     <dimen name="offerwall_button_get_fee_margin_top">10dp</dimen>
     <dimen name="offerwall_divider_height">1dp</dimen>
+
+    <!--Feeds like cards-->
+    <dimen name="feed_card_avatar_size">74dp</dimen>
+    <dimen name="feed_card_padding_left">12dp</dimen>
+    <dimen name="feed_card_padding_top">12dp</dimen>
+    <dimen name="feed_card_padding_right">12dp</dimen>
+    <dimen name="feed_card_padding_bottom">12dp</dimen>
+    <dimen name="feed_card_corner_radius">2dp</dimen>
+    <dimen name="feed_card_elevation">4dp</dimen>
+    <integer name="feed_like_grid_column_count">2</integer>
+
 </resources>

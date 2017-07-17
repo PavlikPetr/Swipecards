@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:onClick="@{() -> viewModel.buy()}"
-        app:cardBackgroundColor="@color/purchase_v1_card_background_selector"
+        app:cardBackgroundColor="@color/card_background_selector"
         app:cardCornerRadius="@dimen/purchase_v1_card_corner_radius"
         app:cardElevation="@dimen/purchase_v1_card_elevation"
         app:cardMaxElevation="@dimen/purchase_v1_card_max_elevation"

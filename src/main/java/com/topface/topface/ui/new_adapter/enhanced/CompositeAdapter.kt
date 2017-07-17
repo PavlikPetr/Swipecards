@@ -5,6 +5,7 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.topface.framework.utils.Debug
@@ -16,7 +17,7 @@ import rx.Subscriber
  * Адаптер - конструктор, реализуем компонент, подсовываем сюда и все работает
  * Created by tiberal on 28.11.16.
  */
-class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyType:Int = ProvideItemTypeStrategyFactory.DEFAULT,
+class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyType: Int = ProvideItemTypeStrategyFactory.DEFAULT,
                        private var updaterEmitObject: (CompositeAdapter) -> Bundle) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>() {
 
     val updateObservable: Observable<Bundle>
@@ -28,7 +29,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyT
     var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
 
-    private val mOnScrollListener by lazy {
+    private val mOnLinearLayoutManagerScrollListener by lazy {
         object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 (recyclerView?.layoutManager as? LinearLayoutManager)?.let {
@@ -40,6 +41,29 @@ class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyT
                             if (firstVisibleItem != RecyclerView.NO_POSITION &&
                                     lastVisibleItem != RecyclerView.NO_POSITION && visibleItemCount != 0 &&
                                     firstVisibleItem + visibleItemCount >= data.size - 1) {
+                                subscriber.onNext(updaterEmitObject(this@CompositeAdapter))
+                            }
+                        } else {
+                            subscriber.onNext(Bundle())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private val mOnStaggeredGridLayoutManagerScrollListener by lazy {
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                (recyclerView?.layoutManager as? StaggeredGridLayoutManager)?.let {
+                    mUpdateSubscriber?.let { subscriber ->
+                        if (!data.isEmpty()) {
+                            val firstVisibleItemsList = it.findFirstCompletelyVisibleItemPositions(null)
+                            val lastVisibleItemsList = it.findLastVisibleItemPositions(null)
+                            val visibleItemCount = (lastVisibleItemsList.getOrNull(lastVisibleItemsList.lastIndex) ?: 0) - (firstVisibleItemsList.getOrNull(0) ?: 0) + 1
+                            if (firstVisibleItemsList != null &&
+                                    lastVisibleItemsList != null && visibleItemCount != 0 &&
+                                    (firstVisibleItemsList.getOrNull(0) ?: 0) + visibleItemCount >= data.size - 1) {
                                 subscriber.onNext(updaterEmitObject(this@CompositeAdapter))
                             }
                         } else {
@@ -80,11 +104,11 @@ class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyT
         components.values.forEach {
             it.onAttachedToRecyclerView(recyclerView)
         }
-        recyclerView?.layoutManager?.let {
-            if (it is LinearLayoutManager) {
-                recyclerView.addOnScrollListener(mOnScrollListener)
-            } else {
-                Debug.debug(this, "Wrong layout manager")
+        recyclerView?.let {
+            when (it.layoutManager) {
+                is LinearLayoutManager -> it.addOnScrollListener(mOnLinearLayoutManagerScrollListener)
+                is StaggeredGridLayoutManager -> it.addOnScrollListener(mOnStaggeredGridLayoutManagerScrollListener)
+                else -> Debug.debug(this, "Wrong layout manager")
             }
         }
     }
@@ -113,7 +137,8 @@ class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyT
         doOnRelease?.invoke()
         doOnRelease = null
         components.values.forEach(AdapterComponent<*, *>::release)
-        mRecyclerView?.removeOnScrollListener(mOnScrollListener)
+        mRecyclerView?.removeOnScrollListener(mOnLinearLayoutManagerScrollListener)
+        mRecyclerView?.removeOnScrollListener(mOnStaggeredGridLayoutManagerScrollListener)
         mUpdateSubscriber = null
         mRecyclerView = null
     }

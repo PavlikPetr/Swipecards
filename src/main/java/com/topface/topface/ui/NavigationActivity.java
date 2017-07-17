@@ -34,6 +34,7 @@ import com.topface.topface.databinding.AcNewNavigationBinding;
 import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.di.ComponentManager;
 import com.topface.topface.di.feed.fans.FansViewModelsComponent;
+import com.topface.topface.di.feed.mutual.MutualViewModelsComponent;
 import com.topface.topface.di.feed.visitors.VisitorsModelsComponent;
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent;
 import com.topface.topface.di.navigation_activity.NavigationActivityModule;
@@ -141,6 +142,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
             ComponentManager.INSTANCE.releaseComponent(VisitorsModelsComponent.class);
             ComponentManager.INSTANCE.releaseComponent(FansViewModelsComponent.class);
             ComponentManager.INSTANCE.releaseComponent(NavigationActivityComponent.class);
+            ComponentManager.INSTANCE.releaseComponent(MutualViewModelsComponent.class);
         }
         NavigationActivityComponent component = ComponentManager.INSTANCE
                 .obtainComponent(NavigationActivityComponent.class, new Function0<NavigationActivityComponent>() {

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="purchase_v1_card_padding">8dp</dimen>
+    <!--Feeds like cards-->
+    <dimen name="feed_card_padding_left">16dp</dimen>
+    <dimen name="feed_card_padding_top">16dp</dimen>
+    <dimen name="feed_card_padding_right">16dp</dimen>
+    <dimen name="feed_card_padding_bottom">16dp</dimen>
 </resources>

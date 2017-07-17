@@ -214,7 +214,7 @@ public class NavigationManager {
                 fragment = new PhotoblogFragment();
                 break;
             case FragmentIdData.TABBED_LIKES:
-                fragment = new TabbedLikesFragment();
+                fragment = new com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
                 fragment = new DialogsFragment();

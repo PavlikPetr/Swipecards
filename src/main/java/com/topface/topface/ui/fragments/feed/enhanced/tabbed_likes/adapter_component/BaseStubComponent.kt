@@ -24,9 +24,9 @@ abstract class BaseStubComponent<D>() : AdapterComponent<BaseSympathyStubLayoutB
 
     override fun bind(binding: BaseSympathyStubLayoutBinding, data: D?, position: Int) =
             with(binding) {
-                viewModel = BaseSympathyStubViewModel(stubTitleText, stubText,
-                        greenButtonText, borderlessButtonText,
-                        { greenButtonAction() }, { onBorderlessButtonPress() })
+//                viewModel = BaseSympathyStubViewModel(stubTitleText, stubText,
+//                        greenButtonText, borderlessButtonText,
+//                        { greenButtonAction() }, { onBorderlessButtonPress() })
                 root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.WRAP_CONTENT).apply { isFullSpan = true }
             }
