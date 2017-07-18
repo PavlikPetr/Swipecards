@@ -1,7 +1,5 @@
 package com.topface.topface.ui.dialogs.new_rate
 
-import com.topface.statistics.android.Slices
-import com.topface.statistics.android.StatisticsTracker
 import com.topface.statistics.processor.annotations.GenerateStatistics
 import com.topface.statistics.processor.annotations.SendNow
 
