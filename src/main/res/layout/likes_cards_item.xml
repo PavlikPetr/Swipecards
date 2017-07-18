@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesItemViewModel"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginBottom="48dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/bg_white"
+        android:layout_marginTop="64dp">
+
+        <FrameLayout
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/shape2"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/shape1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/shape"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:placeholderRes="@{viewModel.placeholderRes}"
+                app:setImgeByGlideWithPlaceholder="@{viewModel.avatar}"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingLeft="12dp"
+                    android:paddingStart="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@{viewModel.name}"
+                        android:textColor="#de000000"
+                        android:textSize="20sp"
+                        tools:text="Марьяна, 22"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_geo"
+                        android:drawablePadding="6dp"
+                        android:drawableStart="@drawable/ic_geo"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="@{viewModel.city}"
+                        android:textColor="#9e9e9e"
+                        android:textSize="16sp"
+                        tools:text="Москва"/>
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/skip"
+                    style="@style/DatingBig.V2.Skip"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"/>
+
+                <ImageButton
+                    android:id="@+id/send_like"
+                    style="@style/DatingBig.V2.Like"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/item_swipe_left_indicator"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:alpha="0"
+            android:background="@drawable/bt_like_normal_v2"/>
+
+        <View
+            android:id="@+id/item_swipe_right_indicator"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="right"
+            android:alpha="0"
+            android:background="@drawable/bt_dislike_normal_v2"/>
+    </FrameLayout>
+</layout>

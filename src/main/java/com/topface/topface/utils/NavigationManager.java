@@ -32,6 +32,7 @@ import com.topface.topface.ui.fragments.editor.EditorFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -214,7 +215,8 @@ public class NavigationManager {
                 fragment = new PhotoblogFragment();
                 break;
             case FragmentIdData.TABBED_LIKES:
-                fragment = new com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.TabbedLikesFragment();
+                fragment = new LikesFragment();
+//                fragment = new com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
                 fragment = new DialogsFragment();

@@ -3,15 +3,24 @@ package com.topface.topface.utils.databinding.binding_adapters
 import android.databinding.BindingAdapter
 import android.graphics.Matrix
 import android.graphics.PointF
+import android.support.v7.util.DiffUtil
+import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.lorentzos.flingswipe.SwipeFlingAdapterView
+import com.topface.framework.utils.Debug
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.BaseAdapter
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.image_switcher.ImageLoader
+import com.topface.topface.utils.databinding.IArrayListChange
+import com.topface.topface.utils.databinding.MultiObservableArrayList
+import java.util.ArrayList
 
 /**
  * Binding adapters using Kotlin
@@ -61,5 +70,27 @@ fun setPreloadedGlideImageWithCrop(view: ImageView, resource: GlideDrawable?,
             view.scaleType = ImageView.ScaleType.MATRIX
         }
         view.setImageDrawable(it)
+    }
+}
+
+@BindingAdapter("bindDataToSwipeFlingView")
+fun setBindDataToSwipeFlingView(view: SwipeFlingAdapterView, observableArrayList: MultiObservableArrayList<Any>) {
+    val adapter = view.adapter as BaseAdapter<*, Any>
+    adapter.setData(observableArrayList.getList())
+    adapter.notifyDataSetChanged()
+    observableArrayList.addOnListChangeListener(object : IArrayListChange<Any> {
+        override fun onChange(newList: ArrayList<Any>) {
+            adapter.setData(newList)
+            adapter.notifyDataSetChanged()
+        }
+    })
+}
+
+@BindingAdapter(value = *arrayOf("onSwipeFlingViewScroll", "swipeFlingViewBackgroundId", "swipeFlingViewRightIndicatorId", "swipeFlingViewLeftIndicatorId"))
+fun onSwipeFlingViewScroll(view: SwipeFlingAdapterView, scrollProgressPercent: Float, backgroundId: Int, rightIndicatorId: Int, leftIndicatorId: Int) {
+    view.selectedView?.let {
+        it.findViewById(backgroundId)?.alpha = 0f
+        it.findViewById(rightIndicatorId)?.alpha = if (scrollProgressPercent < 0) -scrollProgressPercent else 0f
+        it.findViewById(leftIndicatorId)?.alpha = if (scrollProgressPercent > 0) scrollProgressPercent else 0f
     }
 }
