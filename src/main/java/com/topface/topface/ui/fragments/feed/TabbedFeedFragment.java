@@ -17,6 +17,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.TabbedLikesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
@@ -40,6 +43,9 @@ import com.topface.topface.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static com.topface.topface.statistics.FlurryUtils.getOpenEventNаme;
+import static com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.TabbedLikesStatistics.TAB_TYPE;
 
 /**
  * base class for feeds with tabs
@@ -80,7 +86,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IBanner
                 mTabLayoutCreator.setTabTitle(position);
             }
             if (mBodyPagerAdapter != null) {
-                FlurryUtils.sendOpenEvent(mBodyPagerAdapter.getClassNameByPos(position));
+                String className = mBodyPagerAdapter.getClassNameByPos(position);
+                FlurryUtils.sendOpenEvent(className);
+                TabbedLikesStatisticsGeneratedStatistics.sendNow_TAB_SHOW(new Slices().putSlice(TAB_TYPE, getOpenEventNаme(className)));
             }
             List<Fragment> fragments = getChildFragmentManager().getFragments();
             if (fragments != null) {
