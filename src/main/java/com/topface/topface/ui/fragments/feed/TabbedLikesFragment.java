@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.topface.statistics.android.Slices;
 import com.topface.statistics.generated.TabbedLikesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -17,17 +16,12 @@ import com.topface.topface.ui.fragments.feed.mutual.MutualFragment;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 
-import static com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.TabbedLikesStatistics.TAB_DESIGN_TYPE;
-
-
 public class TabbedLikesFragment extends TabbedFeedFragment {
-
-    private static String OLD_TABBED_LIKES = "new_tabbed_likes";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TabbedLikesStatisticsGeneratedStatistics.sendNow_TABBED_LIKES_SHOW(new Slices().putSlice(TAB_DESIGN_TYPE, OLD_TABBED_LIKES));
+        TabbedLikesStatisticsGeneratedStatistics.sendNow_OLD_TABBED_LIKES_SHOW();
     }
 
     @Override

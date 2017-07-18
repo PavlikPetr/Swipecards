@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.generated.TabbedLikesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
@@ -36,7 +35,6 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.IActivityDelegate;
-import com.topface.topface.utils.IStateSaverRegistrator;
 import com.topface.topface.utils.IStateSaverRegistratorKt;
 import com.topface.topface.utils.Utils;
 

@@ -10,14 +10,19 @@ import com.topface.statistics.processor.annotations.SendNow
 @GenerateStatistics
 object TabbedLikesStatistics {
 
-    const val TAB_DESIGN_TYPE = "design_type"
     const val TAB_TYPE = "val"
 
     /**
-     * показ экрана лайков
+     * показ старого экрана лайков
      */
-    @SendNow(withSlices = true)
-    const val TABBED_LIKES_SHOW = "tabbed_likes_show"
+    @SendNow()
+    const val OLD_TABBED_LIKES_SHOW = "old_tabbed_likes_show"
+
+    /**
+     * показ нового экрана лайков
+     */
+    @SendNow()
+    const val NEW_TABBED_LIKES_SHOW = "new_tabbed_likes_show"
 
     /**
      *  событие показа определенного таба
