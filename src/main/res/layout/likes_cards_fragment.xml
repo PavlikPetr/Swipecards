@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -9,7 +10,7 @@
             type="com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesViewModel"/>
     </data>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_white">
@@ -20,12 +21,22 @@
             android:layout_height="match_parent"
             android:background="@color/bg_white"
             app:bindDataToSwipeFlingView="@{viewModel.data}"
-            app:flingListener="@{viewModel}"
-            app:onItemClickListener="@{viewModel}"
+            app:max_visible="2"
             app:onSwipeFlingViewScroll="@{viewModel.scrollProgressPercent}"
-            app:rotation_degrees="15.5"
+            app:rotation_degrees="16"
             app:swipeFlingViewBackgroundId="@{@id/background}"
             app:swipeFlingViewLeftIndicatorId="@{@id/item_swipe_left_indicator}"
             app:swipeFlingViewRightIndicatorId="@{@id/item_swipe_right_indicator}"/>
-    </FrameLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="@{viewModel.counter}"
+            android:textColor="#9e9e9e"
+            android:textSize="16sp"
+            tools:text="12 из 45"/>
+    </RelativeLayout>
 </layout>

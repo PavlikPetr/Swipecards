@@ -6,7 +6,6 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.view.View
 import com.lorentzos.flingswipe.SwipeFlingAdapterView
-import com.topface.framework.utils.Debug
 import com.topface.scruffy.data.ApiError
 import com.topface.topface.App
 import com.topface.topface.R
@@ -17,8 +16,8 @@ import com.topface.topface.api.responses.GetFeedBookmarkListResponse
 import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedLike
 import com.topface.topface.requests.handlers.ErrorCodes
+import com.topface.topface.state.CountersDataProvider
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
@@ -28,13 +27,13 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedLockerView
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.databinding.MultiObservableArrayList
-import com.topface.topface.utils.extensions.unregisterReceiver
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscribe
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -42,7 +41,7 @@ import java.util.concurrent.atomic.AtomicReference
  * Вью-модель симпатий в виде карточек, по аналогии с tinder
  */
 typealias LockerStubLastState = Pair<Long, Int>
-class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, SwipeFlingAdapterView.OnItemClickListener {
+class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, SwipeFlingAdapterView.OnItemClickListener, CountersDataProvider.ICountersUpdater {
 
     val data = MultiObservableArrayList<Any>()
 
@@ -50,6 +49,7 @@ class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, S
     val isListVisible = ObservableInt(View.VISIBLE)
     val isLockViewVisible = ObservableInt(View.INVISIBLE)
     val scrollProgressPercent = ObservableFloat(0f)
+    val counter = ObservableField(Utils.EMPTY)
 
     private val mUnreadState = UnreadStatePair(true, false)
     private var mUpdaterSubscription: Subscription? = null
@@ -86,6 +86,8 @@ class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, S
         FeedCacheManager<FeedBookmark>(FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS)
     }
 
+    private val mCountersDataProvider = CountersDataProvider(this)
+
     companion object {
         const val FROM = "from"
         const val TO = "to"
@@ -98,6 +100,12 @@ class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, S
 
     private val mApi by lazy {
         App.getAppComponent().api()
+    }
+
+    private fun getCounter(size: Int) = if (size == 0) {
+        Utils.EMPTY
+    } else {
+        Utils.getQuantityString(R.plurals.number_of_sympathies, size, size)
     }
 
     fun update(updateBundle: Bundle = Bundle(), force: Boolean = false) {
@@ -205,21 +213,25 @@ class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, S
         }
     }
 
-    override fun onItemClicked(p0: Int, p1: Any?) {
+    override fun onUpdateCounters(countersData: CountersData?) {
+        counter.set(getCounter(countersData?.likes ?: 0))
+    }
+
+    override fun onItemClicked(itemPosition: Int, dataObject: Any?) {
     }
 
     override fun removeFirstObjectInAdapter() {
     }
 
-    override fun onLeftCardExit(p0: Any?) {
+    override fun onLeftCardExit(dataObject: Any?) {
         data.removeAt(0)
     }
 
-    override fun onRightCardExit(p0: Any?) {
+    override fun onRightCardExit(dataObject: Any?) {
         data.removeAt(0)
     }
 
-    override fun onAdapterAboutToEmpty(p0: Int) {
+    override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {
     }
 
     override fun onScroll(scrollProgressPercent: Float) {
@@ -233,6 +245,7 @@ class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, S
 
     override fun release() {
         unbind()
+        mCountersDataProvider.unsubscribe()
         arrayOf(mUpdaterSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {
             if (data.isNotEmpty()) {

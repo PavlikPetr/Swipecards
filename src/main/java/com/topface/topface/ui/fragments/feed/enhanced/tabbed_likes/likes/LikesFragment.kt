@@ -5,10 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.LikesCardsFragmentBinding
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
+import rx.Subscription
 
 
 /**
@@ -16,9 +20,41 @@ import org.jetbrains.anko.layoutInflater
  * Фрагмент симпатий в виде карточек, по аналогии с tinder
  */
 class LikesFragment : BaseFragment() {
+
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
+
+    private var mUserСhoiceSubscription: Subscription? = null
+
     private val mBinding by lazy {
         DataBindingUtil.inflate<LikesCardsFragmentBinding>(context.layoutInflater,
                 R.layout.likes_cards_fragment, null, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mUserСhoiceSubscription = mEventBus
+                .getObservable(LikesCardUserChoose::class.java)
+                .subscribe(shortSubscription {
+                    it?.let {
+                        try {
+                            if (it.isLike) {
+                                mBinding.frame.topCardListener.selectRight()
+                            } else {
+                                mBinding.frame.topCardListener.selectLeft()
+                            }
+                        } catch (e: NullPointerException) {
+
+                        }
+                    }
+
+                })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mUserСhoiceSubscription.safeUnsubscribe()
     }
 
     private val mAdapter by lazy {
@@ -33,6 +69,8 @@ class LikesFragment : BaseFragment() {
         return mBinding.apply {
             viewModel = mViewModel
             frame.adapter = mAdapter
+            frame.setFlingListener(mViewModel)
+            frame.setOnItemClickListener(mViewModel)
         }.root
     }
 }
