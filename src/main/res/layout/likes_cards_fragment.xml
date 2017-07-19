@@ -22,6 +22,7 @@
             android:background="@color/bg_white"
             app:bindDataToSwipeFlingView="@{viewModel.data}"
             app:max_visible="2"
+            app:min_adapter_stack="5"
             app:onSwipeFlingViewScroll="@{viewModel.scrollProgressPercent}"
             app:rotation_degrees="16"
             app:swipeFlingViewBackgroundId="@{@id/background}"

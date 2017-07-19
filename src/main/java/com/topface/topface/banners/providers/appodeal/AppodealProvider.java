@@ -37,7 +37,7 @@ public class AppodealProvider extends AbstractAdsProvider {
     public boolean injectBannerInner(final IBannerAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
         mAppodealManager = App.getAppComponent().appodealManager();
-        final BannerView adView = Appodeal.getBannerView(page.getActivity());
+        final BannerView adView = Appodeal.getBannerView(activity);
         page.getContainerForAd().addView(adView);
         UserSettings userSettings = Appodeal.getUserSettings(activity.getApplicationContext());
         userSettings.setGender(
@@ -47,6 +47,8 @@ public class AppodealProvider extends AbstractAdsProvider {
                 .setAge(App.get().getProfile().age);
         if (Appodeal.isLoaded(Appodeal.BANNER_VIEW)) {
             bannerLoaded(page, callbacks, adView);
+        } else if (mAppodealManager.getInitStatus() == AppodealManager.NOT_INITED) {
+            mAppodealManager.initAppodeal(activity);
         }
         mBannerCallback = new IBanner() {
 

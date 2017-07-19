@@ -232,6 +232,11 @@ class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, S
     }
 
     override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {
+        update( Bundle().apply {
+            if (data.isNotEmpty()) {
+                putString(com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory.TO, (data.last() as FeedItem).id)
+            }
+        })
     }
 
     override fun onScroll(scrollProgressPercent: Float) {
@@ -253,34 +258,4 @@ class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, S
             }
         }
     }
-
-    init {
-        update()
-//        Debug.log("NEW_BASE new view model -> ${this}")
-//        if (isNeedCacheItems) {
-//            mCache.restoreFromCache(FeedBookmark::class.java)?.let {
-//                if (data.isEmpty()) {
-//                    data.addAll(it)
-//                }
-//            }
-//            isDataFromCache = true
-//        } else {
-//            isListVisible.set(View.INVISIBLE)
-//        }
-//        mCountersSubscription = mState.getObservable(CountersData::class.java)
-//                .filter { newCounters ->
-//                    val isChanged = mCounters.isNotEmpty && isCountersChanged(newCounters, mCounters)
-//                    mCounters.setCounters(newCounters)
-//                    isChanged
-//                }
-//                .shortSubscribe { newCounters ->
-//                    newCounters?.let {
-//                        loadTopFeeds()
-//                    }
-//                }
-//
-//        createAndRegisterBroadcasts()
-//        mStateManager.registerAppChangeStateListener(this)
-    }
-
 }
