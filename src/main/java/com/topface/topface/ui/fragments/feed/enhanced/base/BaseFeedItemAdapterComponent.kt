@@ -22,8 +22,8 @@ abstract class BaseFeedItemAdapterComponent<T : ViewDataBinding, D : FeedItem>(v
         data?.let {
             attachViewModel(binding, it)
             binding.executePendingBindings()
-            binding.root.isSelected = mMultiselectionController.mSelected.contains(data)
             with(binding.root) {
+                isSelected = mMultiselectionController.mSelected.contains(data)
                 setOnClickListener {
                     click(it)
                 }
