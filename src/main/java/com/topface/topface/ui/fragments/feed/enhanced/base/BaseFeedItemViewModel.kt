@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.enhanced.base
 
+import android.databinding.ObservableInt
 import android.text.Html
 import android.text.TextUtils
 import com.topface.topface.App
@@ -17,6 +18,8 @@ open class BaseFeedItemViewModel<out T : FeedItem>(val item: T, private val mNav
     open val feed_type: String = "UNDEFINED"
     var avatarHolder: AvatarHolder? = null
     var nameAndAge: AgeAndNameData? = null
+    var background = ObservableInt(0)
+
     open val text: String? = null
     open val time: String? = null
 
@@ -30,6 +33,7 @@ open class BaseFeedItemViewModel<out T : FeedItem>(val item: T, private val mNav
         item.user?.let {
             avatarHolder = AvatarHolder(it.photo, getStubResourсe())
             nameAndAge = getNameAndAge(it)
+            background.set(if (item.unread) R.drawable.new_feed_list_item_selector else R.drawable.feed_list_item_selector)
         }
     }
 

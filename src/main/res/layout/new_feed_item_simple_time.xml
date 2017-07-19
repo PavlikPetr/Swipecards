@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{clickListener::onClick}"
+        app:setBackgroundResource="@{viewModel.background}"
         app:onLongItemClick="@{longClickListener}"
         android:orientation="horizontal">
 

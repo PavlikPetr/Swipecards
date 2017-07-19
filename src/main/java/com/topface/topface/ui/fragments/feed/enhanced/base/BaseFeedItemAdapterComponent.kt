@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.feed.enhanced.base
 
 import android.databinding.ViewDataBinding
 import android.view.View
-import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController
@@ -23,8 +22,8 @@ abstract class BaseFeedItemAdapterComponent<T : ViewDataBinding, D : FeedItem>(v
         data?.let {
             attachViewModel(binding, it)
             binding.executePendingBindings()
-            handleHighlight(binding, data)
             with(binding.root) {
+                isSelected = mMultiselectionController.mSelected.contains(data)
                 setOnClickListener {
                     click(it)
                 }
@@ -38,15 +37,4 @@ abstract class BaseFeedItemAdapterComponent<T : ViewDataBinding, D : FeedItem>(v
 
     abstract fun attachViewModel(binding: T, data: D)
 
-    private fun handleHighlight(binding: T, data: D?) {
-        binding.root.isSelected = false
-        if (data?.unread ?: false) {
-            binding.root.setBackgroundResource(R.drawable.new_feed_list_item_selector)
-        } else {
-            binding.root.setBackgroundResource(R.drawable.feed_list_item_selector)
-        }
-        if (data != null) {
-            binding.root.isSelected = mMultiselectionController.mSelected.contains(data)
-        }
-    }
 }
