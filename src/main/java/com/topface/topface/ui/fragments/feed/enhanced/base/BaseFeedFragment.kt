@@ -13,6 +13,7 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.databinding.NewFeedFragmentBaseBinding
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesAdapter
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.ActionModeController
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
@@ -25,6 +26,7 @@ import com.topface.topface.ui.new_adapter.enhanced.IAdapter
 import com.topface.topface.utils.extensions.executePendingBindingsBeforeApi
 import org.jetbrains.anko.layoutInflater
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Базовый фрагментик для всех фидов
@@ -57,7 +59,6 @@ abstract class BaseFeedFragment<T : FeedItem, A : IAdapter, V : ViewDataBinding>
     @Inject lateinit var mLockerControllerBase: BaseFeedLockerController<*>
 
     abstract val mViewModel: BaseFeedFragmentModel<T>
-
 
     abstract fun attachAdapterComponents(adapter: A)
 

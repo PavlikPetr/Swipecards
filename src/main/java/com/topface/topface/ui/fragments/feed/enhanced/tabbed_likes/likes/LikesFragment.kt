@@ -7,25 +7,24 @@ import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.databinding.LikesCardsFragmentBinding
 import com.topface.topface.databinding.LikesCardsItemBinding
 import com.topface.topface.di.ComponentManager
-import com.topface.topface.di.feed.likes.*
-import com.topface.topface.di.navigation_activity.NavigationActivityComponent
-import com.topface.topface.di.navigation_activity.NavigationActivityModule
+import com.topface.topface.di.feed.likes.DaggerLikesViewModelsComponent
+import com.topface.topface.di.feed.likes.LikesComponent
+import com.topface.topface.di.feed.likes.LikesViewModelsComponent
 import com.topface.topface.statistics.FlurryOpenEvent
-import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
-import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.BaseAdapter
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
+import javax.inject.Inject
 
 
 /**
  * Created by ppavlik on 17.07.17.
  * Фрагмент симпатий в виде карточек, по аналогии с tinder
  */
-@FlurryOpenEvent(name = LikeFragment.SCREEN_TYPE)
-class LikeFragment : BaseFeedFragment<FeedBookmark, BaseAdapter<LikesCardsItemBinding, FeedBookmark>, LikesCardsFragmentBinding>() {
+@FlurryOpenEvent(name = LikesFragment.SCREEN_TYPE)
+class LikesFragment : BaseFeedFragment<FeedBookmark, BaseAdapter<LikesCardsItemBinding, FeedBookmark>, LikesCardsFragmentBinding>() {
 
     companion object {
         const val SCREEN_TYPE = "NewLikes"

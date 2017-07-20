@@ -5,6 +5,7 @@ import com.topface.topface.App
 import com.topface.topface.api.responses.Visitor
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.feed.base.BaseFeedModule
+import com.topface.topface.di.feed.base.DefaultFeedModule
 import com.topface.topface.di.feed.visitors.DaggerVisitorsModelsComponent
 import com.topface.topface.di.feed.visitors.VisitorsComponent
 import com.topface.topface.di.feed.visitors.VisitorsModelsComponent
@@ -36,7 +37,7 @@ class VisitorsFragment : BaseFeedFragmentWithComponentAdapter<Visitor>(), IOnFra
             ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
                 App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
             }
-                    .add(VisitorsModule(this@VisitorsFragment), BaseFeedModule(this@VisitorsFragment))
+                    .add(VisitorsModule(this@VisitorsFragment), DefaultFeedModule(this@VisitorsFragment))
         }.inject(this@VisitorsFragment)
         super.onCreate(savedInstanceState)
     }

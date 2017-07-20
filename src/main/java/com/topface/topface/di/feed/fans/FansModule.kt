@@ -4,6 +4,7 @@ import android.databinding.ViewStubProxy
 import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.feed.base.BaseFeedModule
+import com.topface.topface.di.feed.base.DefaultFeedModule
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.enhanced.fans.FansFragment
@@ -15,7 +16,7 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 import dagger.Module
 import dagger.Provides
 
-@Module(includes = arrayOf(BaseFeedModule::class))
+@Module(includes = arrayOf(DefaultFeedModule::class))
 class FansModule(private val mFragment: FansFragment) {
 
     val emptyFeedLayout = R.layout.layout_empty_fans
@@ -51,5 +52,4 @@ class FansModule(private val mFragment: FansFragment) {
             setLockerLayout(emptyFeedLayout)
         }
     }
-
 }

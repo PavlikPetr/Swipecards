@@ -5,7 +5,7 @@ import com.topface.topface.R
 import com.topface.topface.data.CountersData
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.admiration.AdmirationFragment
-import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikeFragment
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesFragment
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.mutual.MutualFragment
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
@@ -22,13 +22,13 @@ class TabbedLikesFragment : TabbedFeedFragment() {
     }
 
     override fun onBeforeCountersUpdate(countersData: CountersData?) {
-        updatePageCounter(LikeFragment::class.java.name, countersData?.likes ?: 0)
+        updatePageCounter(LikesFragment::class.java.name, countersData?.likes ?: 0)
         updatePageCounter(MutualFragment::class.java.name, countersData?.mutual ?: 0)
         updatePageCounter(AdmirationFragment::class.java.name, countersData?.admirations ?: 0)
     }
 
     override fun addPages() {
-        addBodyPage(LikeFragment::class.java.name, R.string.general_likes.getString(), mCountersData.likes)
+        addBodyPage(LikesFragment::class.java.name, R.string.general_likes.getString(), mCountersData.likes)
         addBodyPage(MutualFragment::class.java.name, R.string.general_mutual.getString(), mCountersData.mutual)
         addBodyPage(AdmirationFragment::class.java.name, R.string.general_admirations.getString(), mCountersData.admirations)
     }

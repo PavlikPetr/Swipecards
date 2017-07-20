@@ -6,10 +6,8 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.databinding.NewFeedFragmentBaseBinding
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import javax.inject.Inject
 
-/**
- * Created by ppavlik on 20.07.17.
- */
 abstract class BaseFeedFragmentWithComponentAdapter<T : FeedItem> : BaseFeedFragment<T, CompositeAdapter, NewFeedFragmentBaseBinding>() {
     override val res: Int
         get() = R.layout.new_feed_fragment_base
