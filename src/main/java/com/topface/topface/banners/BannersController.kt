@@ -15,7 +15,7 @@ import rx.Subscription
  * и вызывает ее загрузку в контейнер
  * Новые застройки будут получены при возвращении пользователя на экран (свернул апу - вернулся, открыл чат/профиль - вернулся по back/up)
  */
-class BannersController(private var mPage: IBannerAds) : ILifeCycle, RunningStateManager.OnAppChangeStateListener {
+class BannersController(private val mPage: IBannerAds) : ILifeCycle, RunningStateManager.OnAppChangeStateListener {
 
     private val mFeedBannersInjector by lazy {
         BannerInjector()
@@ -53,9 +53,7 @@ class BannersController(private var mPage: IBannerAds) : ILifeCycle, RunningStat
         mBannerSubscription?.safeUnsubscribe()
     }
 
-    fun release() {
-        mFeedBannersInjector.cleanUp()
-    }
+    fun release() = mFeedBannersInjector.cleanUp()
 
     override fun onResume() {
         super.onResume()
