@@ -1117,4 +1117,11 @@
   <string name="payment_ninja_currency_notice">* Цена при расчете может отличаться из-за курса валют</string>
   <string name="get_free">Получить бесплатно</string>
   <string name="product_coast">за %s</string>
+  <string name="you_have_not_sympathies">У вас пока нет симпатий</string>
+  <string name="you_have_not_admirations">У вас пока нет восхищений</string>
+  <string name="become_a_vip_and_many_partners_will_see_you">Стань VIP и тебя увидет много партнеров!</string>
+  <string name="go_to_dating">В знакомства</string>
+  <string name="go_to_guests">К гостям</string>
+  <string name="go_to_dating_and_rate_people">Перейдите в знакомства и оцените людей!</string>
+  <string name="go_to_sypmathies">К симпатиям</string>
 </resources>

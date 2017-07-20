@@ -19,7 +19,7 @@
   <string name="waiting_a_products">Please wait, we\'re loading our available products</string>
   <string name="likes_background_text">No likes</string>
   <string name="visitors_background_text">No guests</string>
-  <string name="need_set_avatar">No one can get to know you! Upload a profile photo.</string>
+  <string name="need_set_avatar">No one can see you! Upload a profile photo.</string>
   <string name="chat_background_text">No incoming messages</string>
   <string name="entrance">Enter</string>
   <string name="filter_only_online">Online only</string>
@@ -52,7 +52,7 @@
   <string name="general_type_complain">Subject of complaint</string>
   <string name="address_book_access_error">This app does not have access to your contacts. You can
         allow access via the Privacy Settings of your device.</string>
-  <string name="camera_access_error">Application does not have access to the camera. You can grant access in your device\'s Privacy Settings.</string>
+  <string name="camera_access_error">The application does not have access to the camera. You can grant access in your device\'s Privacy Settings.</string>
   <string name="profile_deleted_user">User has been deleted</string>
   <string name="filter_main_parameters">I am interested in</string>
   <string name="dating_prev_button_ext">Previous</string>
@@ -428,7 +428,7 @@
         photo gallery</string>
   <string name="photo_for_avatar">Your photo is ready to be sent to your profile! This is your
         first uploaded one, meaning it will act as your profile photo.</string>
-  <string name="add_photo_before">First you need to add a photo</string>
+  <string name="add_photo_before">You need to add a photo first</string>
   <string name="change_email">Change email</string>
   <string name="send_confirmation_email">Send a confirmation email</string>
   <string name="change_password">Change password</string>
@@ -445,9 +445,9 @@
   <string name="enter_new_password">Enter your new password</string>
   <string name="enter_old_password">Enter your previous password</string>
   <string name="enter_password_confirmation">Confirm your password</string>
-  <string name="passwords_mismatched">Passwords do not match</string>
+  <string name="passwords_mismatched">Passwords do not match.</string>
   <string name="old_password_mismatched">Incorrect old password.</string>
-  <string name="passwords_matched">New and previous password don\'t match</string>
+  <string name="passwords_matched">New password is identical to the old one.</string>
   <string name="passwords_changed">Password was changed</string>
   <string name="take_photo">Take a photo</string>
   <string name="take_another_photo">Another photo</string>
@@ -539,7 +539,7 @@
         contain a commercial offer</string>
   <string name="complain_type_swearing_profile">The fields \&quot;status\&quot;, \&quot;about yourself\&quot; contain
         offensive language, links to social networks</string>
-  <string name="complain_type_fake_data">Name, sex, age, or photo do not match</string>
+  <string name="complain_type_fake_data">Name, sex, age, and person\'s photo do not match</string>
   <string name="complain_description">Tell us the details regarding the cause for complaint.</string>
   <string name="general_complain_sended">Your complaint has been submitted, thank you for your
         help!</string>
@@ -547,7 +547,7 @@
   <string name="general_msg">Message</string>
   <string name="notifications">Notifications</string>
   <string name="general_no_notifications">Unfortunately, notifications on your device are not
-        available</string>
+        available.</string>
   <string name="black_list_add_short">To the Blacklist</string>
   <string name="confirm_email_for_dating">We are against Spam. Please confirm your email so that
         you can date people on Spark!</string>
@@ -717,8 +717,8 @@
   <string name="google_sign_in_account_title">Your Google Account has not been added. You have to
         sign in if you want to receive Notifications.</string>
   <string name="google_sign_in_account_button">Sign in</string>
-  <string name="google_unavailable_services_title">Unfortunately, Notifications are not available
-        on your device.</string>
+  <string name="google_unavailable_services_title">Unfortunately, notifications on your device are not
+        available.</string>
   <string name="receive_message_notification">Get notified about\na new Message</string>
   <string name="receive_mutual_notification">Get notified about\na new Mutual Like</string>
   <string name="receive_sympathy_notification">Get notified about\na new Like</string>
@@ -746,7 +746,7 @@
   <string name="settings_check_vip_alert">Your request to check VIP-status has been sent.</string>
   <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
         find someone special!</string>
-  <string name="go_dating_message">Start dating and here will appear the names of those users who visited your profile.</string>
+  <string name="go_dating_message">When you start dating, the names of users who have visited your profile will appear here.</string>
   <string name="photo_not_from_main_album">A moderator has decided that this photo may not be used as a profile photo.</string>
   <string name="sidebar_vk_profile">VK Profile</string>
   <string name="fb_invite_friends_menu_item">Invite friends</string>
@@ -768,7 +768,7 @@
   <string name="vk_friends_success_invite">Invitation has been sent</string>
   <string name="join_group_success">You have joined the group</string>
   <string name="settings_auto_greeting_title">Auto-Greetings</string>
-  <string name="settings_auto_greeting_subtitle">Allow the system to automatically start a conversation with a greeting when you receive Like</string>
+  <string name="settings_auto_greeting_subtitle">Allow the system to automatically start a conversation with a greeting when you receive a Like</string>
   <string name="take_photo_text_1">Please upload a photo of yourself to start dating.</string>
   <string name="take_photo_text_2">Only you should be in the photo; all photos are reviewed by moderators to ensure rules are followed.</string>
   <string name="unlock_by_viewed_ad_video_button_text">Unlock for free at %s</string>
@@ -949,7 +949,7 @@
   <string name="people_nearby_popover_text">Get featured in the photo feed!\nThousands of people will see you</string>
   <string name="mutual_popup_you_get_mutual">You like each other!</string>
   <string name="start_dialog">Start Conversation</string>
-  <string name="continue_to_meet">Continue Dating</string>
+  <string name="continue_to_meet">Continue dating</string>
   <string name="basic_information">Basic Information</string>
   <string name="purchase_successfull">Payment was successful!</string>
   <string name="now_you_have_VIP">You now have VIP-status</string>

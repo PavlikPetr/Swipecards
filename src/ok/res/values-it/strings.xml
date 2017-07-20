@@ -1144,6 +1144,7 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="get_vip">Diventa VIP</string>
     <string name="payment_ninja_autofill_title">Ricarica automatica</string>
     <string name="payment_ninja_autofill_link">Regole del Servizio</string>
+    <string name="payment_ninja_currency_notice">* Il prezzo potrebbe essere soggetto a cambiamenti al momento del pagamento, per motivi legati al cambio valuta</string>
     <string name="get_free">Ottienilo gratuitamente</string>
     <string name="product_coast">a %s</string>
 </resources>
