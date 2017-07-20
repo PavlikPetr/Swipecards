@@ -15,7 +15,7 @@ import rx.Subscription
  * и вызывает ее загрузку в контейнер
  * Новые застройки будут получены при возвращении пользователя на экран (свернул апу - вернулся, открыл чат/профиль - вернулся по back/up)
  */
-class BannersController(private val mPage: IBannerAds) : ILifeCycle, RunningStateManager.OnAppChangeStateListener {
+class BannersController(private var mPage: IBannerAds) : ILifeCycle, RunningStateManager.OnAppChangeStateListener {
 
     private val mFeedBannersInjector by lazy {
         BannerInjector()
@@ -51,10 +51,11 @@ class BannersController(private val mPage: IBannerAds) : ILifeCycle, RunningStat
 
     override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
         mBannerSubscription?.safeUnsubscribe()
-        mFeedBannersInjector.cleanUp()
     }
 
-    fun release() = mFeedBannersInjector.cleanUp()
+    fun release() {
+        mFeedBannersInjector.cleanUp()
+    }
 
     override fun onResume() {
         super.onResume()
@@ -86,7 +87,11 @@ class BannersController(private val mPage: IBannerAds) : ILifeCycle, RunningStat
 
     override fun onPause() {
         super.onPause()
-        mFeedBannersInjector.cleanUp()
+//         // TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+//      ниже закомичен метод cleanUp(), чтобы краша не было...
+//      лог и кейсы описаны тут - https://tasks.verumnets.ru/issues/57082
+
+//        mFeedBannersInjector.cleanUp()
         mRunningStateManager.unregisterAppChangeStateListener(this)
     }
 }

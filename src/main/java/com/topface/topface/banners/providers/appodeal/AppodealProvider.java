@@ -1,30 +1,21 @@
 package com.topface.topface.banners.providers.appodeal;
 
 import android.app.Activity;
-import android.content.res.Resources;
-import android.support.annotation.StringRes;
 import android.text.TextUtils;
 
 import com.appodeal.ads.Appodeal;
-import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.BannerView;
 import com.appodeal.ads.UserSettings;
-import com.appodeal.ads.utils.Log;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.banners.AbstractAdsProvider;
 import com.topface.topface.banners.AdProvidersFactory;
 import com.topface.topface.banners.IBannerAds;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.external_libs.appodeal.AppodealManager;
 import com.topface.topface.ui.external_libs.appodeal.IBanner;
-import com.topface.topface.ui.external_libs.appodeal.IFullscreen;
-import com.topface.topface.utils.FormItem;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Inject;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
@@ -47,6 +38,8 @@ public class AppodealProvider extends AbstractAdsProvider {
                 .setAge(App.get().getProfile().age);
         if (Appodeal.isLoaded(Appodeal.BANNER_VIEW)) {
             bannerLoaded(page, callbacks, adView);
+        } else if (mAppodealManager.getInitStatus() == AppodealManager.NOT_INITED) {
+            mAppodealManager.initAppodeal(activity);
         }
         mBannerCallback = new IBanner() {
 
