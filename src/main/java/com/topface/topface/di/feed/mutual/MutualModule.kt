@@ -44,7 +44,7 @@ class MutualModule(private val mFragment: MutualFragment) {
 
     @Provides
     @FragmentScope
-    fun providesVisitorsLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory, navigator: IFeedNavigator)
+    fun providesMutualLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory, navigator: IFeedNavigator)
             : BaseFeedLockerController<*> {
         return MutualLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy, navigator).apply {
             lockScreenFactory = lockerFactory

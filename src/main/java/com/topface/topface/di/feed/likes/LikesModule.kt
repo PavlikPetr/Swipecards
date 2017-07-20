@@ -1,4 +1,4 @@
-package com.topface.topface.di.feed.admiration
+package com.topface.topface.di.feed.likes
 
 import android.databinding.ViewStubProxy
 import com.topface.topface.R
@@ -6,9 +6,9 @@ import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
-import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.admiration.AdmirationFragment
-import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.admiration.AdmirationLockController
-import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.admiration.AdmirationLockScreenViewModel
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikeFragment
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesLockController
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesLockScreenViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
@@ -16,7 +16,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module(includes = arrayOf(BaseFeedModule::class))
-class AdmirationModule(private val mFragment: AdmirationFragment) {
+class LikesModule(private val mFragment: LikeFragment) {
 
     val emptyFeedLayout = R.layout.base_sympathy_stub_layout
 
@@ -39,14 +39,15 @@ class AdmirationModule(private val mFragment: AdmirationFragment) {
     @FragmentScope
     fun providesLockScreenVMFactory(): BaseFeedLockerController.ILockScreenVMFactory =
             object : BaseFeedLockerController.ILockScreenVMFactory {
-                override fun construct() = AdmirationLockScreenViewModel(mFragment)
+                override fun construct() = LikesLockScreenViewModel(mFragment)
             }
 
     @Provides
     @FragmentScope
-    fun providesAdmirationLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory, navigator: IFeedNavigator)
+    fun providesVisitorsLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory, navigator: IFeedNavigator)
             : BaseFeedLockerController<*> {
-        return AdmirationLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy, navigator).apply {
+        //TODO mFragment.mBinding.emptyFeedStub as ViewStubProxy
+        return LikesLockController(mFragment.mBinding as ViewStubProxy, navigator).apply {
             lockScreenFactory = lockerFactory
             setLockerLayout(emptyFeedLayout)
         }

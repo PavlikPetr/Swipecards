@@ -14,11 +14,11 @@ import com.topface.topface.di.navigation_activity.NavigationActivityComponent
 import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.NavigationActivity
-import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentWithComponentAdapter
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 
 @FlurryOpenEvent(name = FansFragment.SCREEN_TYPE)
-class FansFragment : BaseFeedFragment<FeedBookmark>() {
+class FansFragment : BaseFeedFragmentWithComponentAdapter<FeedBookmark>() {
 
     companion object {
         const val SCREEN_TYPE = "Fans"
@@ -33,8 +33,8 @@ class FansFragment : BaseFeedFragment<FeedBookmark>() {
         }.fansViewModel()
     }
 
-    override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
-        compositeAdapter.addAdapterComponent(
+    override fun attachAdapterComponents(adapter: CompositeAdapter) {
+        adapter.addAdapterComponent(
                 FansAdapterComponent({ itemClick(it, SCREEN_TYPE) }, { itemLongClick(it) }))
     }
 

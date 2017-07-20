@@ -31,7 +31,6 @@ import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
 import com.topface.topface.ui.fragments.editor.EditorFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;

@@ -1,12 +1,14 @@
 package com.topface.topface.ui.fragments.feed.enhanced.base
 
 import android.databinding.DataBindingUtil
+import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.databinding.NewFeedFragmentBaseBinding
@@ -19,6 +21,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController
 import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController.IMultiSelectionListener
 import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import com.topface.topface.ui.new_adapter.enhanced.IAdapter
 import com.topface.topface.utils.extensions.executePendingBindingsBeforeApi
 import org.jetbrains.anko.layoutInflater
 import javax.inject.Inject
@@ -27,7 +30,7 @@ import javax.inject.Inject
  * Базовый фрагментик для всех фидов
  * Created by tiberal on 10.02.17.
  */
-abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionListener,
+abstract class BaseFeedFragment<T : FeedItem, A : IAdapter, V : ViewDataBinding> : BaseFragment(), IMultiSelectionListener,
         ActionModeController.OnActionModeEventsListener,
         IFeedUnlocked {
     /**
@@ -40,9 +43,9 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
      * значит мы развернули приложение после сворачивания
      */
     private var onStartAfterSavedStateWasCalled = false
-    protected open val res: Int = R.layout.new_feed_fragment_base
-    val mBinding: NewFeedFragmentBaseBinding by lazy {
-        DataBindingUtil.inflate<NewFeedFragmentBaseBinding>(context.layoutInflater, res, null, false)
+    abstract val res: Int
+    val mBinding: V by lazy {
+        DataBindingUtil.inflate<V>(context.layoutInflater, res, null, false)
     }
     open val actionModeMenu = R.menu.feed_context_menu
 
@@ -50,42 +53,46 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
     @Inject lateinit var mApi: FeedApi
     @Inject lateinit var mNavigator: IFeedNavigator
     @Inject lateinit var mActionModeController: ActionModeController
-    @Inject lateinit var mAdapter: CompositeAdapter
+    @Inject lateinit var mAdapter: A
     @Inject lateinit var mLockerControllerBase: BaseFeedLockerController<*>
 
     abstract val mViewModel: BaseFeedFragmentModel<T>
 
 
-    abstract fun attachAdapterComponents(compositeAdapter: CompositeAdapter)
+    abstract fun attachAdapterComponents(adapter: A)
 
     @Suppress("UNCHECKED_CAST")
     protected fun itemLongClick(view: View?) {
-        val itemPosition = mBinding.feedList.layoutManager.getPosition(view)
-        val data = mAdapter.data[itemPosition] as T
-        if (!mActionModeController.isActionModeEnabled() && view != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).startSupportActionMode(mActionModeController)
-            mMultiselectionController.startMultiSelection()
-            mMultiselectionController.handleSelected(data, view, itemPosition)
-            mAdapter.notifyItemChanged(itemPosition)
+        getViewPosition(view)?.let {
+            val data = mAdapter.data[it] as T
+            if (!mActionModeController.isActionModeEnabled() && view != null && activity is AppCompatActivity) {
+                (activity as AppCompatActivity).startSupportActionMode(mActionModeController)
+                mMultiselectionController.startMultiSelection()
+                mMultiselectionController.handleSelected(data, view, it)
+                mAdapter.notifyItemChanged(it)
+            }
         }
     }
 
+    open fun getViewPosition(view: View?): Int? = null
+
     @Suppress("UNCHECKED_CAST")
     protected fun itemClick(view: View?, from: String) {
-        val itemPosition = mBinding.feedList.layoutManager.getPosition(view)
-        val data = mAdapter.data[itemPosition] as T
-        if (mActionModeController.isActionModeEnabled() && view != null) {
-            mMultiselectionController.handleSelected(data, view, itemPosition)
-            mAdapter.notifyItemChanged(itemPosition)
-        } else {
-            mViewModel.itemClick(view, itemPosition, data, from)
+        getViewPosition(view)?.let {
+            val data = mAdapter.data[it] as T
+            if (mActionModeController.isActionModeEnabled() && view != null) {
+                mMultiselectionController.handleSelected(data, view, it)
+                mAdapter.notifyItemChanged(it)
+            } else {
+                mViewModel.itemClick(view, it, data, from)
+            }
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         initScreenView(mBinding)
-        mBinding.viewModel = mViewModel as BaseFeedFragmentModel<FeedItem>
+        mBinding.setVariable(BR.viewModel, mViewModel as BaseFeedFragmentModel<FeedItem>)
         //Хитрый хак, дабы зафорсить обновление данных через биндинг адаптре на прелолипопах
         mBinding.executePendingBindingsBeforeApi()
         mViewModel.apply {
@@ -146,14 +153,7 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
     protected open fun terminateImmortalComponent() {
     }
 
-    protected open fun initScreenView(binding: NewFeedFragmentBaseBinding) {
-        with(binding.feedList) {
-            itemAnimator = null
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = mAdapter
-        }
-    }
+    abstract fun initScreenView(binding: V)
 
     override fun onDeleteFeedItems() {
         mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected,
@@ -190,7 +190,6 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
     open fun getDeleteItemsList(mSelected: MutableList<T>) = mSelected.getFeedIdList()
 
     override fun onDestroyView() {
-        mBinding.feedList.stopScroll()
         super.onDestroyView()
         //пока пусть будет так, похоже что это лишнее, на дестрое вьюхи не надо релизить модель.
         //mViewModel.release()

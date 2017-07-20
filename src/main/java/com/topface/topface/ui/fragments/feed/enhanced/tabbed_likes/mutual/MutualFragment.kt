@@ -27,8 +27,8 @@ class MutualFragment : BaseLikesFeedFragment() {
         }.mutualViewModel()
     }
 
-    override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
-        compositeAdapter.addAdapterComponent(
+    override fun attachAdapterComponents(adapter: CompositeAdapter) {
+        adapter.addAdapterComponent(
                 MutualAdapterComponent({ itemClick(it, MutualFragment.SCREEN_TYPE) }, { itemLongClick(it) }))
     }
 
