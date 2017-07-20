@@ -10,6 +10,8 @@ import com.topface.topface.data.CountersData
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
+import com.topface.topface.utils.rx.shortSubscribe
+import rx.subscriptions.CompositeSubscription
 
 class AdmirationViewModel(api: IApi) : BaseFeedFragmentModel<FeedBookmark>(api) {
     override val responseClass: Class<out IBaseFeedResponse>
@@ -25,6 +27,8 @@ class AdmirationViewModel(api: IApi) : BaseFeedFragmentModel<FeedBookmark>(api) 
     override val isForPremium: Boolean
         get() = true
 
+    private val mPopupMenuSubscription = CompositeSubscription()
+
     override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData) =
             newCounters.admirations > currentCounters.admirations
 
@@ -33,4 +37,18 @@ class AdmirationViewModel(api: IApi) : BaseFeedFragmentModel<FeedBookmark>(api) 
 
     override fun itemClick(view: View?, itemPosition: Int, data: FeedBookmark?, from: String) =
             navigator?.showProfile(data, from)
+
+    init {
+        mPopupMenuSubscription
+                .add(api.observeDeleteMutual().shortSubscribe {
+                    //todo       обработать получение ивента
+                })
+        mPopupMenuSubscription.add(api.observeAddToBlackList().shortSubscribe {
+            //todo       обработать получение ивента
+
+        })
+    }
+
+
+    // TODO                    ОТПИСКУ НЕ ПРОЕБИ!!!!!!!!!!!!!!
 }

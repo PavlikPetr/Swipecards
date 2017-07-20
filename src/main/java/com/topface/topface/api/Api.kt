@@ -45,6 +45,24 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
 
     override fun execDeleteMessage(item: HistoryItem) = DeleteMessageRequest(item.id).exec()
 
+    override fun execAddToBlackList(itemId: List<Int>) = BlackListAddRequest(itemId).exec()
+
+    override fun observeAddToBlackList() = mScruffyManager.mEventManager
+            .observeEventInBackground(BlackListAddRequest.REQUEST_METHOD_NAME, Completed::class.java)
+            .applySchedulers()
+
+    override fun execDeleteMutual(userIds: ArrayList<String>) = DeleteMutualRequest(userIds).exec()
+
+    override fun observeDeleteMutual() = mScruffyManager.mEventManager
+            .observeEventInBackground(DeleteMutualRequest.REQUEST_METHOD_NAME, DeleteComplete::class.java)
+            .applySchedulers()
+
+    override fun execDeleteAdmiration(itemsId: ArrayList<String>) = DeleteAdmirationRequest(itemsId).exec()
+
+    override fun observeDeleteAdmiration() = mScruffyManager.mEventManager
+            .observeEventInBackground(DeleteAdmirationRequest.REQUEST_METHOD_NAME, DeleteComplete::class.java)
+            .applySchedulers()
+
     override fun callSetProfile(name: String, age: Int, sex: Int, location: Location?, cityid: Int,
                                 status: String, background: Int, invisible: Boolean?, xstatus: Int,
                                 isAutoReplyAllowed: Boolean?): Observable<Completed> =

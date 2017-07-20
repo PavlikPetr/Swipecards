@@ -34,6 +34,18 @@ interface IApi {
 
     fun observeDeleteMessage(): Observable<DeleteComplete>
 
+    fun execAddToBlackList(itemId: List<Int>)
+
+    fun observeAddToBlackList(): Observable<Completed>
+
+    fun execDeleteMutual(userIds: ArrayList<String>)
+
+    fun observeDeleteMutual(): Observable<DeleteComplete>
+
+    fun execDeleteAdmiration(itemsId: ArrayList<String>)
+
+    fun observeDeleteAdmiration(): Observable<DeleteComplete>
+
     fun callSetProfile(name: String = Utils.EMPTY, age: Int = -1, sex: Int = -1, location: Location? = null,
                        cityid: Int = -1, status: String = Utils.EMPTY, background: Int = -1, invisible: Boolean? = null,
                        xstatus: Int = -1, isAutoReplyAllowed: Boolean? = null): Observable<Completed>
