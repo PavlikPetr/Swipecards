@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes
 
+import com.topface.statistics.generated.TabbedLikesStatisticsGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.data.CountersData
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment
@@ -15,6 +16,11 @@ import com.topface.topface.utils.extensions.getString
  * Экран с табами для симпатий, взаимных, восхищений
  */
 class TabbedLikesFragment : TabbedFeedFragment() {
+
+    init {
+        TabbedLikesStatisticsGeneratedStatistics.sendNow_NEW_TABBED_LIKES_SHOW()
+    }
+
     override fun onBeforeCountersUpdate(countersData: CountersData?) {
         updatePageCounter(LikesFragment::class.java.name, countersData?.likes ?: 0)
         updatePageCounter(MutualFragment::class.java.name, countersData?.mutual ?: 0)

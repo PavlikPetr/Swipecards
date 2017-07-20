@@ -18,7 +18,7 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 @FlurryOpenEvent(name = AdmirationFragment.Companion.SCREEN_TYPE)
 class AdmirationFragment : BaseLikesFeedFragment() {
     companion object {
-        const val SCREEN_TYPE = "Admiration"
+        const val SCREEN_TYPE = "NewAdmiration"
     }
 
     override val mViewModel by lazy {

@@ -18,7 +18,7 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 @FlurryOpenEvent(name = MutualFragment.SCREEN_TYPE)
 class MutualFragment : BaseLikesFeedFragment() {
     companion object {
-        const val SCREEN_TYPE = "Mutual"
+        const val SCREEN_TYPE = "NewMutual"
     }
 
     override val mViewModel by lazy {

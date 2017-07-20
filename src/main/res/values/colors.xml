@@ -350,4 +350,7 @@
     <!--Offerwalls-->
     <color name="offerwall_button_text_color">#1e1e1e</color>
     <color name="offerwall_divider_color">#dbdbdb</color>
+
+    <color name="disable_tab_title_color">#666666</color>
+    <color name="counter_tab_color">#499aff</color>
 </resources>
