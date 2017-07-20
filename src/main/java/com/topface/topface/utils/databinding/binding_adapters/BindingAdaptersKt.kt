@@ -1,10 +1,10 @@
 package com.topface.topface.utils.databinding.binding_adapters
 
 import android.databinding.BindingAdapter
+import android.databinding.ObservableArrayList
+import android.databinding.ObservableList
 import android.graphics.Matrix
 import android.graphics.PointF
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.view.View
 import android.widget.ImageView
@@ -12,15 +12,12 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.lorentzos.flingswipe.SwipeFlingAdapterView
-import com.topface.framework.utils.Debug
+import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.BaseAdapter
-import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import com.topface.topface.ui.fragments.feed.enhanced.utils.ImprovedObservableList
 import com.topface.topface.ui.views.image_switcher.ImageLoader
-import com.topface.topface.utils.databinding.IArrayListChange
-import com.topface.topface.utils.databinding.MultiObservableArrayList
-import java.util.ArrayList
 
 /**
  * Binding adapters using Kotlin
@@ -74,16 +71,45 @@ fun setPreloadedGlideImageWithCrop(view: ImageView, resource: GlideDrawable?,
 }
 
 @BindingAdapter("bindDataToSwipeFlingView")
-fun setBindDataToSwipeFlingView(view: SwipeFlingAdapterView, observableArrayList: MultiObservableArrayList<Any>) {
-    val adapter = view.adapter as BaseAdapter<*, Any>
-    adapter.setData(observableArrayList.getList())
+fun setBindDataToSwipeFlingView(view: SwipeFlingAdapterView, data: ImprovedObservableList<FeedBookmark>) {
+    val adapter = view.adapter as BaseAdapter<*, FeedBookmark>
+    adapter.setData(data.observableList)
     adapter.notifyDataSetChanged()
-    observableArrayList.addOnListChangeListener(object : IArrayListChange<Any> {
-        override fun onChange(newList: ArrayList<Any>) {
-            adapter.setData(newList)
-            adapter.notifyDataSetChanged()
-        }
-    })
+    data.canAddListener = true
+    if (!data.isListenerAdded()) {
+        data.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableArrayList<FeedBookmark>>() {
+            override fun onItemRangeMoved(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int, p3: Int) {
+                list?.let {
+                    adapter.setData(it)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onChanged(list: ObservableArrayList<FeedBookmark>?) {
+            }
+
+            override fun onItemRangeInserted(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
+                list?.let {
+                    adapter.setData(it)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onItemRangeRemoved(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
+                list?.let {
+                    adapter.setData(it)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onItemRangeChanged(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
+                list?.let {
+                    adapter.setData(it)
+                    adapter.notifyDataSetChanged()
+                }
+            }
+        })
+    }
 }
 
 @BindingAdapter(value = *arrayOf("onSwipeFlingViewScroll", "swipeFlingViewBackgroundId", "swipeFlingViewRightIndicatorId", "swipeFlingViewLeftIndicatorId"))

@@ -62,7 +62,7 @@ class LikesFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        LikesViewModel()
+        LikesViewModel(App.getAppComponent().api())
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -2,219 +2,58 @@ package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes
 
 import android.databinding.ObservableField
 import android.databinding.ObservableFloat
-import android.databinding.ObservableInt
 import android.os.Bundle
 import android.view.View
 import com.lorentzos.flingswipe.SwipeFlingAdapterView
-import com.topface.scruffy.data.ApiError
-import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.FeedRequestFactory
-import com.topface.topface.api.UnreadStatePair
+import com.topface.topface.api.IApi
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.api.responses.GetFeedBookmarkListResponse
 import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
-import com.topface.topface.requests.handlers.ErrorCodes
-import com.topface.topface.state.CountersDataProvider
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
-import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
-import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
-import com.topface.topface.ui.fragments.feed.enhanced.base.LockerStubState
-import com.topface.topface.ui.fragments.feed.feed_base.FeedCacheManager
-import com.topface.topface.ui.fragments.feed.feed_base.IFeedLockerView
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
-import com.topface.topface.utils.databinding.MultiObservableArrayList
-import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.rx.safeUnsubscribe
-import com.topface.topface.utils.rx.shortSubscribe
+import com.topface.topface.utils.gcmutils.GCMUtils
 import rx.Observable
 import rx.Subscriber
-import rx.Subscription
-import java.util.*
-import java.util.concurrent.atomic.AtomicReference
 
-/**
- * Created by ppavlik on 17.07.17.
- * Вью-модель симпатий в виде карточек, по аналогии с tinder
- */
-typealias LockerStubLastState = Pair<Long, Int>
-class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, SwipeFlingAdapterView.OnItemClickListener, CountersDataProvider.ICountersUpdater {
+class LikesViewModel(api: IApi) : BaseFeedFragmentModel<FeedBookmark>(api), SwipeFlingAdapterView.onFlingListener, SwipeFlingAdapterView.OnItemClickListener {
+    override val responseClass: Class<out IBaseFeedResponse>
+        get() = GetFeedBookmarkListResponse::class.java
+    override val feedsType: FeedsCache.FEEDS_TYPE
+        get() = FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS
+    override val itemClass: Class<FeedBookmark>
+        get() = FeedBookmark::class.java
+    override val service: FeedRequestFactory.FeedService
+        get() = FeedRequestFactory.FeedService.LIKES
+    override val gcmType: Array<Int>
+        get() = arrayOf(GCMUtils.GCM_TYPE_UNKNOWN)
+    override val isForPremium: Boolean
+        get() = true
 
-    val data = MultiObservableArrayList<Any>()
-
-    val isFeedProgressBarVisible = ObservableInt(View.INVISIBLE)
-    val isListVisible = ObservableInt(View.VISIBLE)
-    val isLockViewVisible = ObservableInt(View.INVISIBLE)
-    val scrollProgressPercent = ObservableFloat(0f)
     val counter = ObservableField(Utils.EMPTY)
+    val scrollProgressPercent = ObservableFloat(0f)
 
-    private val mUnreadState = UnreadStatePair(true, false)
-    private var mUpdaterSubscription: Subscription? = null
-    private var mIsAllDataLoaded = false
-    private val mAtomicUpdaterSubscription = AtomicReference<Subscription>()
-    open val isNeedCacheItems: Boolean = false
-    private var isDataFromCache = false
-    open val typeFeedFragment: String? = null
-    var stubView: IFeedLockerView? = null
-        set(value) {
-            field = value
-            switchLockerStubView(lockerStubLastState.first, field, lockerStubLastState.second)
-        }
+    private var mUpdateSubscriber: Subscriber<in Bundle>? = null
 
-    private var lockerStubLastState = LockerStubLastState(BaseFeedLockerController.NONE, -666)
-
-    var updateObservable: Observable<Bundle>? = null
-        set(value) {
-            mUpdaterSubscription = value?.let {
-                it.distinct {
-                    it?.getString(TO, Utils.EMPTY)
-                }.shortSubscribe { updateBundle ->
-                    if (!mIsAllDataLoaded) {
-                        updateBundle?.let {
-                            update(it)
-                        }
-                    }
-                }
-            }
-            field = value
-        }
-
-    private val mCache by lazy {
-        FeedCacheManager<FeedBookmark>(FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS)
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
+        counter.set(getCounter(newCounters.likes))
+        return newCounters.likes > currentCounters.likes
     }
 
-    private val mCountersDataProvider = CountersDataProvider(this)
+    override fun considerDuplicates(first: FeedBookmark, second: FeedBookmark) =
+            first.user?.id == second.user?.id
 
-    companion object {
-        const val FROM = "from"
-        const val TO = "to"
-        const val SERVICE = "service"
-        const val LEAVE = "leave"
-        const val HISTORY_LOAD_FLAG = "history_load_flag"
-        const val PULL_TO_REF_FLAG = "pull_to_refresh_flag"
-        const val UNREAD_STATE = "unread_state"
-    }
-
-    private val mApi by lazy {
-        App.getAppComponent().api()
-    }
+    override fun itemClick(view: View?, itemPosition: Int, data: FeedBookmark?, from: String) =
+            navigator?.showProfile(data, from)
 
     private fun getCounter(size: Int) = if (size == 0) {
         Utils.EMPTY
     } else {
         Utils.getQuantityString(R.plurals.number_of_sympathies, size, size)
-    }
-
-    fun update(updateBundle: Bundle = Bundle(), force: Boolean = false) {
-        if (mAtomicUpdaterSubscription.get() == null && (!isNeedCacheItems || isDataFromCache) ||
-                mAtomicUpdaterSubscription.get()?.isUnsubscribed ?: false &&
-                        updateBundle.getString(BaseFeedFragmentModel.TO, Utils.EMPTY) != Utils.EMPTY || force) {
-            isFeedProgressBarVisible.set(View.VISIBLE)
-            val arg = constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(BaseFeedFragmentModel.TO, Utils.EMPTY))
-            mAtomicUpdaterSubscription.set(mApi.callGetList(arg, GetFeedBookmarkListResponse::class.java, FeedBookmark::class.java).
-                    subscribe(object : Subscriber<IBaseFeedResponse>() {
-                        override fun onNext(data: IBaseFeedResponse?) {
-                            data?.let {
-                                if (!data.more) mIsAllDataLoaded = true
-                                updateFeedsLoaded(data.getItemsList(), updateBundle)
-                            }
-                        }
-
-                        override fun onError(e: Throwable?) {
-                            mAtomicUpdaterSubscription.get().safeUnsubscribe()
-                            onErrorProcess(e as? ApiError)
-                            isFeedProgressBarVisible.set(View.INVISIBLE)
-                        }
-
-                        override fun onCompleted() {
-                            mAtomicUpdaterSubscription.get().safeUnsubscribe()
-                            isFeedProgressBarVisible.set(View.INVISIBLE)
-                        }
-                    }))
-        }
-    }
-
-    private fun onErrorProcess(apiError: ApiError?) = apiError?.let {
-        it.printStackTrace()
-        val codeError = Integer.valueOf(it.code)
-        when (codeError) {
-            ErrorCodes.PREMIUM_ACCESS_ONLY, ErrorCodes.BLOCKED_SYMPATHIES
-                , ErrorCodes.BLOCKED_PEOPLE_NEARBY -> {
-                isListVisible.set(View.INVISIBLE)
-                isFeedProgressBarVisible.set(View.INVISIBLE)
-                switchLockerStubView(BaseFeedLockerController.LOCKED_FEED, stubView, codeError)
-                return@let
-            }
-            else -> {
-                if (data.isEmpty()) {
-                    isFeedProgressBarVisible.set(View.VISIBLE)
-                }
-                switchLockerStubView(BaseFeedLockerController.FILLED_FEED, stubView)
-            }
-        }
-    }
-
-    private fun switchLockerStubView(@LockerStubState state: Long, stubView: IFeedLockerView?,
-                                     errorCode: Int = -666) = stubView?.let {
-        lockerStubLastState = LockerStubLastState(state, errorCode)
-        when (state) {
-            BaseFeedLockerController.FILLED_FEED -> it.onFilledFeed()
-            BaseFeedLockerController.EMPTY_FEED -> it.onEmptyFeed()
-            BaseFeedLockerController.LOCKED_FEED -> it.onLockedFeed(errorCode)
-            else -> {
-                lockerStubLastState = LockerStubLastState(BaseFeedLockerController.NONE, errorCode)
-            }
-        }
-    }
-
-    private fun constructFeedRequestArgs(isPullToRef: Boolean = true, from: String? = Utils.EMPTY,
-                                         to: String? = Utils.EMPTY) =
-            Bundle().apply {
-                putSerializable(BaseFeedFragmentModel.SERVICE, FeedRequestFactory.FeedService.LIKES)
-                putParcelable(BaseFeedFragmentModel.UNREAD_STATE, mUnreadState)
-                putBoolean(BaseFeedFragmentModel.PULL_TO_REF_FLAG, isPullToRef)
-                putString(BaseFeedFragmentModel.FROM, from)
-                putString(BaseFeedFragmentModel.TO, to)
-                putBoolean(BaseFeedFragmentModel.HISTORY_LOAD_FLAG, hasData())
-                putBoolean(BaseFeedFragmentModel.LEAVE, false)
-            }
-
-    private fun hasData() = data.isNotEmpty()
-
-    private fun handleUnreadState(data: ArrayList<out FeedItem>, isPullToRef: Boolean) {
-        if (!data.isEmpty()) {
-            if (!mUnreadState.wasFromInited || isPullToRef) {
-                mUnreadState.from = data.first().unread
-                mUnreadState.wasFromInited = true
-            }
-            mUnreadState.to = data.last().unread
-        }
-    }
-
-    protected open fun updateFeedsLoaded(newData: ArrayList<out FeedItem>, updateBundle: Bundle) {
-        if (isDataFromCache) {
-            data.clear()
-            isDataFromCache = false
-        }
-        handleUnreadState(newData, updateBundle.getBoolean(BaseFeedFragmentModel.PULL_TO_REF_FLAG))
-        if (data.isEmpty() && newData.isEmpty()) {
-            isListVisible.set(View.INVISIBLE)
-            switchLockerStubView(BaseFeedLockerController.EMPTY_FEED, stubView)
-        } else {
-            isListVisible.set(View.VISIBLE)
-            isLockViewVisible.set(View.GONE)
-            switchLockerStubView(BaseFeedLockerController.FILLED_FEED, stubView)
-        }
-        (newData as? ArrayList<FeedBookmark>)?.let {
-            data.addAll(it)
-        }
-    }
-
-    override fun onUpdateCounters(countersData: CountersData?) {
-        counter.set(getCounter(countersData?.likes ?: 0))
     }
 
     override fun onItemClicked(itemPosition: Int, dataObject: Any?) {
@@ -232,9 +71,9 @@ class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, S
     }
 
     override fun onAdapterAboutToEmpty(itemsInAdapter: Int) {
-        update( Bundle().apply {
+        mUpdateSubscriber?.onNext(Bundle().apply {
             if (data.isNotEmpty()) {
-                putString(com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory.TO, (data.last() as FeedItem).id)
+                putString(FeedRequestFactory.TO, (data.last() as FeedItem).id)
             }
         })
     }
@@ -243,19 +82,14 @@ class LikesViewModel : BaseViewModel(), SwipeFlingAdapterView.onFlingListener, S
         this@LikesViewModel.scrollProgressPercent.set(scrollProgressPercent)
     }
 
-    override fun unbind() {
-        mAtomicUpdaterSubscription.get().safeUnsubscribe()
-        updateObservable = null
+    init {
+        updateObservable = Observable.create { subscriber ->
+            mUpdateSubscriber = subscriber
+        }
     }
 
     override fun release() {
-        unbind()
-        mCountersDataProvider.unsubscribe()
-        arrayOf(mUpdaterSubscription).safeUnsubscribe()
-        if (isNeedCacheItems) {
-            if (data.isNotEmpty()) {
-                mCache.saveToCache(ArrayList<FeedBookmark>(data as List<FeedBookmark>))
-            }
-        }
+        super.release()
+        mUpdateSubscriber = null
     }
 }
