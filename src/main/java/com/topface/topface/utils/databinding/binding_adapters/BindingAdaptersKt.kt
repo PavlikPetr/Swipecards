@@ -73,14 +73,16 @@ fun setPreloadedGlideImageWithCrop(view: ImageView, resource: GlideDrawable?,
 @BindingAdapter("bindDataToSwipeFlingView")
 fun setBindDataToSwipeFlingView(view: SwipeFlingAdapterView, data: ImprovedObservableList<FeedBookmark>) {
     val adapter = view.adapter as BaseAdapter<*, FeedBookmark>
-    adapter.data = mutableListOf(data.observableList)
+    adapter.data.clear()
+    adapter.data.addAll(data.observableList)
     adapter.notifyDataSetChanged()
     data.canAddListener = true
     if (!data.isListenerAdded()) {
         data.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableArrayList<FeedBookmark>>() {
             override fun onItemRangeMoved(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int, p3: Int) {
                 list?.let {
-                    adapter.data = mutableListOf(it)
+                    adapter.data.clear()
+                    adapter.data.addAll(it)
                     adapter.notifyDataSetChanged()
                 }
             }
@@ -90,21 +92,24 @@ fun setBindDataToSwipeFlingView(view: SwipeFlingAdapterView, data: ImprovedObser
 
             override fun onItemRangeInserted(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
                 list?.let {
-                    adapter.data = mutableListOf(it)
+                    adapter.data.clear()
+                    adapter.data.addAll(it)
                     adapter.notifyDataSetChanged()
                 }
             }
 
             override fun onItemRangeRemoved(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
                 list?.let {
-                    adapter.data = mutableListOf(it)
+                    adapter.data.clear()
+                    adapter.data.addAll(it)
                     adapter.notifyDataSetChanged()
                 }
             }
 
             override fun onItemRangeChanged(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
                 list?.let {
-                    adapter.data = mutableListOf(it)
+                    adapter.data.clear()
+                    adapter.data.addAll(it)
                     adapter.notifyDataSetChanged()
                 }
             }

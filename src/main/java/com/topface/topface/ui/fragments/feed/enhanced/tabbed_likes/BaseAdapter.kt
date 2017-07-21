@@ -44,10 +44,6 @@ abstract class BaseAdapter<in T : ViewDataBinding, D : Any> : BaseAdapter(), IAd
 //        return view
 //    }
 
-    fun addData(list: ArrayList<D>) {
-        data.addAll(list)
-    }
-
     private fun getBinding(parent: ViewGroup?) = DataBindingUtil.inflate<T>(mInflater, layout, parent, false)
 
     abstract fun bind(binding: T?, data: D?)

@@ -8,7 +8,6 @@ import com.topface.topface.di.feed.admiration.AdmirationModule
 import com.topface.topface.di.feed.admiration.AdmirationViewModelsComponent
 import com.topface.topface.di.feed.admiration.DaggerAdmirationViewModelsComponent
 import com.topface.topface.di.feed.base.BaseFeedModule
-import com.topface.topface.di.feed.base.DefaultFeedModule
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent
 import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.statistics.FlurryOpenEvent
@@ -39,7 +38,7 @@ class AdmirationFragment : BaseLikesFeedFragment() {
             ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
                 App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
             }
-                    .add(AdmirationModule(this@AdmirationFragment), DefaultFeedModule(this@AdmirationFragment))
+                    .add(AdmirationModule(this@AdmirationFragment), BaseFeedModule(this@AdmirationFragment))
         }.inject(this@AdmirationFragment)
         super.onCreate(savedInstanceState)
     }

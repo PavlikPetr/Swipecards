@@ -5,18 +5,20 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.databinding.LikesCardsFragmentBinding
-import com.topface.topface.databinding.LikesCardsItemBinding
 import com.topface.topface.di.ComponentManager
+import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.feed.likes.DaggerLikesViewModelsComponent
 import com.topface.topface.di.feed.likes.LikesComponent
+import com.topface.topface.di.feed.likes.LikesModule
 import com.topface.topface.di.feed.likes.LikesViewModelsComponent
+import com.topface.topface.di.navigation_activity.NavigationActivityComponent
+import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.statistics.FlurryOpenEvent
+import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
-import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.BaseAdapter
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
-import javax.inject.Inject
 
 
 /**
@@ -24,7 +26,7 @@ import javax.inject.Inject
  * Фрагмент симпатий в виде карточек, по аналогии с tinder
  */
 @FlurryOpenEvent(name = LikesFragment.SCREEN_TYPE)
-class LikesFragment : BaseFeedFragment<FeedBookmark, BaseAdapter<LikesCardsItemBinding, FeedBookmark>, LikesCardsFragmentBinding>() {
+class LikesFragment : BaseFeedFragment<FeedBookmark, LikesAdapter, LikesCardsFragmentBinding>() {
 
     companion object {
         const val SCREEN_TYPE = "NewLikes"
@@ -37,7 +39,7 @@ class LikesFragment : BaseFeedFragment<FeedBookmark, BaseAdapter<LikesCardsItemB
     }
 
 
-    override fun attachAdapterComponents(adapter: BaseAdapter<LikesCardsItemBinding, FeedBookmark>) {
+    override fun attachAdapterComponents(adapter: LikesAdapter) {
     }
 
     override val res: Int
@@ -58,13 +60,13 @@ class LikesFragment : BaseFeedFragment<FeedBookmark, BaseAdapter<LikesCardsItemB
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        ComponentManager.releaseComponent(LikesComponent::class.java)
-//        ComponentManager.obtainComponent(LikesComponent::class.java) {
-//            ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
-//                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
-//            }
-//                    .add(LikesModule(this@LikeFragment), LikesFeedModule(this@LikeFragment))
-//        }.inject(this@LikeFragment)
+        ComponentManager.releaseComponent(LikesComponent::class.java)
+        ComponentManager.obtainComponent(LikesComponent::class.java) {
+            ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
+                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
+            }
+                    .add(LikesModule(this@LikesFragment), BaseFeedModule(this@LikesFragment))
+        }.inject(this@LikesFragment)
         super.onCreate(savedInstanceState)
         mUserСhoiceSubscription = mEventBus
                 .getObservable(LikesCardUserChoose::class.java)

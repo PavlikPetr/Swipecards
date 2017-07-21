@@ -5,11 +5,9 @@ import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.feed.admiration.AdmirationComponent
 import com.topface.topface.di.feed.admiration.AdmirationModule
 import com.topface.topface.di.feed.base.BaseFeedModule
-import com.topface.topface.di.feed.base.DefaultFeedModule
 import com.topface.topface.di.feed.fans.FansComponent
 import com.topface.topface.di.feed.fans.FansModule
 import com.topface.topface.di.feed.likes.LikesComponent
-import com.topface.topface.di.feed.likes.LikesFeedModule
 import com.topface.topface.di.feed.likes.LikesModule
 import com.topface.topface.di.feed.mutual.MutualComponent
 import com.topface.topface.di.feed.mutual.MutualModule
@@ -30,11 +28,11 @@ interface NavigationActivityComponent {
 
     fun inject(activity: NavigationActivity)
 
-    fun add(visitorsModule: VisitorsModule, baseModule: DefaultFeedModule): VisitorsComponent
-    fun add(fansModule: FansModule, baseModule: DefaultFeedModule): FansComponent
+    fun add(visitorsModule: VisitorsModule, baseModule: BaseFeedModule): VisitorsComponent
+    fun add(fansModule: FansModule, baseModule: BaseFeedModule): FansComponent
     fun add(chatModule: ChatModule): ChatComponent
 
-    fun add(mutualModule: MutualModule, baseModule: DefaultFeedModule): MutualComponent
-    fun add(admirationModule: AdmirationModule, baseModule: DefaultFeedModule): AdmirationComponent
-//    fun add(likesModule: LikesModule, baseModule: LikesFeedModule): LikesComponent
+    fun add(mutualModule: MutualModule, baseModule: BaseFeedModule): MutualComponent
+    fun add(admirationModule: AdmirationModule, baseModule: BaseFeedModule): AdmirationComponent
+    fun add(likesModule: LikesModule, baseModule: BaseFeedModule): LikesComponent
 }

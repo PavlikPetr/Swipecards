@@ -4,7 +4,6 @@ import android.os.Bundle
 import com.topface.topface.App
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.feed.base.BaseFeedModule
-import com.topface.topface.di.feed.base.DefaultFeedModule
 import com.topface.topface.di.feed.mutual.DaggerMutualViewModelsComponent
 import com.topface.topface.di.feed.mutual.MutualComponent
 import com.topface.topface.di.feed.mutual.MutualModule
@@ -39,7 +38,7 @@ class MutualFragment : BaseLikesFeedFragment() {
             ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
                 App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
             }
-                    .add(MutualModule(this@MutualFragment), DefaultFeedModule(this@MutualFragment))
+                    .add(MutualModule(this@MutualFragment), BaseFeedModule(this@MutualFragment))
         }.inject(this@MutualFragment)
         super.onCreate(savedInstanceState)
     }

@@ -6,7 +6,6 @@ import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.feed.base.BaseFeedModule
-import com.topface.topface.di.feed.base.DefaultFeedModule
 import com.topface.topface.di.feed.fans.DaggerFansViewModelsComponent
 import com.topface.topface.di.feed.fans.FansComponent
 import com.topface.topface.di.feed.fans.FansModule
@@ -42,10 +41,10 @@ class FansFragment : BaseFeedFragmentWithComponentAdapter<FeedBookmark>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         ComponentManager.releaseComponent(FansComponent::class.java)
         ComponentManager.obtainComponent(FansComponent::class.java) {
-            ComponentManager.obtainComponent(NavigationActivityComponent::class.java){
+            ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
                 App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
             }
-                    .add(FansModule(this@FansFragment), DefaultFeedModule(this@FansFragment))
+                    .add(FansModule(this@FansFragment), BaseFeedModule(this@FansFragment))
         }.inject(this@FansFragment)
         super.onCreate(savedInstanceState)
     }

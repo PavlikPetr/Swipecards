@@ -12,15 +12,14 @@ import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesLo
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesLockScreenViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController
-import com.topface.topface.ui.new_adapter.enhanced.IAdapter
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 import dagger.Module
 import dagger.Provides
 
-@Module(includes = arrayOf(LikesFeedModule::class))
+@Module(includes = arrayOf(BaseFeedModule::class))
 class LikesModule(private val mFragment: LikesFragment) {
 
-    val emptyFeedLayout = R.layout.base_sympathy_stub_layout
+    val emptyFeedLayout = R.layout.likes_stub
 
     @Provides
     @FragmentScope
@@ -53,4 +52,8 @@ class LikesModule(private val mFragment: LikesFragment) {
             setLockerLayout(emptyFeedLayout)
         }
     }
+
+    @Provides
+    @FragmentScope
+    fun provideAdapter() = LikesAdapter()
 }

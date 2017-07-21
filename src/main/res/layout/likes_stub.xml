@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="lockViewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesLockScreenViewModel"/>
+    </data>
+
+    <ViewFlipper
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_white"
+        app:showChild="@{lockViewModel.showChild}">
+
+        <include
+            android:id="@+id/emptyStub"
+            layout="@layout/base_sympathy_stub_layout"
+            bind:lockViewModel="@{lockViewModel.emptyStubVM}"/>
+
+        <include
+            android:id="@+id/lockedStub"
+            layout="@layout/layout_empty_likes"/>
+
+    </ViewFlipper>
+</layout>
