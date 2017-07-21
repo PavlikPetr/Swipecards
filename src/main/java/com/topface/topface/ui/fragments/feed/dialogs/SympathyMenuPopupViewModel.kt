@@ -12,12 +12,16 @@ class SympathyMenuPopupViewModel(private val mFeedBookmark: FeedBookmark, privat
         get() = R.string.delete_mutual_sympathy.getString()
 
     override fun addToBlackListItem() {
-        mApi.execAddToBlackList(listOf(mFeedBookmark.user.id))
+        mFeedBookmark.user?.let {
+            mApi.execAddToBlackList(listOf(it.id))
+        }
         iDialogCloser.closeIt()
     }
 
     override fun deleteItem() {
-        mApi.execDeleteMutual(arrayListOf(mFeedBookmark.user.id.toString()))
+        mFeedBookmark.user?.let {
+            mApi.execDeleteMutual(arrayListOf(it.id.toString()))
+        }
         iDialogCloser.closeIt()
     }
 

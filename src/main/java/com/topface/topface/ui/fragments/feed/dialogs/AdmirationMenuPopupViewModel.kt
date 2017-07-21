@@ -12,12 +12,16 @@ class AdmirationMenuPopupViewModel(private val mFeedBookmark: FeedBookmark, priv
         get() = R.string.delete_admiration.getString()
 
     override fun addToBlackListItem() {
-        mApi.execAddToBlackList(listOf(mFeedBookmark.user.id))
+        mFeedBookmark.user?.let {
+            mApi.execAddToBlackList(listOf(it.id))
+        }
         iDialogCloser.closeIt()
     }
 
     override fun deleteItem() {
-        mApi.execDeleteAdmiration(arrayListOf(mFeedBookmark.user.id.toString()))
+        mFeedBookmark.user?.let {
+            mApi.execDeleteAdmiration(arrayListOf(it.id.toString()))
+        }
         iDialogCloser.closeIt()
     }
 

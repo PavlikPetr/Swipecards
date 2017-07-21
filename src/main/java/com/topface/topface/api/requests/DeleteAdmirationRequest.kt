@@ -13,9 +13,7 @@ class DeleteAdmirationRequest(val itemsIds: ArrayList<String>) : BaseScruffyRequ
 
     override fun getMethod() = REQUEST_METHOD_NAME
 
-    override fun createJson(json: JsonObject) = with(json) {
-        add("items", itemsIds.stringListToJsonArray())
-    }
+    override fun createJson(json: JsonObject) = json.add("items", itemsIds.stringListToJsonArray())
 
     override fun getResponseClass(): Class<Completed> = Completed::class.java
 }

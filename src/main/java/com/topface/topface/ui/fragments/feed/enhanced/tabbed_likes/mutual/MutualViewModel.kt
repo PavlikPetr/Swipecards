@@ -49,6 +49,5 @@ class MutualViewModel(val api: IApi) : BaseFeedFragmentModel<FeedBookmark>(api) 
         })
     }
 
-
     // TODO                    ОТПИСКУ НЕ ПРОЕБИ!!!!!!!!!!!!!!
 }

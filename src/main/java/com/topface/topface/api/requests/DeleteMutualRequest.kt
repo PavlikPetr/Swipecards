@@ -13,9 +13,7 @@ class DeleteMutualRequest(val userIds: ArrayList<String>) : BaseScruffyRequest<C
 
     override fun getMethod() = REQUEST_METHOD_NAME
 
-    override fun createJson(json: JsonObject) = with(json) {
-        add("userIds", userIds.stringListToJsonArray())
-    }
+    override fun createJson(json: JsonObject) = json.add("userIds", userIds.stringListToJsonArray())
 
     override fun getResponseClass(): Class<Completed> = Completed::class.java
 }

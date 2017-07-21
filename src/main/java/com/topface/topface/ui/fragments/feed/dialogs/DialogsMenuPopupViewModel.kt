@@ -15,7 +15,7 @@ import rx.Subscription
 class DialogsMenuPopupViewModel(private val mFeedDialog: FeedDialog, private val mApi: FeedApi, private val iDialogCloser: IDialogCloser) : MenuPopupViewModel(mFeedDialog.user) {
 
     override val deleteText: String
-    get() = R.string.popup_delete_dialog.getString()
+        get() = R.string.popup_delete_dialog.getString()
 
     private val mEventBus by lazy {
         App.getAppComponent().eventBus()
@@ -38,16 +38,18 @@ class DialogsMenuPopupViewModel(private val mFeedDialog: FeedDialog, private val
     }
 
     override fun deleteItem() {
-        mDeleteDialogsSubscriber = mApi.callDelete(FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS, ids = arrayListOf(mFeedDialog.user.id.toString())).subscribe(object : Subscriber<Boolean>() {
-            override fun onError(e: Throwable?) = mDeleteDialogsSubscriber.safeUnsubscribe()
+        mFeedDialog.user?.let {
+            mDeleteDialogsSubscriber = mApi.callDelete(FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS, ids = arrayListOf(mFeedDialog.user.id.toString())).subscribe(object : Subscriber<Boolean>() {
+                override fun onError(e: Throwable?) = mDeleteDialogsSubscriber.safeUnsubscribe()
 
-            override fun onCompleted() = mDeleteDialogsSubscriber.safeUnsubscribe()
+                override fun onCompleted() = mDeleteDialogsSubscriber.safeUnsubscribe()
 
-            override fun onNext(t: Boolean?) {
-                mEventBus.setData(DialogPopupEvent(mFeedDialog))
-            }
+                override fun onNext(t: Boolean?) {
+                    mEventBus.setData(DialogPopupEvent(mFeedDialog))
+                }
 
-        })
+            })
+        }
         iDialogCloser.closeIt()
     }
 
