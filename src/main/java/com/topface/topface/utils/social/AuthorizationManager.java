@@ -150,6 +150,7 @@ public class AuthorizationManager {
         App.getConfig().onLogout();
         // reset "design verions" in weak storage, couse each user has its own
         mWeakStorage.resetProfileDialogRedesignEnabled();
+        mWeakStorage.resetSympathiesRedesignEnabled();
         NavigationActivity.isPhotoAsked = false;
         PopupManager.INSTANCE.clear();
         NavigationActivity.hasNewOptionsOrProfile = false;

@@ -25,6 +25,7 @@ public class WeakStorage extends AbstractConfig {
     private static final String IS_FIRST_SESSION = "is_first_session";
     private static final String IS_QUESTIONNAIRE_REQUEST_SENT = "is_questionnaire_request_sent";
     private static final String AUTH_TOKEN_STATE = "auth_token_state";
+    private static final String SYMPATHIES_REDESIGN_ENABLED = "sympathies_redesign_enabled";
 
     public WeakStorage() {
         super(App.getContext());
@@ -51,6 +52,8 @@ public class WeakStorage extends AbstractConfig {
         addField(settingsMap, IS_QUESTIONNAIRE_REQUEST_SENT, false);
         // статус токена авторизации
         addField(settingsMap, AUTH_TOKEN_STATE, Utils.EMPTY);
+        // строковая обертка над boolean чтобы знать что значение было установлено
+        addField(settingsMap, SYMPATHIES_REDESIGN_ENABLED, Utils.EMPTY);
     }
 
     @Override
@@ -202,5 +205,33 @@ public class WeakStorage extends AbstractConfig {
     public AuthTokenStateData getAuthTokenState() {
         AuthTokenStateData state = JsonUtils.fromJson(getStringField(getSettingsMap(), AUTH_TOKEN_STATE), AuthTokenStateData.class);
         return state == null ? new AuthTokenStateData() : state;
+    }
+
+    /**
+     * @param sympathiesRedesignEnabled true if must use new version
+     */
+    public void setSympathiesRedesignEnabled(boolean sympathiesRedesignEnabled) {
+        SettingsMap settingsMap = getSettingsMap();
+        if (TextUtils.isEmpty(getStringField(settingsMap, SYMPATHIES_REDESIGN_ENABLED))) {
+            setField(settingsMap, SYMPATHIES_REDESIGN_ENABLED, String.valueOf(sympathiesRedesignEnabled));
+        }
+    }
+
+    /**
+     * @return true if must use new sympathies
+     */
+    public boolean getSympathiesRedesignEnabled() {
+        SettingsMap settingsMap = getSettingsMap();
+        if (TextUtils.isEmpty(getStringField(settingsMap, SYMPATHIES_REDESIGN_ENABLED))) {
+            setField(settingsMap, SYMPATHIES_REDESIGN_ENABLED, String.valueOf(App.get().getOptions().isSympathiesRedesignEnabled()));
+        }
+        return Boolean.valueOf(getStringField(getSettingsMap(), SYMPATHIES_REDESIGN_ENABLED));
+    }
+
+    /**
+     * Resets stored possibility to show new sympathies
+     */
+    public void resetSympathiesRedesignEnabled() {
+        setField(getSettingsMap(), SYMPATHIES_REDESIGN_ENABLED, Utils.EMPTY);
     }
 }

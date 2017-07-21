@@ -249,6 +249,8 @@ public class Options extends AbstractData {
         return coinPurchaseScreenRedesignEnabled;
     }
 
+    public SerialLikesSettings serialLikesSettings = new SerialLikesSettings();
+
     /**
      * {int} - настройка отображения/реакиции свитчера "только красивые" в фильтре знакомств и мб потом где-то еще
      * 0 - none: свитер не показываем
@@ -412,6 +414,9 @@ public class Options extends AbstractData {
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
             datingRedesign = response.optInt("datingRedesign");
+            serialLikesSettings = JsonUtils.optFromJson(response.optString("serialLikesSettings"),
+                    SerialLikesSettings.class, new SerialLikesSettings());
+            // store "design version" of feeds if need
             cropAndGalleryEnabled = response.optBoolean("cropAndGalleryEnabled");
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
@@ -479,6 +484,10 @@ public class Options extends AbstractData {
         if (cacheToPreferences) {
             App.getAppComponent().appState().setData(this);
         }
+    }
+
+    public boolean isSympathiesRedesignEnabled() {
+        return serialLikesSettings.getEnabled();
     }
 
     private void fillOffers(List<Offerwalls.Offer> list, JSONArray offersArrObj) throws JSONException {
