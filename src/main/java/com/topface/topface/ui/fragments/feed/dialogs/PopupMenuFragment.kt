@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.data.FeedDialog
@@ -53,8 +52,8 @@ class PopupMenuFragment : DialogFragment(), IDialogCloser {
         item?.let {
             mViewModel = when (type) {
                 DIALOGS_TYPE -> DialogsMenuPopupViewModel(it as FeedDialog, mApi, this@PopupMenuFragment)
-                MUTUAL_TYPE -> SympathyMenuPopupViewModel(it as FeedBookmark, App.getAppComponent().api(), this@PopupMenuFragment)
-                ADMIRATION_TYPE -> AdmirationMenuPopupViewModel(it as FeedBookmark, App.getAppComponent().api(), this@PopupMenuFragment)
+                MUTUAL_TYPE -> SympathyMenuPopupViewModel(it as FeedBookmark, this@PopupMenuFragment)
+                ADMIRATION_TYPE -> AdmirationMenuPopupViewModel(it as FeedBookmark, this@PopupMenuFragment)
                 else -> DialogsMenuPopupViewModel(it as FeedDialog, mApi, this@PopupMenuFragment)
             }
             model = mViewModel
@@ -69,11 +68,6 @@ class PopupMenuFragment : DialogFragment(), IDialogCloser {
 
     private val mApi by lazy {
         FeedApi(context, activity as IRequestClient, DeleteFeedRequestFactory(context))
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mViewModel.release()
     }
 
     override fun closeIt() = dialog?.cancel() ?: Unit
