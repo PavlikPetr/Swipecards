@@ -74,7 +74,7 @@
         değiştirebilirsiniz
     </string>
     <string name="map_title">Harita</string>
-    <string name="general_buying">Beğeni ve kredi satın al</string>
+    <string name="general_buying">Beğeni ve Kredi satın al</string>
     <string name="popup_version_title">Uygulamanın yeni versiyonu mevcuttur</string>
     <string name="popup_version_message">Uyguamanızı güncelleme vakti geldi</string>
     <string name="leaders_select_photo_info">En etkileyici fotoğrafınızı seçiniz! Düşük reytingi olan 
@@ -103,8 +103,8 @@
         <item quantity="one">Daha %d arkadaş davet edin</item>
     </plurals>
     <plurals name="get_free_money">
-        <item quantity="other">%d bedava kredi</item>
-        <item quantity="one">%d bedava kredi</item>
+        <item quantity="other">%d bedava Kredi</item>
+        <item quantity="one">%d bedava Kredi</item>
     </plurals>
     <string name="pincode_blocking_app">Uygulamayı kilitle</string>
     <string name="pincode_blocking">Kilitle</string>
@@ -215,24 +215,24 @@
     <string name="purchase_header_title">Bakiye:</string>
     <string name="buying_header_title">Satın aldıklarım</string>
     <plurals name="buying_gift_you_need_coins">
-        <item quantity="other">Hediye gönderebilmek için %d kredi daha satın alın</item>
-        <item quantity="one">Hediye gönderebilmek için %d kredi daha satın alın</item>
+        <item quantity="other">Hediye gönderebilmek için %d Kredi daha satın alın</item>
+        <item quantity="one">Hediye gönderebilmek için %d Kredi daha satın alın</item>
     </plurals>
     <plurals name="buying_admiration_you_need_coins">
-        <item quantity="other">Hayranlık gönderebilmek için %d kredi daha satın alın</item>
-        <item quantity="one">Hayranlık gönderebilmek için %d kredi daha satın alın</item>
+        <item quantity="other">Hayranlık gönderebilmek için %d Kredi daha satın alın</item>
+        <item quantity="one">Hayranlık gönderebilmek için %d Kredi daha satın alın</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
-        <item quantity="other">Sizi kimlerin beğendiğini  görebilmek için %d kredi daha satın alın</item>
-        <item quantity="one">Sizi kimlerin beğendiğini  görebilmek için %d kredi daha satın alın</item>
+        <item quantity="other">Sizi kimlerin beğendiğini  görebilmek için %d Kredi daha satın alın</item>
+        <item quantity="one">Sizi kimlerin beğendiğini  görebilmek için %d Kredi daha satın alın</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
-        <item quantity="other">Herkes tarafından görünmek için %d kredi daha gerekli</item>
-        <item quantity="one">Herkes tarafından görünmek için %d kredi daha gerekli</item>
+        <item quantity="other">Herkes tarafından görünmek için %d Kredi daha gerekli</item>
+        <item quantity="one">Herkes tarafından görünmek için %d Kredi daha gerekli</item>
     </plurals>
     <plurals name="buying_you_need_coins">
-        <item quantity="other">%d kredi eksiğiniz var</item>
-        <item quantity="one">%d kredi eksiğiniz var</item>
+        <item quantity="other">%d Kredi eksiğiniz var</item>
+        <item quantity="one">%d Kredi eksiğiniz var</item>
     </plurals>
     <string name="buying_default_message">Kredi ile diğerlerine hediye ve hayranlık gönderebilirsiniz.</string>
     <string name="buying_money">Kredi satın al</string>
@@ -308,8 +308,8 @@
     <string name="leaders_leader_now">Artık sizi herkes görecek!</string>
     <string name="leaders_need_photo">Önce bir fotoğraf seçin!</string>
     <plurals name="leaders_price">
-        <item quantity="other">%d krediye beni buraya koy</item>
-        <item quantity="one">%d krediye beni buraya koy</item>
+        <item quantity="other">%d Krediye beni buraya koy</item>
+        <item quantity="one">%d Krediye beni buraya koy</item>
     </plurals>
     <string name="photo_add_or">Fotoğraf başarıyla yüklendi</string>
     <string name="photo_add_error">Fotoğraf yüklemesi başarısız oldu</string>
@@ -802,7 +802,7 @@
     <string name="mutual_like_popup_text">Beğeniler karşılıklı</string>
     <string name="mutual_like_popup_button">\"Merhaba\" yaz</string>
     <string name="people_nearby_access_to_location_description">Kimlerin yakınınızda olduğunu görebilmek için lokasyonunuza erşim izni vermeniz gerekiyor.</string>
-    <string name="people_nearby_not_enought_money">\"Yakınımdaki insanlar\" fonksiyonu için yeterince krediniz yok</string>
+    <string name="people_nearby_not_enought_money">\"Yakınımdaki insanlar\" fonksiyonu için yeterince Krediniz yok</string>
     <string name="people_nearby_not_found_title">Şu an size yakın kullanıcı bulunamadı</string>
     <string name="people_nearby_not_found_description">Tekrar denemek için, ekranın ortasına parmağınızla dokunup basılı tutunuz.</string>
     <string name="NSLocationWhenInUseUsageDescription">Bu fonksiyona erişebilmek için izin vermeniz gerekiyor.</string>
@@ -821,7 +821,7 @@
     <string name="offers_screen_title">Bonus</string>
     <string name="offers_loading_text">Mevcut görevler yükleniyor…</string>
     <string name="offers_empty_text">Maalesef şu an sizin için görevimiz yok, lütfen daha sonra tekrar denetin!</string>
-    <string name="offers_rewarded_video_title">Bedava kredi</string>
+    <string name="offers_rewarded_video_title">Bedava Kredi</string>
     <string name="offers_rewarded_video_description">vidyo izlediğiniz için</string>
     <string name="app_of_the_day_ad_badge">Reklâm</string>
     <string name="filter_select_sex_title">arıyorum</string>
@@ -878,7 +878,7 @@
     <string name="turn_on_geo">Konum servisini açın</string>
     <string name="geo_show_settings_explanation">Yakınlardaki kişileri görebilmek için telefonunuzun konum servisini açın</string>
     <string name="show_geo_settings">Ayarları göster</string>
-    <string name="buy_vip_button_text_admiration_purchase_popup">%d Para karşılığı gönder</string>
+    <string name="buy_vip_button_text_admiration_purchase_popup">%d Kredi karşılığı gönder</string>
     <string name="label1_text_admiration_purchase_popup">Gönderdiğiniz \"Beğeniler\" alıcı tarafından anında karşılanacak ve bildirim gönderilecek</string>
     <string name="label2_text_admiration_purchase_popup">Ücretsiz \"Beğeniler\" gönder!</string>
     <string name="buy_vip_button_text">VIP ol</string>
@@ -937,10 +937,10 @@
     <string name="start_dating">Tanışmaya başla</string>
     <string name="no_mutual">Hiç Ortak Beğeniniz yok</string>
     <string name="buy_vip_button_title">VIP satın al</string>
-    <string name="unlock_symphaty_coins_one">Açmak için: %d Para</string>
-    <string name="unlock_symphaty_coins_many">Açmak için: %d Para</string>
-    <string name="unlock_symphaty_coins_few">Açmak için: %d Para</string>
-    <string name="unlock_symphaty_coins_other">Açmak için: %d Para</string>
+    <string name="unlock_symphaty_coins_one">Açmak için: %d Kredi</string>
+    <string name="unlock_symphaty_coins_many">Açmak için: %d Kredi</string>
+    <string name="unlock_symphaty_coins_few">Açmak için: %d Kredi</string>
+    <string name="unlock_symphaty_coins_other">Açmak için: %d Kredi</string>
     <string name="unlock_symphaty_hours_one">Açık kalma süresi: %d saat</string>
     <string name="unlock_symphaty_hours_many">Açık kalma süresi: %d saat</string>
     <string name="unlock_symphaty_hours_few">Açık kalma süresi: %d saat</string>

@@ -29,6 +29,7 @@ import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
 import com.topface.topface.ui.fragments.editor.EditorFragment;
+import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
@@ -213,7 +214,9 @@ public class NavigationManager {
                 fragment = new PhotoblogFragment();
                 break;
             case FragmentIdData.TABBED_LIKES:
-//                fragment = new LikesFragment();
+//                fragment = mWeakStorage.getSympathiesRedesignEnabled() ?
+//                        new com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.TabbedLikesFragment() :
+//                        new TabbedLikesFragment();
                 fragment = new com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
