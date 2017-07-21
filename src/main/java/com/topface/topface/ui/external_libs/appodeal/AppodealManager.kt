@@ -25,7 +25,7 @@ class AppodealManager {
         val APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328"
         private const val TAG = "AppodealManager"
 
-        private const val NOT_INITED = 0L
+        const val NOT_INITED = 0L
         private const val INIT_IN_PROGRESS = 1L
         private const val INITED_SUCCESS = 2L
 
