@@ -31,4 +31,6 @@ abstract class MenuPopupViewModel(val user: FeedUser?) {
 
     abstract fun deleteItem()
 
+    abstract fun release()
+
 }

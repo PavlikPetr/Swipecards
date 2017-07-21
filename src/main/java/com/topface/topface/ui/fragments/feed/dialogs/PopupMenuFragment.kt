@@ -45,16 +45,19 @@ class PopupMenuFragment : DialogFragment(), IDialogCloser {
         }
     }
 
+    private lateinit var mViewModel: MenuPopupViewModel
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = with(mBinding) {
         item = arguments.getParcelable(FEED_ITEM_TAG)
         val type = arguments.getLong(POPUP_MENU_TYPE)
         item?.let {
-            model = when (type) {
+            mViewModel = when (type) {
                 DIALOGS_TYPE -> DialogsMenuPopupViewModel(it as FeedDialog, mApi, this@PopupMenuFragment)
                 MUTUAL_TYPE -> SympathyMenuPopupViewModel(it as FeedBookmark, App.getAppComponent().api(), this@PopupMenuFragment)
                 ADMIRATION_TYPE -> AdmirationMenuPopupViewModel(it as FeedBookmark, App.getAppComponent().api(), this@PopupMenuFragment)
                 else -> DialogsMenuPopupViewModel(it as FeedDialog, mApi, this@PopupMenuFragment)
             }
+            model = mViewModel
             dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
         }
         root
@@ -66,6 +69,11 @@ class PopupMenuFragment : DialogFragment(), IDialogCloser {
 
     private val mApi by lazy {
         FeedApi(context, activity as IRequestClient, DeleteFeedRequestFactory(context))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mViewModel.release()
     }
 
     override fun closeIt() = dialog?.cancel() ?: Unit

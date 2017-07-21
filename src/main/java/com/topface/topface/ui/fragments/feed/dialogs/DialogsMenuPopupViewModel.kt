@@ -53,4 +53,5 @@ class DialogsMenuPopupViewModel(private val mFeedDialog: FeedDialog, private val
         iDialogCloser.closeIt()
     }
 
+    override fun release() = arrayOf(mBlackListSubscriber,mDeleteDialogsSubscriber).safeUnsubscribe()
 }

@@ -11,7 +11,7 @@
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:colorBackground="@color/bg_white"
         android:orientation="vertical"
@@ -31,9 +31,9 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginBottom="7dp"
-                android:layout_marginLeft="24dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="24dp"
-                android:layout_marginTop="17dp"
+                android:layout_marginTop="16dp"
                 app:glideTransformationPhoto="@{model.userPhoto}"
                 app:outSideCircle="@{model.strokeSize}"
                 app:placeholderRes="@{model.placeholderRes}"
@@ -44,7 +44,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="24dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="20dp"
                 android:ellipsize="end"
                 android:gravity="top"
@@ -67,7 +67,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginLeft="24dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginRight="24dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/delete_gray"/>
