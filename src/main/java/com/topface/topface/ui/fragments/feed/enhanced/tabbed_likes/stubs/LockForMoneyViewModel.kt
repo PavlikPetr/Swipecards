@@ -27,7 +27,7 @@ class LockForMoneyViewModel(private val mIFeedUnlocked: IFeedUnlocked) {
         App.getAppComponent().appState()
     }
 
-    var mApi: IApi? = null
+    var api: IApi? = null
     var buyVipAction: () -> Unit = {}
     lateinit private var mBalanceData: BalanceData
     private var mBalanceSubscription: Subscription?
@@ -60,7 +60,7 @@ class LockForMoneyViewModel(private val mIFeedUnlocked: IFeedUnlocked) {
 
     fun onBuyVipClick() {
         if (mBalanceData.money >= mBlockSympathy.price) {
-            mApi?.callLikesAccessRequest()?.subscribe({
+            api?.callLikesAccessRequest()?.subscribe({
                 if (it.completed) {
                     FlurryManager.getInstance().sendSpendCoinsEvent(mBlockSympathy.price, FlurryManager.LIKES_UNLOCK)
                     mIFeedUnlocked.onFeedUnlocked()
