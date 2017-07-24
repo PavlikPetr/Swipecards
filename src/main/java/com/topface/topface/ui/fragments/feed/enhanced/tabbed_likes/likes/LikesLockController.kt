@@ -3,13 +3,20 @@ package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes
 import android.databinding.ViewStubProxy
 import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.api.IApi
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.extensions.getString
 
-class LikesLockController(stub: ViewStubProxy, private val mNavigator: IFeedNavigator) : BaseFeedLockerController<LikesLockScreenViewModel>(stub) {
+class LikesLockController(stub: ViewStubProxy, private val mNavigator: IFeedNavigator, private val mApi: IApi) : BaseFeedLockerController<LikesLockScreenViewModel>(stub) {
     override fun initLockedFeedStub(errorCode: Int) {
-        mStubModel?.showChild?.set(1)
+        mStubModel?.let {
+            it.showChild.set(1)
+            with(it.lockForMoneyViewModel) {
+                mApi = this@LikesLockController.mApi
+                mNavigator.showPurchaseCoins("EmptyLikes")
+            }
+        }
     }
 
     override fun initEmptyFeedStub() {

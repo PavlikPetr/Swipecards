@@ -2,6 +2,7 @@ package com.topface.topface.di.feed.likes
 
 import android.databinding.ViewStubProxy
 import com.topface.topface.R
+import com.topface.topface.api.Api
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.scope.FragmentScope
@@ -45,9 +46,9 @@ class LikesModule(private val mFragment: LikesFragment) {
 
     @Provides
     @FragmentScope
-    fun providesVisitorsLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory, navigator: IFeedNavigator)
+    fun providesVisitorsLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory, navigator: IFeedNavigator, api: Api)
             : BaseFeedLockerController<*> {
-        return LikesLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy, navigator).apply {
+        return LikesLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy, navigator, api).apply {
             lockScreenFactory = lockerFactory
             setLockerLayout(emptyFeedLayout)
         }

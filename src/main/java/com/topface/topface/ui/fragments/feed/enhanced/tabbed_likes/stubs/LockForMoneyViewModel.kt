@@ -6,7 +6,7 @@ import android.view.View
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.api.Api
+import com.topface.topface.api.IApi
 import com.topface.topface.data.BalanceData
 import com.topface.topface.data.Options
 import com.topface.topface.data.Profile
@@ -21,11 +21,14 @@ import rx.Subscription
 /**
  * Заглушка разблокировки за деньги
  */
-class LockForMoneyViewModel(private val mApi: Api, private val buyVipAction: () -> Unit, private val mIFeedUnlocked: IFeedUnlocked) {
+class LockForMoneyViewModel(private val mIFeedUnlocked: IFeedUnlocked) {
 
     private val mState by lazy {
         App.getAppComponent().appState()
     }
+
+    var mApi: IApi? = null
+    var buyVipAction: () -> Unit = {}
     lateinit private var mBalanceData: BalanceData
     private var mBalanceSubscription: Subscription?
     private var mOptionsSubscription: Subscription?
@@ -57,7 +60,7 @@ class LockForMoneyViewModel(private val mApi: Api, private val buyVipAction: () 
 
     fun onBuyVipClick() {
         if (mBalanceData.money >= mBlockSympathy.price) {
-            mApi.callLikesAccessRequest().subscribe({
+            mApi?.callLikesAccessRequest()?.subscribe({
                 if (it.completed) {
                     FlurryManager.getInstance().sendSpendCoinsEvent(mBlockSympathy.price, FlurryManager.LIKES_UNLOCK)
                     mIFeedUnlocked.onFeedUnlocked()
