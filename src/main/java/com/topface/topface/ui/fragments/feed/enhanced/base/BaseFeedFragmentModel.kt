@@ -35,6 +35,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_utils.addAllFirst
 import com.topface.topface.ui.fragments.feed.feed_utils.addFirst
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
+import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
 import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
@@ -402,6 +403,18 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
                 if (considerDuplicates(feed, newFeed)) {
                     feedsIterator.remove()
                     break
+                }
+            }
+        }
+    }
+
+    protected fun remove(id: Int) {
+        if (data.isNotEmpty()) {
+            val iterator = data.listIterator()
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (item.getUserId() == id) {
+                    iterator.remove()
                 }
             }
         }

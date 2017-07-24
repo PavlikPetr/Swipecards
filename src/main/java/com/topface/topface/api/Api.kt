@@ -47,6 +47,10 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
 
     override fun execDeleteMessage(item: HistoryItem) = DeleteMessageRequest(item.id).exec()
 
+    override fun callDeleteMutual(userIds: ArrayList<String>) = DeleteMutualRequest(userIds).subscribe()
+
+    override fun callDeleteAdmiration(itemsId: ArrayList<String>) = DeleteAdmirationRequest(itemsId).subscribe()
+
     override fun callSetProfile(name: String, age: Int, sex: Int, location: Location?, cityid: Int,
                                 status: String, background: Int, invisible: Boolean?, xstatus: Int,
                                 isAutoReplyAllowed: Boolean?): Observable<Completed> =

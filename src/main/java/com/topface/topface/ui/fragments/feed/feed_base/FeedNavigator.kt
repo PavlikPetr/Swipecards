@@ -39,7 +39,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel
-import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
+import com.topface.topface.ui.fragments.feed.dialogs.PopupMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
 import com.topface.topface.ui.fragments.feed.enhanced.chat.NeedRelease
 import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
@@ -227,8 +227,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mMutualPopupFragment.show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
     }
 
-    override fun showDialogpopupMenu(item: FeedDialog) =
-            DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
+    override fun showDialogpopupMenu(item: FeedItem, @PopupMenuFragment.MenuPopupType popupMenuType: Long) =
+            PopupMenuFragment.getInstance(item, popupMenuType).show(mActivityDelegate.supportFragmentManager, PopupMenuFragment.TAG)
 
     override fun showPurchaseProduct(skuId: String, from: String) =
             mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),

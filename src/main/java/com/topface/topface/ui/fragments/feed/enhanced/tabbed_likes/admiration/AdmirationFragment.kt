@@ -12,6 +12,7 @@ import com.topface.topface.di.navigation_activity.NavigationActivityComponent
 import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.NavigationActivity
+import com.topface.topface.ui.fragments.feed.dialogs.PopupMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.BaseLikesFeedFragment
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 
@@ -27,9 +28,9 @@ class AdmirationFragment : BaseLikesFeedFragment() {
         }.admirationViewModel()
     }
 
-    override fun attachAdapterComponents(adapter: CompositeAdapter) {
-        adapter.addAdapterComponent(
-                AdmirationAdapterComponent({ itemClick(it, AdmirationFragment.SCREEN_TYPE) }, { itemLongClick(it) }))
+    override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
+        compositeAdapter.addAdapterComponent(
+                AdmirationAdapterComponent({ itemClick(it, AdmirationFragment.SCREEN_TYPE) }, { sympathyItemLongClick(it, PopupMenuFragment.ADMIRATION_TYPE) }))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
