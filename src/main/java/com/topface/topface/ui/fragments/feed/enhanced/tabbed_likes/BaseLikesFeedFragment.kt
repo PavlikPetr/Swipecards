@@ -5,13 +5,14 @@ import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.databinding.NewFeedFragmentBaseBinding
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentWithComponentAdapter
 import com.topface.topface.utils.extensions.getInt
 
 /**
  * Created by ppavlik on 13.07.17.
  * Базовый фрагмент для фидового списка "взаимно" и "восхищения"
  */
-abstract class BaseLikesFeedFragment : BaseFeedFragment<FeedBookmark>() {
+abstract class BaseLikesFeedFragment : BaseFeedFragmentWithComponentAdapter<FeedBookmark>() {
 
     override fun initScreenView(binding: NewFeedFragmentBaseBinding) {
         with(binding.feedList) {

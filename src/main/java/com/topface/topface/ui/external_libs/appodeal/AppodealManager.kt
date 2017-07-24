@@ -26,8 +26,8 @@ class AppodealManager {
         private const val TAG = "AppodealManager"
 
         const val NOT_INITED = 0L
-        private const val INIT_IN_PROGRESS = 1L
-        private const val INITED_SUCCESS = 2L
+        const val INIT_IN_PROGRESS = 1L
+        const val INITED_SUCCESS = 2L
 
         @IntDef(NOT_INITED, INIT_IN_PROGRESS, INITED_SUCCESS)
         annotation class AppodealInitState

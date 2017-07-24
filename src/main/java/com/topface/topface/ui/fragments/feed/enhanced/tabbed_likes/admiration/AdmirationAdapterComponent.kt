@@ -21,7 +21,6 @@ class AdmirationAdapterComponent(click: (View?) -> Unit, longClick: (View?) -> U
     }
 
     override fun attachViewModel(binding: NewFeedItemCardBinding, data: FeedBookmark) {
-//        binding.card
         binding.viewModel = AdmirationItemViewModel(data, mNavigator)
     }
 }

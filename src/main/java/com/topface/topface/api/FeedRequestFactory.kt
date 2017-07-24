@@ -16,16 +16,18 @@ class FeedRequestFactory : IFeedRequestFactory {
         const val HISTORY_LOAD_FLAG = "history_load_flag"
         const val PULL_TO_REF_FLAG = "pull_to_refresh_flag"
         const val UNREAD_STATE = "unread_state"
+        const val UNREAD = "unread"
     }
 
     override fun <P : IBaseFeedResponse> construct(arg: Bundle, responseClass: Class<P>): FeedRequest<P> {
         val service = getServiceName(arg.getSerializable(FeedRequestFactory.SERVICE) as FeedService)
         val unreadState = arg.getParcelable<UnreadStatePair>(FeedRequestFactory.UNREAD_STATE)
         val leave = arg.getBoolean(FeedRequestFactory.LEAVE)
+        val unread = arg.getBoolean(FeedRequestFactory.UNREAD)
         val from = arg.getString(FeedRequestFactory.FROM, Utils.EMPTY)
         val to = arg.getString(FeedRequestFactory.TO, Utils.EMPTY)
 
-        val request = FeedRequest(service, unreadState, leave, respClass = responseClass)
+        val request = FeedRequest(service, unreadState, leave, respClass = responseClass, unread = unread)
 
         if (arg.getBoolean(FeedRequestFactory.PULL_TO_REF_FLAG) && !TextUtils.isEmpty(from)) {
             request.from = from

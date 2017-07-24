@@ -1,16 +1,20 @@
 package com.topface.topface.di.feed.fans
 
 import android.databinding.ViewStubProxy
+import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
+import com.topface.topface.data.FeedItem
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.enhanced.fans.FansFragment
 import com.topface.topface.ui.fragments.feed.enhanced.fans.FansLockController
 import com.topface.topface.ui.fragments.feed.enhanced.fans.FansLockScreenViewModel
+import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 import dagger.Module
 import dagger.Provides
@@ -52,4 +56,14 @@ class FansModule(private val mFragment: FansFragment) {
         }
     }
 
+
+    @Provides
+    @FragmentScope
+    fun provideAdapter(typeProvider: ITypeProvider) = CompositeAdapter(typeProvider) {
+        Bundle().apply {
+            if (it.data.isNotEmpty()) {
+                putString(FeedRequestFactory.TO, (it.data.last() as FeedItem).id)
+            }
+        }
+    }
 }

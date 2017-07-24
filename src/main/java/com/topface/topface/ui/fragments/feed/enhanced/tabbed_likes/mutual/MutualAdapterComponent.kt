@@ -9,7 +9,7 @@ import com.topface.topface.di.feed.mutual.MutualComponent
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedItemAdapterComponent
 
 class MutualAdapterComponent(click: (View?) -> Unit, longClick: (View?) -> Unit)
-    : BaseFeedItemAdapterComponent<NewFeedItemCardBinding, FeedBookmark>(click, {}) {
+    : BaseFeedItemAdapterComponent<NewFeedItemCardBinding, FeedBookmark>(click, longClick) {
 
     override val itemLayout = R.layout.new_feed_item_card
     override val bindingClass = NewFeedItemCardBinding::class.java

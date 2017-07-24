@@ -97,6 +97,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
     open val isForPremium: Boolean = false
     open val isNeedReadItems: Boolean = false
     open val isNeedCacheItems: Boolean = true
+    open val isUnreadOnly: Boolean = false
 
     abstract fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean
     open val bannerRes: Int = R.layout.app_day_list
@@ -144,6 +145,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         const val HISTORY_LOAD_FLAG = "history_load_flag"
         const val PULL_TO_REF_FLAG = "pull_to_refresh_flag"
         const val UNREAD_STATE = "unread_state"
+        const val UNREAD = "unread"
     }
 
     private lateinit var mReadItemReceiver: BroadcastReceiver
@@ -414,6 +416,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
                 putSerializable(SERVICE, service)
                 putParcelable(UNREAD_STATE, mUnreadState)
                 putBoolean(PULL_TO_REF_FLAG, isPullToRef)
+                putBoolean(UNREAD, isUnreadOnly)
                 putString(FROM, from)
                 putString(TO, to)
                 putBoolean(HISTORY_LOAD_FLAG, hasData())

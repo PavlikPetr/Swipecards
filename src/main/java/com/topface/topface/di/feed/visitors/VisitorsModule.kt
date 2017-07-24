@@ -1,16 +1,20 @@
 package com.topface.topface.di.feed.visitors
 
 import android.databinding.ViewStubProxy
+import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.api.responses.Visitor
+import com.topface.topface.data.FeedItem
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsFragment
 import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsLockController
 import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsLockScreenViewModel
+import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 import dagger.Module
 import dagger.Provides
@@ -48,6 +52,16 @@ class VisitorsModule(private val mFragment: VisitorsFragment) {
         return VisitorsLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy).apply {
             lockScreenFactory = lockerFactory
             setLockerLayout(emptyFeedLayout)
+        }
+    }
+
+    @Provides
+    @FragmentScope
+    fun provideAdapter(typeProvider: ITypeProvider) = CompositeAdapter(typeProvider) {
+        Bundle().apply {
+            if (it.data.isNotEmpty()) {
+                putString(FeedRequestFactory.TO, (it.data.last() as FeedItem).id)
+            }
         }
     }
 }

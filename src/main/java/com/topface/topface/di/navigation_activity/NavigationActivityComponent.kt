@@ -7,6 +7,8 @@ import com.topface.topface.di.feed.admiration.AdmirationModule
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.feed.fans.FansComponent
 import com.topface.topface.di.feed.fans.FansModule
+import com.topface.topface.di.feed.likes.LikesComponent
+import com.topface.topface.di.feed.likes.LikesModule
 import com.topface.topface.di.feed.mutual.MutualComponent
 import com.topface.topface.di.feed.mutual.MutualModule
 import com.topface.topface.di.feed.visitors.VisitorsComponent
@@ -32,4 +34,5 @@ interface NavigationActivityComponent {
 
     fun add(mutualModule: MutualModule, baseModule: BaseFeedModule): MutualComponent
     fun add(admirationModule: AdmirationModule, baseModule: BaseFeedModule): AdmirationComponent
+    fun add(likesModule: LikesModule, baseModule: BaseFeedModule): LikesComponent
 }

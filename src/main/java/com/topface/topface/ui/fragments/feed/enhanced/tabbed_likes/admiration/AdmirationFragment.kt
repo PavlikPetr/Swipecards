@@ -27,8 +27,8 @@ class AdmirationFragment : BaseLikesFeedFragment() {
         }.admirationViewModel()
     }
 
-    override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
-        compositeAdapter.addAdapterComponent(
+    override fun attachAdapterComponents(adapter: CompositeAdapter) {
+        adapter.addAdapterComponent(
                 AdmirationAdapterComponent({ itemClick(it, AdmirationFragment.SCREEN_TYPE) }, { itemLongClick(it) }))
     }
 

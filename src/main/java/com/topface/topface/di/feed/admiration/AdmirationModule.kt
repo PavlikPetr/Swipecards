@@ -1,16 +1,20 @@
 package com.topface.topface.di.feed.admiration
 
 import android.databinding.ViewStubProxy
+import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
+import com.topface.topface.data.FeedItem
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.admiration.AdmirationFragment
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.admiration.AdmirationLockController
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.admiration.AdmirationLockScreenViewModel
+import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 import dagger.Module
 import dagger.Provides
@@ -44,7 +48,7 @@ class AdmirationModule(private val mFragment: AdmirationFragment) {
 
     @Provides
     @FragmentScope
-    fun providesVisitorsLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory, navigator: IFeedNavigator)
+    fun providesAdmirationLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory, navigator: IFeedNavigator)
             : BaseFeedLockerController<*> {
         return AdmirationLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy, navigator).apply {
             lockScreenFactory = lockerFactory
@@ -52,4 +56,13 @@ class AdmirationModule(private val mFragment: AdmirationFragment) {
         }
     }
 
+    @Provides
+    @FragmentScope
+    fun provideAdapter(typeProvider: ITypeProvider) = CompositeAdapter(typeProvider) {
+        Bundle().apply {
+            if (it.data.isNotEmpty()) {
+                putString(FeedRequestFactory.TO, (it.data.last() as FeedItem).id)
+            }
+        }
+    }
 }
