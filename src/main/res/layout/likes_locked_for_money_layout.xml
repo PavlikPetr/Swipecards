@@ -1,0 +1,74 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="lockViewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.stubs.LockForMoneyViewModel"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="24dp">
+
+            <LinearLayout
+                style="@style/LandscapePortraitImagesVisibility"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:visibility="@{lockViewModel.muzzleVisibility}">
+
+                <ImageView
+                    android:id="@+id/ivOne"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@{lockViewModel.firstMuzzle}"/>
+                <ImageView
+                    android:id="@+id/ivTwo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@{lockViewModel.secondMuzzle}"/>
+
+                <ImageView
+                    android:id="@+id/ivThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@{lockViewModel.thirdMuzzle}"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvTextOne"
+                style="@style/ListItemEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:maxWidth="300dp"
+                android:text="@{lockViewModel.message}"/>
+
+            <Button
+                android:id="@+id/btn_unlock_by_coins"
+                style="@style/Widget.Topface.Button.Big.Blue"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="@{() -> lockViewModel.onBuyVipClick()}"
+                android:text="@{lockViewModel.buttonMessage}"/>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+</layout>

@@ -6,6 +6,9 @@ import com.topface.scruffy.ScruffyManager
 import com.topface.topface.api.requests.*
 import com.topface.topface.api.responses.*
 import com.topface.topface.data.FeedItem
+import com.topface.topface.api.requests.BuyLikesAccessRequest
+import com.topface.topface.requests.IApiResponse
+import com.topface.topface.requests.handlers.SimpleApiHandler
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.rx.applySchedulers
@@ -22,6 +25,8 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
 
     override fun callAppDayRequest(typeFeedFragment: String) =
             AppDayRequest(typeFeedFragment).subscribe()
+
+    override fun callLikesAccessRequest() = BuyLikesAccessRequest().subscribe()
 
     override fun callAddToBlackList(items: List<FeedItem>) =
             BlackListAddRequest(items.getFeedIntIds()).subscribe()
@@ -55,4 +60,6 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
             .applySchedulers()
 
     override fun callBannerGetCommon(startNumber: Long) = BannerSettingsRequest(startNumber).subscribe()
+
+
 }
