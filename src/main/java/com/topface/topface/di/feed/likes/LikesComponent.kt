@@ -2,6 +2,7 @@ package com.topface.topface.di.feed.likes
 
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.LikesFragment
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import dagger.Subcomponent
 
 @FragmentScope

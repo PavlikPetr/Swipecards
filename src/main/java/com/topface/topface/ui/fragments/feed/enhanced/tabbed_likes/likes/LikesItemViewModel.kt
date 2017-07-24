@@ -14,16 +14,15 @@ import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
  * Вью-модель итема симпатии в виде карточки, по аналогии с tinder
  */
 
-class LikesItemViewModel(data: FeedBookmark) : BaseViewModel() {
-
+class LikesItemViewModel(data: FeedBookmark) : BaseViewModel(), IViewModel<FeedBookmark> {
     private val mEventBus by lazy {
         App.getAppComponent().eventBus()
     }
 
-    val avatar = ObservableField(data.user?.photo?.defaultLink)
-    val placeholderRes = ObservableField(if (data.user?.sex == Profile.BOY) R.drawable.nearby_av_man else R.drawable.nearby_av_girl)
-    val name = ObservableField(data.user?.nameAndAge ?: "")
-    val city = ObservableField(data.user?.city?.name ?: "")
+    val avatar = ObservableField(getAvatar(data))
+    val placeholderRes = ObservableField(getPlaceholder(data))
+    val name = ObservableField(getName(data))
+    val city = ObservableField(getName(data))
     val backgroundAlpha = ObservableFloat(1f)
 
     fun onLikeClick() {
@@ -35,4 +34,19 @@ class LikesItemViewModel(data: FeedBookmark) : BaseViewModel() {
         mEventBus.setData(LikesCardUserChoose(false))
         backgroundAlpha.set(0f)
     }
+
+    override fun update(data: FeedBookmark) {
+        avatar.set(getAvatar(data))
+        placeholderRes.set(getPlaceholder(data))
+        name.set(getName(data))
+        city.set(getCity(data))
+    }
+
+    private fun getAvatar(data: FeedBookmark) = data.user?.photo?.defaultLink
+
+    private fun getPlaceholder(data: FeedBookmark) = if (data.user?.sex == Profile.BOY) R.drawable.nearby_av_man else R.drawable.nearby_av_girl
+
+    private fun getName(data: FeedBookmark) = data.user?.nameAndAge ?: ""
+
+    private fun getCity(data: FeedBookmark) = data.user?.city?.name ?: ""
 }

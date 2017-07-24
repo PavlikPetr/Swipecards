@@ -55,4 +55,10 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
             .applySchedulers()
 
     override fun callBannerGetCommon(startNumber: Long) = BannerSettingsRequest(startNumber).subscribe()
+
+    override fun callReadLikeRequest(senderId: Int): Observable<Completed> =
+            LikeReadRequest(senderId).subscribe()
+
+    override fun callSendLikeRequest(userId: Int, place: Long): Observable<LikeSendResponse> =
+            LikeSendRequest(userId, place).subscribe()
 }

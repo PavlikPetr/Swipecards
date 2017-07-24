@@ -155,3 +155,5 @@ data class OfferwallWithPlaces(val name: String? = "", private val places: List<
     fun getPurchaseScreen(): List<String> = purchaseScreen ?: listOf()
     fun getPurchaseScreenVip(): List<String> = purchaseScreenVip ?: listOf()
 }
+
+data class LikeSendResponse(val created: Long, val id: Int, val targer: Int, val unread: Boolean, val user: User)

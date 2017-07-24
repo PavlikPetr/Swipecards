@@ -8,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes.IViewModel
 import com.topface.topface.ui.new_adapter.enhanced.IAdapter
 import rx.Observable
 
-abstract class BaseAdapter<in T : ViewDataBinding, D : Any> : BaseAdapter(), IAdapter {
+abstract class BaseAdapter<in T : ViewDataBinding, in D : Any> : BaseAdapter(), IAdapter {
 
     override var data: MutableList<Any> = mutableListOf()
 
@@ -27,28 +29,35 @@ abstract class BaseAdapter<in T : ViewDataBinding, D : Any> : BaseAdapter(), IAd
     override fun getItemId(position: Int) = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View =
-            getBinding(parent).apply {
-                bind(this, getItem(position) as? D)
+            convertView?.apply {
+                (getItem(position) as? D)?.let {
+                    findViewModel(DataBindingUtil.getBinding<T>(convertView)).update(it)
+                    Debug.error("LikesAdapter update ${logData(it)}")
+                }
+            } ?: getBinding(parent).apply {
+                (getItem(position) as? D)?.let {
+                    bind(this, it)
+                    Debug.error("LikesAdapter set ${logData(it)}")
+                }
             }.root
-//        val view = convertView ?: inflate(parent)
-//        val viewHolder = convertView?.let {
-//            it.tag as? T
-//        } ?: createViewHolder().apply {
-//            view.tag = this
-//        }
-//        viewHolder?.let { viewHolder ->
-//            getItem(position)?.let {
-//                fillView(it, viewHolder)
-//            }
-//        }
-//        return view
-//    }
 
     private fun getBinding(parent: ViewGroup?) = DataBindingUtil.inflate<T>(mInflater, layout, parent, false)
 
-    abstract fun bind(binding: T?, data: D?)
+    private fun bind(binding: T?, data: D?) {
+        data?.let {
+            binding?.setVariable(variableId, getViewModel(it))
+        }
+    }
+
+    abstract fun findViewModel(binding: T): IViewModel<D>
+
+    abstract fun getViewModel(data: D): IViewModel<D>
+
+    abstract val variableId: Int
 
     abstract val layout: Int
+
+    abstract fun logData(data: D): String
 
     override fun releaseComponents() {
     }
