@@ -6,6 +6,7 @@ import com.topface.topface.App
 import com.topface.topface.api.requests.LikeSendRequest
 import com.topface.topface.api.requests.LikeSendRequest.Companion.LikeSendPlaces
 import com.topface.topface.api.requests.LikeSendRequest.Companion.UNDEFINED
+import com.topface.topface.api.requests.BuyLikesAccessRequest
 import com.topface.topface.api.responses.*
 import com.topface.topface.data.AdsSettings
 import com.topface.topface.data.FeedItem
@@ -22,6 +23,8 @@ import java.util.*
 interface IApi {
 
     fun callAppDayRequest(typeFeedFragment: String): Observable<AppDay>
+
+    fun callLikesAccessRequest(): Observable<Completed>
 
     fun callAddToBlackList(items: List<FeedItem>): Observable<Completed>
 
