@@ -14,7 +14,7 @@ class LikesLockController(stub: ViewStubProxy, private val mNavigator: IFeedNavi
             it.showChild.set(1)
             with(it.lockForMoneyViewModel) {
                 mApi = this@LikesLockController.mApi
-                mNavigator.showPurchaseCoins("EmptyLikes")
+                buyVipAction = { mNavigator.showPurchaseCoins("EmptyLikes") }
             }
         }
     }
