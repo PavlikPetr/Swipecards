@@ -15,21 +15,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/ivOne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/likes_female_one" />
 
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/ivTwo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:src="@drawable/likes_female_two" />
 
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/ivThree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
