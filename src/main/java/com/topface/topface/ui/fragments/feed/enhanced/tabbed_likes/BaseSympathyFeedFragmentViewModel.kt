@@ -8,6 +8,7 @@ import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.api.responses.GetFeedBookmarkListResponse
 import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.CountersData
+import com.topface.topface.ui.fragments.feed.dialogs.PopupMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
 import com.topface.topface.utils.config.FeedsCache
@@ -30,8 +31,17 @@ abstract class BaseSympathyFeedFragmentViewModel(api: IApi) : BaseFeedFragmentMo
         mPopupMenuSubscription.add(mEventBus.getObservable(PopupMenuDeleteEvent::class.java)
                 .filter { it.getPopupType() == sympathyTypeViewModelType }
                 .subscribe(shortSubscription {
-                    val itemIdForDelete = it.getItemForAction().getUserId()
-                    api.callDeleteMutual(arrayListOf(itemIdForDelete.toString())).subscribe { remove(itemIdForDelete) }
+                    val itemIdForDelete = it.getItemForAction()
+                    val userId = itemIdForDelete.getUserId()
+                    when (sympathyTypeViewModelType) {
+                        PopupMenuFragment.ADMIRATION_TYPE -> {
+                            api.callDeleteAdmiration(arrayListOf(itemIdForDelete.id)).subscribe { remove(userId) }
+                        }
+                        PopupMenuFragment.MUTUAL_TYPE -> {
+                            api.callDeleteMutual(arrayListOf(itemIdForDelete.id)).subscribe { remove(userId) }
+                        }
+                    }
+
                 }
                 ))
         mPopupMenuSubscription.add(mEventBus.getObservable(PopupMenuAddToBlackListEvent::class.java)
