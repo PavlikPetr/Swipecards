@@ -19,6 +19,4 @@ class LikesAdapter : BaseAdapter<LikesCardsItemBinding, FeedBookmark>() {
     override val variableId: Int
         get() = BR.viewModel
     override val layout = R.layout.likes_cards_item
-
-    override fun logData(data: FeedBookmark) = data.user?.nameAndAge?:"empty"
 }

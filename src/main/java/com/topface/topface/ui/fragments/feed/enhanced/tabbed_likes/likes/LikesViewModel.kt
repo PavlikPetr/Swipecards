@@ -42,6 +42,8 @@ class LikesViewModel(private val mApi: IApi) : BaseFeedFragmentModel<FeedBookmar
         get() = true
     override val isUnreadOnly: Boolean
         get() = true
+    override val isNeedReadItems: Boolean
+        get() = true
 
     val counter = ObservableField(Utils.EMPTY)
     val scrollProgressPercent = ObservableFloat(0f)

@@ -32,12 +32,10 @@ abstract class BaseAdapter<in T : ViewDataBinding, in D : Any> : BaseAdapter(), 
             convertView?.apply {
                 (getItem(position) as? D)?.let {
                     findViewModel(DataBindingUtil.getBinding<T>(convertView)).update(it)
-                    Debug.error("LikesAdapter update ${logData(it)}")
                 }
             } ?: getBinding(parent).apply {
                 (getItem(position) as? D)?.let {
                     bind(this, it)
-                    Debug.error("LikesAdapter set ${logData(it)}")
                 }
             }.root
 
@@ -56,8 +54,6 @@ abstract class BaseAdapter<in T : ViewDataBinding, in D : Any> : BaseAdapter(), 
     abstract val variableId: Int
 
     abstract val layout: Int
-
-    abstract fun logData(data: D): String
 
     override fun releaseComponents() {
     }
