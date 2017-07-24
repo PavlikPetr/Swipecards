@@ -3,6 +3,10 @@ package com.topface.topface.api
 import android.location.Location
 import android.os.Bundle
 import com.topface.topface.App
+import com.topface.topface.api.requests.LikeSendRequest
+import com.topface.topface.api.requests.LikeSendRequest.Companion.LikeSendPlaces
+import com.topface.topface.api.requests.LikeSendRequest.Companion.UNDEFINED
+import com.topface.topface.api.requests.BuyLikesAccessRequest
 import com.topface.topface.api.responses.*
 import com.topface.topface.data.AdsSettings
 import com.topface.topface.data.FeedItem
@@ -19,6 +23,8 @@ import java.util.*
 interface IApi {
 
     fun callAppDayRequest(typeFeedFragment: String): Observable<AppDay>
+
+    fun callLikesAccessRequest(): Observable<Completed>
 
     fun callAddToBlackList(items: List<FeedItem>): Observable<Completed>
 
@@ -46,4 +52,8 @@ interface IApi {
             .getConfigFieldInfo().getAmount()): Observable<AdsSettings>
 
     fun observeSendMessage(): Observable<History>
+
+    fun callReadLikeRequest(senderId: Int): Observable<Completed>
+
+    fun callSendLikeRequest(userId: Int, @LikeSendPlaces place: Long = UNDEFINED): Observable<LikeSendResponse>
 }

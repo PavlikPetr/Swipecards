@@ -393,6 +393,7 @@ public class BindingsAdapters {
 
     @BindingAdapter({"setImgeByGlideWithPlaceholder", "placeholderRes"})
     public static void setImgeByGlideWithPlaceholder(ImageView view, String res, Integer placeholderRes) {
+        res = res == null ? Utils.EMPTY : res;
         if (res.contains(Utils.LOCAL_RES)) {
             Glide.with(view.getContext().getApplicationContext()).load(Integer.valueOf(res.replace(Utils.LOCAL_RES, Utils.EMPTY))).into(view);
         } else {

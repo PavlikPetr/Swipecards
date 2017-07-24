@@ -1,6 +1,8 @@
 package com.topface.topface.utils.databinding.binding_adapters
 
 import android.databinding.BindingAdapter
+import android.databinding.ObservableArrayList
+import android.databinding.ObservableList
 import android.graphics.Matrix
 import android.graphics.PointF
 import android.text.Html
@@ -9,8 +11,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.lorentzos.flingswipe.SwipeFlingAdapterView
+import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
+import com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.BaseAdapter
+import com.topface.topface.ui.fragments.feed.enhanced.utils.ImprovedObservableList
 import com.topface.topface.ui.views.image_switcher.ImageLoader
 
 /**
@@ -61,5 +67,56 @@ fun setPreloadedGlideImageWithCrop(view: ImageView, resource: GlideDrawable?,
             view.scaleType = ImageView.ScaleType.MATRIX
         }
         view.setImageDrawable(it)
+    }
+}
+
+@BindingAdapter("bindDataToSwipeFlingView")
+fun setBindDataToSwipeFlingView(view: SwipeFlingAdapterView, data: ImprovedObservableList<FeedBookmark>) {
+    val adapter = (view.adapter as BaseAdapter<*, FeedBookmark>).update(data.observableList)
+    data.canAddListener = true
+    if (!data.isListenerAdded()) {
+        data.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableArrayList<FeedBookmark>>() {
+            override fun onItemRangeMoved(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int, p3: Int) {
+                list?.let {
+                    adapter.update(it)
+                }
+            }
+
+            override fun onChanged(list: ObservableArrayList<FeedBookmark>?) {
+            }
+
+            override fun onItemRangeInserted(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
+                list?.let {
+                    adapter.update(it)
+                }
+            }
+
+            override fun onItemRangeRemoved(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
+                list?.let {
+                    adapter.update(it)
+                }
+            }
+
+            override fun onItemRangeChanged(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
+                list?.let {
+                    adapter.update(it)
+                }
+            }
+        })
+    }
+}
+
+private fun BaseAdapter<*, FeedBookmark>.update(list: ObservableArrayList<FeedBookmark>) = this.apply {
+    data.clear()
+    data.addAll(list)
+    notifyDataSetChanged()
+}
+
+@BindingAdapter(value = *arrayOf("onSwipeFlingViewScroll", "swipeFlingViewBackgroundId", "swipeFlingViewRightIndicatorId", "swipeFlingViewLeftIndicatorId"))
+fun onSwipeFlingViewScroll(view: SwipeFlingAdapterView, scrollProgressPercent: Float, backgroundId: Int, rightIndicatorId: Int, leftIndicatorId: Int) {
+    view.selectedView?.let {
+        it.findViewById(backgroundId)?.alpha = 0f
+        it.findViewById(rightIndicatorId)?.alpha = if (scrollProgressPercent < 0) -scrollProgressPercent else 0f
+        it.findViewById(leftIndicatorId)?.alpha = if (scrollProgressPercent > 0) scrollProgressPercent else 0f
     }
 }

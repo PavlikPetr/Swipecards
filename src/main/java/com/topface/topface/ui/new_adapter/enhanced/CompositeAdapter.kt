@@ -18,15 +18,16 @@ import rx.Subscriber
  * Created by tiberal on 28.11.16.
  */
 class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyType: Int = ProvideItemTypeStrategyFactory.DEFAULT,
-                       private var updaterEmitObject: (CompositeAdapter) -> Bundle) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>() {
+                       private var updaterEmitObject: (CompositeAdapter) -> Bundle) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>(), IAdapter {
 
-    val updateObservable: Observable<Bundle>
+    override val updateObservable: Observable<Bundle>
+    override var data: MutableList<Any> = mutableListOf()
+
     private var mUpdateSubscriber: Subscriber<in Bundle>? = null
     private var mRecyclerView: RecyclerView? = null
     private var doOnRelease: (() -> Unit)? = null
 
     var provideItemTypeStrategy = ProvideItemTypeStrategyFactory(typeProvider).construct(provideItemTypeStrategyType)
-    var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
 
     private val mOnLinearLayoutManagerScrollListener by lazy {
@@ -133,7 +134,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyT
     override fun getItemCount() = data.count()
 
 
-    fun releaseComponents() {
+    override fun releaseComponents() {
         doOnRelease?.invoke()
         doOnRelease = null
         components.values.forEach(AdapterComponent<*, *>::release)

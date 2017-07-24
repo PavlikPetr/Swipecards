@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed.enhanced.visitors
 import android.os.Bundle
 import com.topface.topface.App
 import com.topface.topface.api.responses.Visitor
-import com.topface.topface.banners.PageInfo
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.feed.visitors.DaggerVisitorsModelsComponent
@@ -15,11 +14,11 @@ import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
-import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentWithComponentAdapter
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 
 @FlurryOpenEvent(name = VisitorsFragment.SCREEN_TYPE)
-class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate {
+class VisitorsFragment : BaseFeedFragmentWithComponentAdapter<Visitor>(), IOnFragmentFinishDelegate {
 
     companion object {
         const val SCREEN_TYPE = "Visitors"
@@ -42,8 +41,8 @@ class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate 
         super.onCreate(savedInstanceState)
     }
 
-    override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
-        compositeAdapter.addAdapterComponent(
+    override fun attachAdapterComponents(adapter: CompositeAdapter) {
+        adapter.addAdapterComponent(
                 VisitorAdapterComponent({ itemClick(it, SCREEN_TYPE) }, { itemLongClick(it) }))
     }
 

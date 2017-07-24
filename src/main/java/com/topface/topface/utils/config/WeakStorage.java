@@ -26,6 +26,7 @@ public class WeakStorage extends AbstractConfig {
     private static final String IS_QUESTIONNAIRE_REQUEST_SENT = "is_questionnaire_request_sent";
     private static final String AUTH_TOKEN_STATE = "auth_token_state";
     private static final String SYMPATHIES_REDESIGN_ENABLED = "sympathies_redesign_enabled";
+    private static final String IS_SYMPATHY_SENDED = "is_sympathy_sended";
 
     public WeakStorage() {
         super(App.getContext());
@@ -54,6 +55,8 @@ public class WeakStorage extends AbstractConfig {
         addField(settingsMap, AUTH_TOKEN_STATE, Utils.EMPTY);
         // строковая обертка над boolean чтобы знать что значение было установлено
         addField(settingsMap, SYMPATHIES_REDESIGN_ENABLED, Utils.EMPTY);
+        // флажок, отображающий статус отправки взаимной симпатии в текущей сессии
+        addField(settingsMap, IS_SYMPATHY_SENDED, false);
     }
 
     @Override
@@ -233,5 +236,19 @@ public class WeakStorage extends AbstractConfig {
      */
     public void resetSympathiesRedesignEnabled() {
         setField(getSettingsMap(), SYMPATHIES_REDESIGN_ENABLED, Utils.EMPTY);
+    }
+
+    /**
+     * Метод вызывается при первой отправке взаимной симпатии за сессию
+     */
+    public void setSympathySended() {
+        setField(getSettingsMap(), IS_SYMPATHY_SENDED, true);
+    }
+
+    /**
+     * Признак того, что взаимная симпатия в текущей сессии уже отправлялась
+     */
+    public boolean isSympathySended() {
+        return getBooleanField(getSettingsMap(), IS_SYMPATHY_SENDED);
     }
 }
