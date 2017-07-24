@@ -23,7 +23,8 @@
 
         <include
             android:id="@+id/lockedStub"
-            layout="@layout/layout_empty_likes"/>
+            layout="@layout/likes_locked_for_money_layout"
+            bind:lockViewModel="@{lockViewModel.lockForMoneyViewModel}"/>
 
     </ViewFlipper>
 </layout>
