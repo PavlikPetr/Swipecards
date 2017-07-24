@@ -44,6 +44,8 @@ class LikesViewModel(private val mApi: IApi) : BaseFeedFragmentModel<FeedBookmar
         get() = true
     override val isNeedReadItems: Boolean
         get() = true
+    override val isNeedCacheItems: Boolean
+        get() = false
 
     val counter = ObservableField(Utils.EMPTY)
     val scrollProgressPercent = ObservableFloat(0f)
@@ -102,7 +104,6 @@ class LikesViewModel(private val mApi: IApi) : BaseFeedFragmentModel<FeedBookmar
                         navigator?.showMutualPopup(FeedUser.createFeedUserFromUser(it.user), PopupMutualViewModel.SYMPATHY_TYPE)
                     }
                 })
-
             }
         }
     }

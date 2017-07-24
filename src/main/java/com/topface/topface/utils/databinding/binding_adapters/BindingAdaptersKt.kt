@@ -72,18 +72,13 @@ fun setPreloadedGlideImageWithCrop(view: ImageView, resource: GlideDrawable?,
 
 @BindingAdapter("bindDataToSwipeFlingView")
 fun setBindDataToSwipeFlingView(view: SwipeFlingAdapterView, data: ImprovedObservableList<FeedBookmark>) {
-    val adapter = view.adapter as BaseAdapter<*, FeedBookmark>
-    adapter.data.clear()
-    adapter.data.addAll(data.observableList)
-    adapter.notifyDataSetChanged()
+    val adapter = (view.adapter as BaseAdapter<*, FeedBookmark>).update(data.observableList)
     data.canAddListener = true
     if (!data.isListenerAdded()) {
         data.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableArrayList<FeedBookmark>>() {
             override fun onItemRangeMoved(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int, p3: Int) {
                 list?.let {
-                    adapter.data.clear()
-                    adapter.data.addAll(it)
-                    adapter.notifyDataSetChanged()
+                    adapter.update(it)
                 }
             }
 
@@ -92,29 +87,29 @@ fun setBindDataToSwipeFlingView(view: SwipeFlingAdapterView, data: ImprovedObser
 
             override fun onItemRangeInserted(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
                 list?.let {
-                    adapter.data.clear()
-                    adapter.data.addAll(it)
-                    adapter.notifyDataSetChanged()
+                    adapter.update(it)
                 }
             }
 
             override fun onItemRangeRemoved(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
                 list?.let {
-                    adapter.data.clear()
-                    adapter.data.addAll(it)
-                    adapter.notifyDataSetChanged()
+                    adapter.update(it)
                 }
             }
 
             override fun onItemRangeChanged(list: ObservableArrayList<FeedBookmark>?, p1: Int, p2: Int) {
                 list?.let {
-                    adapter.data.clear()
-                    adapter.data.addAll(it)
-                    adapter.notifyDataSetChanged()
+                    adapter.update(it)
                 }
             }
         })
     }
+}
+
+private fun BaseAdapter<*, FeedBookmark>.update(list: ObservableArrayList<FeedBookmark>) = this.apply {
+    data.clear()
+    data.addAll(list)
+    notifyDataSetChanged()
 }
 
 @BindingAdapter(value = *arrayOf("onSwipeFlingViewScroll", "swipeFlingViewBackgroundId", "swipeFlingViewRightIndicatorId", "swipeFlingViewLeftIndicatorId"))
