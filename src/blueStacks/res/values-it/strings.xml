@@ -1058,4 +1058,10 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="payment_ninja_currency_notice">* Il prezzo potrebbe essere soggetto a cambiamenti al momento del pagamento, per motivi legati al cambio valuta</string>
   <string name="get_free">Ottienilo gratuitamente</string>
   <string name="product_coast">a %s</string>
+  <string name="you_have_not_sympathies">Non hai ancora alcun Like</string>
+  <string name="you_have_not_admirations">Non hai ancora alcun Ammiratore</string>
+  <string name="go_to_dating">Vai a Incontri</string>
+  <string name="go_to_guests">Vai a Ospiti</string>
+  <string name="go_to_dating_and_rate_people">Accedi agli Incontri e dai voti agli altri utenti!</string>
+  <string name="go_to_sypmathies">Vai a Like</string>
 </resources>
