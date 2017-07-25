@@ -5,7 +5,7 @@ import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.stringListToJsonArray
 import java.util.*
 
-class DeleteMutualRequest(val userIds: ArrayList<String>) : BaseScruffyRequest<Completed>() {
+class DeleteMutualRequest(val items: ArrayList<String>) : BaseScruffyRequest<Completed>() {
 
     companion object {
         const val REQUEST_METHOD_NAME = "mutual.delete"
@@ -13,7 +13,7 @@ class DeleteMutualRequest(val userIds: ArrayList<String>) : BaseScruffyRequest<C
 
     override fun getMethod() = REQUEST_METHOD_NAME
 
-    override fun createJson(json: JsonObject) = json.add("userIds", userIds.stringListToJsonArray())
+    override fun createJson(json: JsonObject) = json.add("items", items.stringListToJsonArray())
 
     override fun getResponseClass(): Class<Completed> = Completed::class.java
 }
