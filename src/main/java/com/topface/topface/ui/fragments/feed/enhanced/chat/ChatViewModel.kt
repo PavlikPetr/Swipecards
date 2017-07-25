@@ -436,6 +436,10 @@ class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
         } else if (!mIsPremium) {
             mBlockChatType = NO_MUTUAL_NO_VIP_STUB
             stub = NotMutualBuyVipStub()
+        } else {
+            // пустой чат без всяких заглушек - скорее всего это какое-то купленное восхищение
+            // и надо записать факт его прочтения
+            chatResult?.setResult(createResultIntent())
         }
         return stub?.let { arrayListOf<IChatItem>(it) }
     }
