@@ -24,7 +24,7 @@
         app:cardElevation="@dimen/feed_card_elevation"
         app:cardMaxElevation="@dimen/feed_card_elevation"
         app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
+        app:cardUseCompatPadding="false"
         app:contentPaddingBottom="3dp"
         app:contentPaddingLeft="16dp"
         app:contentPaddingRight="16dp"

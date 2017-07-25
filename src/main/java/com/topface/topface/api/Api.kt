@@ -6,9 +6,6 @@ import com.topface.scruffy.ScruffyManager
 import com.topface.topface.api.requests.*
 import com.topface.topface.api.responses.*
 import com.topface.topface.data.FeedItem
-import com.topface.topface.api.requests.BuyLikesAccessRequest
-import com.topface.topface.requests.IApiResponse
-import com.topface.topface.requests.handlers.SimpleApiHandler
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.rx.applySchedulers
@@ -49,6 +46,10 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
             .applySchedulers()
 
     override fun execDeleteMessage(item: HistoryItem) = DeleteMessageRequest(item.id).exec()
+
+    override fun callDeleteMutual(userIds: ArrayList<String>) = DeleteMutualRequest(userIds).subscribe()
+
+    override fun callDeleteAdmiration(itemsId: ArrayList<String>) = DeleteAdmirationRequest(itemsId).subscribe()
 
     override fun callSetProfile(name: String, age: Int, sex: Int, location: Location?, cityid: Int,
                                 status: String, background: Int, invisible: Boolean?, xstatus: Int,

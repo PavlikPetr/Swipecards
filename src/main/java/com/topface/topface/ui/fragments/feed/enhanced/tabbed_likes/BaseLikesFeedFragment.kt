@@ -1,9 +1,11 @@
 package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes
 
 import android.support.v7.widget.StaggeredGridLayoutManager
+import android.view.View
 import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.databinding.NewFeedFragmentBaseBinding
+import com.topface.topface.ui.fragments.feed.dialogs.PopupMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentWithComponentAdapter
 import com.topface.topface.utils.extensions.getInt
@@ -23,5 +25,11 @@ abstract class BaseLikesFeedFragment : BaseFeedFragmentWithComponentAdapter<Feed
             addItemDecoration(CardItemDecoration())
             adapter = mAdapter
         }
+    }
+
+    fun sympathyItemLongClick(view: View?, @PopupMenuFragment.MenuPopupType popupMenuPopupType: Long) {
+        val itemPosition = mBinding.feedList.layoutManager.getPosition(view)
+        val data = mAdapter.data[itemPosition] as FeedBookmark
+        mNavigator.showDialogpopupMenu(data, popupMenuPopupType)
     }
 }

@@ -14,6 +14,7 @@ import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.glide.tranformation.GlideTransformationType
+import com.topface.topface.ui.fragments.feed.dialogs.PopupMenuFragment
 
 /**
  * Created by mbulgakov on 28.11.16. НОВЫЙ ВАРИАНТ ИТЕМА
@@ -67,7 +68,7 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
     fun onClick() = navigator.showChat(item, feed_type)
 
     fun onLongClick(): Boolean {
-        navigator.showDialogpopupMenu(item)
+        navigator.showDialogpopupMenu(item, PopupMenuFragment.DIALOGS_TYPE)
         return true
     }
 

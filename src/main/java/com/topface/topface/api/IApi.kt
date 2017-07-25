@@ -40,6 +40,10 @@ interface IApi {
 
     fun observeDeleteMessage(): Observable<DeleteComplete>
 
+    fun callDeleteMutual(userIds: ArrayList<String>): Observable<Completed>
+
+    fun callDeleteAdmiration(itemsId: ArrayList<String>): Observable<Completed>
+
     fun callSetProfile(name: String = Utils.EMPTY, age: Int = -1, sex: Int = -1, location: Location? = null,
                        cityid: Int = -1, status: String = Utils.EMPTY, background: Int = -1, invisible: Boolean? = null,
                        xstatus: Int = -1, isAutoReplyAllowed: Boolean? = null): Observable<Completed>

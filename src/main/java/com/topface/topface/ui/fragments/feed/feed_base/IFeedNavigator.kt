@@ -11,6 +11,7 @@ import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel
+import com.topface.topface.ui.fragments.feed.dialogs.PopupMenuFragment
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
 import java.util.*
 
@@ -45,7 +46,7 @@ interface IFeedNavigator {
     //todo придумать свой навигатор для попапов
     fun showTrialPopup(args: Bundle)
 
-    fun showDialogpopupMenu(item: FeedDialog)
+    fun showDialogpopupMenu(item: FeedItem, @PopupMenuFragment.MenuPopupType popupMenuType: Long)
     fun showPurchaseProduct(skuId: String, from: String)
     fun showPurchaseSuccessfullFragment(type: String)
     fun showMutualPopup(mutualUser: FeedUser, @PopupMutualViewModel.MutualPopupType popupType: Long)
