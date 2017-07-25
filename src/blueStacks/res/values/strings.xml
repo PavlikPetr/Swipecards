@@ -1045,4 +1045,10 @@
   <string name="payment_ninja_currency_notice">* Price at time of payment may change due to currency exchange rates</string>
   <string name="get_free">Get for Free</string>
   <string name="product_coast">for %s</string>
+  <string name="you_have_not_sympathies">You don\'t have any Likes yet</string>
+  <string name="you_have_not_admirations">You don\'t have any Adorations yet</string>
+  <string name="go_to_dating">Go to Dating</string>
+  <string name="go_to_guests">Go to Guests</string>
+  <string name="go_to_dating_and_rate_people">Go to Dating and rate people!</string>
+  <string name="go_to_sypmathies">Go to Likes</string>
 </resources>

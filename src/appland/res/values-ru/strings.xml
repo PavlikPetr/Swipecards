@@ -1390,9 +1390,11 @@
     <!--new sympathies stubs-->
     <string name="you_have_not_sympathies">У вас пока нет симпатий</string>
     <string name="you_have_not_admirations">У вас пока нет восхищений</string>
-    <string name="become_a_vip_and_many_partners_will_see_you">Стань VIP и тебя увидет много партнеров!</string>
+    <string name="become_a_vip_and_many_partners_will_see_you">Стань VIP и тебя увидит много партнеров!</string>
     <string name="go_to_dating">В знакомства</string>
     <string name="go_to_guests">К гостям</string>
     <string name="go_to_dating_and_rate_people">Перейдите в знакомства и оцените людей!</string>
     <string name="go_to_sypmathies">К симпатиям</string>
+    <string name="delete_mutual_sympathy">Удалить взаимную симпатию</string>
+    <string name="delete_admiration">Удалить восхищение</string>
 </resources>
