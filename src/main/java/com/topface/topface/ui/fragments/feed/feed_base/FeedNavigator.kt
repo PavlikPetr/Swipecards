@@ -39,6 +39,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel
+import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment
 import com.topface.topface.ui.fragments.feed.dialogs.PopupMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
 import com.topface.topface.ui.fragments.feed.enhanced.chat.NeedRelease
@@ -337,6 +338,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 show(mActivityDelegate.supportFragmentManager, CitySearchPopup.TAG)
             }
 
-    override fun showVisitors() = mNavigationState.emmitNavigationState(WrappedNavigationData(LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS),
-                    WrappedNavigationData.SELECT_EXTERNALY))
+    override fun showVisitors() {
+        TabbedVisitorsFragment.setTabsDefaultPosition()
+        mNavigationState.emmitNavigationState(WrappedNavigationData(LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS),
+                WrappedNavigationData.SELECT_EXTERNALY))
+    }
 }
