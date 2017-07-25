@@ -434,6 +434,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         User user = getUser();
                         if (user != null) {
                             user.isSympathySent = value != null ? value : !user.isSympathySent;
+                            Intent i = new Intent();
+                            i.putExtra(UserProfileActivity.IS_LIKE_SEND, user.isSympathySent);
+                            i.putExtra(AbstractProfileFragment.INTENT_UID, user.uid);
+                            getActivity().setResult(Activity.RESULT_OK, i);
                         }
                     }
 

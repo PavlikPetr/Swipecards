@@ -83,9 +83,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         item?.let {
             if (!it.user.isEmpty) {
                 val user = it.user
-                mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, user.photo,
+                mActivityDelegate.startActivityForResult(UserProfileActivity.createIntent(null, user.photo,
                         user.id, it.id, false, true, Utils.getNameAndAge(user.firstName, user.age),
-                        user.city.getName(), from))
+                        user.city.getName(), from), UserProfileActivity.REQUEST_USER_PROFILE)
             }
         }
     }
@@ -222,7 +222,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
     }
 
-    override fun showMutualPopup(mutualUser: FeedUser, @PopupMutualViewModel.MutualPopupType popupType: Long ) {
+    override fun showMutualPopup(mutualUser: FeedUser, @PopupMutualViewModel.MutualPopupType popupType: Long) {
         val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment.getInstance(mutualUser, popupType)
         mMutualPopupFragment.show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
     }
@@ -338,5 +338,5 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             }
 
     override fun showVisitors() = mNavigationState.emmitNavigationState(WrappedNavigationData(LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS),
-                    WrappedNavigationData.SELECT_EXTERNALY))
+            WrappedNavigationData.SELECT_EXTERNALY))
 }

@@ -79,10 +79,8 @@ class LikesFragment : BaseFeedFragment<FeedBookmark, LikesAdapter, LikesCardsFra
                                 mBinding.frame.topCardListener.selectLeft()
                             }
                         } catch (e: NullPointerException) {
-
                         }
                     }
-
                 })
     }
 
@@ -96,6 +94,7 @@ class LikesFragment : BaseFeedFragment<FeedBookmark, LikesAdapter, LikesCardsFra
     }
 
     override fun onDestroyView() {
+        terminateImmortalComponent()
         ComponentManager.releaseComponent(LikesComponent::class.java)
         super.onDestroyView()
     }

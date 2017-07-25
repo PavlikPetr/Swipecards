@@ -12,6 +12,9 @@ class AdmirationViewModel(api: IApi): BaseSympathyFeedFragmentViewModel(api) {
     override val sympathyTypeViewModelType: Long
         get() = PopupMenuFragment.ADMIRATION_TYPE
 
+    override val isNeedReadItems: Boolean
+        get() = true
+
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS
 
