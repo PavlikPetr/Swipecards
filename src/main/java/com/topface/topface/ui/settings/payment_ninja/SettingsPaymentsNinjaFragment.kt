@@ -16,7 +16,7 @@ import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomShe
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType
 import com.topface.topface.ui.settings.payment_ninja.components.CardComponent
 import com.topface.topface.ui.settings.payment_ninja.components.HelpComponent
-import com.topface.topface.ui.bonus.components.LoaderComponent
+import com.topface.topface.ui.settings.payment_ninja.components.LoaderComponent
 import com.topface.topface.ui.settings.payment_ninja.components.SubscriptionComponent
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
