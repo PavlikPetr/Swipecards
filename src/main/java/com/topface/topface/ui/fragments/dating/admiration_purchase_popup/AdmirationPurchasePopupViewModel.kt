@@ -12,6 +12,7 @@ import com.topface.topface.R
 import com.topface.topface.data.BalanceData
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.AdmirationPurchasePopupBinding
+import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
 import com.topface.topface.utils.Utils
@@ -26,7 +27,7 @@ import rx.subscriptions.CompositeSubscription
 class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
                                        private val mAdmirationPurchasePopupHide: IAdmirationPurchasePopupHide,
                                        private val mNavigator: FeedNavigator,
-                                       currentUser: FeedUser?) :
+                                       currentUser: FeedUser?, val iDialogCloser: IDialogCloser) :
         BaseViewModel<AdmirationPurchasePopupBinding>(binding) {
 
     companion object {

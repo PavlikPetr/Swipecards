@@ -65,8 +65,8 @@
                     android:text="@{viewModel.buyCoinsButtonText}"/>
 
                 <TextView
-                    style="@style/AdmirationPopupLabel1Style"
                     android:id="@+id/label1"
+                    style="@style/AdmirationPopupLabel1Style"
                     android:layout_below="@+id/coins_button"
                     android:layout_centerHorizontal="true"/>
 
@@ -113,9 +113,16 @@
                     android:layout_below="@+id/arrow_bottom"
                     android:layout_centerHorizontal="true"
                     android:onClick="@{() -> viewModel.buyVip()}"/>
-            </RelativeLayout>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:onClick="@{() -> viewModel.iDialogCloser.closeIt()}"
+                    android:padding="12dp"
+                    android:src="@drawable/dark_ic_close"/>
+            </RelativeLayout>
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
-
 </layout>

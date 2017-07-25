@@ -38,10 +38,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.50"
-                android:paddingLeft="30dp"
                 android:background="@color/text_white"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="30dp">
 
                 <com.topface.topface.ui.views.ImageViewRemote
                     android:id="@+id/admiration"
@@ -64,8 +64,8 @@
                     android:text="@{viewModel.buyCoinsButtonText}"/>
 
                 <TextView
-                    style="@style/AdmirationPopupLabel1Style"
-                    android:id="@+id/label1"/>
+                    android:id="@+id/label1"
+                    style="@style/AdmirationPopupLabel1Style"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -118,9 +118,16 @@
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
                         android:onClick="@{() -> viewModel.buyVip()}"/>
-
                 </LinearLayout>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:onClick="@{() -> viewModel.iDialogCloser.closeIt()}"
+                    android:padding="12dp"
+                    android:src="@drawable/dark_ic_close"/>
             </RelativeLayout>
 
         </LinearLayout>
