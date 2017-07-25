@@ -84,9 +84,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         item?.let {
             if (!it.user.isEmpty) {
                 val user = it.user
-                mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, user.photo,
+                mActivityDelegate.startActivityForResult(UserProfileActivity.createIntent(null, user.photo,
                         user.id, it.id, false, true, Utils.getNameAndAge(user.firstName, user.age),
-                        user.city.getName(), from))
+                        user.city.getName(), from), UserProfileActivity.REQUEST_USER_PROFILE)
             }
         }
     }

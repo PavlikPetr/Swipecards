@@ -27,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, AcFragmentFrameBinding> {
 
     public static final int INTENT_USER_PROFILE = 6;
+    public static final int REQUEST_USER_PROFILE = 13;
+    public static final String IS_LIKE_SEND = "is_like_send";
     public static final String FROM = "from";
     public static final String INTENT_HIDE_CHAT_IN_OVERFLOw_MENU = "HiDeChAtInOvErFlOw";
 

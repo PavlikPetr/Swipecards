@@ -23,6 +23,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController.
 import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.new_adapter.enhanced.IAdapter
+import com.topface.topface.utils.IStateSaverRegistrator
 import com.topface.topface.utils.extensions.executePendingBindingsBeforeApi
 import org.jetbrains.anko.layoutInflater
 import javax.inject.Inject
@@ -103,6 +104,10 @@ abstract class BaseFeedFragment<T : FeedItem, A : IAdapter, V : ViewDataBinding>
         mAdapter.apply {
             attachAdapterComponents(this)
             mViewModel.updateObservable = updateObservable
+        }
+        val stateSaverRegistrator = activity
+        if (stateSaverRegistrator is IStateSaverRegistrator) {
+            stateSaverRegistrator.registerLifeCycleDelegate(mViewModel)
         }
         return mBinding.root
     }
@@ -195,6 +200,10 @@ abstract class BaseFeedFragment<T : FeedItem, A : IAdapter, V : ViewDataBinding>
         //пока пусть будет так, похоже что это лишнее, на дестрое вьюхи не надо релизить модель.
         //mViewModel.release()
         mAdapter.releaseComponents()
+        val stateSaverRegistrator = activity
+        if (stateSaverRegistrator is IStateSaverRegistrator) {
+            stateSaverRegistrator.unregisterLifeCycleDelegate(mViewModel)
+        }
     }
 
     override fun onDestroy() {

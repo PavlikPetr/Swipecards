@@ -13,7 +13,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="50dp">
+        android:paddingBottom="16dp">
 
         <FrameLayout
             android:id="@+id/background"
@@ -47,6 +47,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/bg_white"
             app:cardCornerRadius="10dp">
 
             <LinearLayout
