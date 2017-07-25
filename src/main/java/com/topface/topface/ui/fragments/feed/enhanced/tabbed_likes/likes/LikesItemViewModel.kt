@@ -22,7 +22,7 @@ class LikesItemViewModel(data: FeedBookmark) : BaseViewModel(), IViewModel<FeedB
     val avatar = ObservableField(getAvatar(data))
     val placeholderRes = ObservableField(getPlaceholder(data))
     val name = ObservableField(getName(data))
-    val city = ObservableField(getName(data))
+    val city = ObservableField(getCity(data))
     val backgroundAlpha = ObservableFloat(1f)
 
     fun onLikeClick() {
