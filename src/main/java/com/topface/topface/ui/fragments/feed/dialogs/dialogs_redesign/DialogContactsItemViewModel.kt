@@ -117,7 +117,7 @@ class DialogContactsItemViewModel(private val mContactsStubItem: DialogContactsS
                         if (this@DialogContactsItemViewModel.data.observableList.count() != 0 ||
                                 it.items.isNotEmpty()) {
                             updateDialogContacts(it)
-                            this@DialogContactsItemViewModel.data.addAll(data.items)
+                            this@DialogContactsItemViewModel.data.addAll(it.items)
                             amount.set(getAmount(it.counter))
                             addFooterGoDatingItem(it.more)
                         } else {

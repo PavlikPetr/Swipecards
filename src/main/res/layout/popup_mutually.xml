@@ -8,6 +8,9 @@
             type="com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel"/>
     </data>
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -134,5 +137,5 @@
             android:text="@{model.borderlessButtonText}"/>
 
     </RelativeLayout>
-
+    </android.support.v4.widget.NestedScrollView>
 </layout>
