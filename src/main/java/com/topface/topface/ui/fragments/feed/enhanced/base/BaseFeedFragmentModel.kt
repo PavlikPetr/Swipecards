@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.databinding.ObservableArrayList
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
+import android.databinding.ObservableList
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
@@ -113,6 +115,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
     private var mDeleteSubscription: Subscription? = null
     private var mBlackListSubscription: Subscription? = null
     private var mCountersSubscription: Subscription? = null
+    private var mDataLastItemSubscription: Subscription? = null
 
     private val mAtomicUpdaterSubscription = AtomicReference<Subscription>()
 
@@ -178,6 +181,28 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
 
         createAndRegisterBroadcasts()
         mStateManager.registerAppChangeStateListener(this)
+
+       data.observableList.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableArrayList<T>>(){
+           override fun onItemRangeChanged(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
+           }
+
+           override fun onChanged(p0: ObservableArrayList<T>?) {
+           }
+
+           override fun onItemRangeMoved(p0: ObservableArrayList<T>?, p1: Int, p2: Int, p3: Int) {
+           }
+
+           override fun onItemRangeInserted(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
+           }
+
+           override fun onItemRangeRemoved(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
+               if (p0?.size == 0){
+                   stubView?.onEmptyFeed()
+                        lockerStubLastState = LockerStubLastState(BaseFeedLockerController.EMPTY_FEED, -666)
+               }
+           }
+
+       })
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
@@ -208,6 +233,18 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         mReadItemReceiver.registerReceiver(filter)
         gcmTypeUpdateAction?.let {
             mGcmReceiver.registerReceiver(IntentFilter(it))
+        }
+    }
+
+    protected fun remove(id: Int) {
+        if (data.isNotEmpty()) {
+            val iterator = data.listIterator()
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (item.getUserId() == id) {
+                        iterator.remove()
+                }
+            }
         }
     }
 
@@ -408,18 +445,6 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         }
     }
 
-    protected fun remove(id: Int) {
-        if (data.isNotEmpty()) {
-            val iterator = data.listIterator()
-            while (iterator.hasNext()) {
-                val item = iterator.next()
-                if (item.getUserId() == id) {
-                    iterator.remove()
-                }
-            }
-        }
-    }
-
     @FuckingVoodooMagic(description = "нужен для removeOldDuplicates")
     protected open fun considerDuplicates(first: T, second: T) = if (first.id == null) second.id == null else first.id == second.id
 
@@ -497,7 +522,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         unbind()
         arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver()
         arrayOf(mUpdaterSubscription, mDeleteSubscription, mBlackListSubscription, mCountersSubscription,
-                mAppDayRequestSubscription).safeUnsubscribe()
+                mAppDayRequestSubscription,mDataLastItemSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {
             if (data.isNotEmpty()) {
                 mCache.saveToCache(ArrayList<T>(data as List<T>))

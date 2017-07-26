@@ -10,6 +10,8 @@ import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.CountersData
 import com.topface.topface.ui.fragments.feed.dialogs.PopupMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
+import com.topface.topface.ui.fragments.feed.enhanced.base.LockerStubLastState
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
@@ -48,7 +50,7 @@ abstract class BaseSympathyFeedFragmentViewModel(api: IApi) : BaseFeedFragmentMo
                 .filter { it.getPopupType() == sympathyTypeViewModelType }
                 .subscribe(shortSubscription {
                     val itemForDelete = it.getItemForAction()
-                    api.callAddToBlackList(arrayListOf(it.getItemForAction())).subscribe { remove(itemForDelete.getUserId()) }
+                    api.callAddToBlackList(arrayListOf(itemForDelete)).subscribe { remove(itemForDelete.getUserId()) }
                 }
                 ))
     }
