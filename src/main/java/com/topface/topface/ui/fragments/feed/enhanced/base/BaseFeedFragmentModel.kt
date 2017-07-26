@@ -182,27 +182,27 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         createAndRegisterBroadcasts()
         mStateManager.registerAppChangeStateListener(this)
 
-       data.observableList.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableArrayList<T>>(){
-           override fun onItemRangeChanged(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
-           }
+        data.observableList.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableArrayList<T>>() {
+            override fun onItemRangeChanged(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
+            }
 
-           override fun onChanged(p0: ObservableArrayList<T>?) {
-           }
+            override fun onChanged(p0: ObservableArrayList<T>?) {
+            }
 
-           override fun onItemRangeMoved(p0: ObservableArrayList<T>?, p1: Int, p2: Int, p3: Int) {
-           }
+            override fun onItemRangeMoved(p0: ObservableArrayList<T>?, p1: Int, p2: Int, p3: Int) {
+            }
 
-           override fun onItemRangeInserted(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
-           }
+            override fun onItemRangeInserted(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
+            }
 
-           override fun onItemRangeRemoved(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
-               if (p0?.size == 0){
-                   stubView?.onEmptyFeed()
-                        lockerStubLastState = LockerStubLastState(BaseFeedLockerController.EMPTY_FEED, -666)
-               }
-           }
+            override fun onItemRangeRemoved(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
+                if (p0?.size == 0) {
+                    stubView?.onEmptyFeed()
+                    lockerStubLastState = LockerStubLastState(BaseFeedLockerController.EMPTY_FEED, -666)
+                }
+            }
 
-       })
+        })
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
@@ -238,11 +238,9 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
 
     protected fun remove(id: Int) {
         if (data.isNotEmpty()) {
-            val iterator = data.listIterator()
-            while (iterator.hasNext()) {
-                val item = iterator.next()
-                if (item.getUserId() == id) {
-                        iterator.remove()
+            with(data.listIterator()) {
+                while (hasNext()) {
+                    if (next().getUserId() == id) remove()
                 }
             }
         }
@@ -522,7 +520,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         unbind()
         arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver()
         arrayOf(mUpdaterSubscription, mDeleteSubscription, mBlackListSubscription, mCountersSubscription,
-                mAppDayRequestSubscription,mDataLastItemSubscription).safeUnsubscribe()
+                mAppDayRequestSubscription, mDataLastItemSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {
             if (data.isNotEmpty()) {
                 mCache.saveToCache(ArrayList<T>(data as List<T>))
