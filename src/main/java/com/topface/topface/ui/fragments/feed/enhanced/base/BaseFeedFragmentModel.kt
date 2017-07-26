@@ -121,6 +121,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
     private var isDataFromCache = false
     private var mIsAllDataLoaded = false
     private var mStateManager = RunningStateManager()
+    private var mRemoveItemListener: ObservableList.OnListChangedCallback<ObservableArrayList<T>>? = null
 
     val data = ImprovedObservableList<T>()
 
@@ -181,7 +182,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         createAndRegisterBroadcasts()
         mStateManager.registerAppChangeStateListener(this)
 
-        data.observableList.addOnListChangedCallback(object : ObservableList.OnListChangedCallback<ObservableArrayList<T>>() {
+        mRemoveItemListener = object : ObservableList.OnListChangedCallback<ObservableArrayList<T>>() {
             override fun onItemRangeChanged(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
             }
 
@@ -200,7 +201,8 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
                 }
             }
 
-        })
+        }
+        data.observableList.addOnListChangedCallback(mRemoveItemListener)
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
@@ -526,7 +528,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
                 mCache.saveToCache(ArrayList<T>(data as List<T>))
             }
         }
-        data.removeListener()
+        data.removeOnListChangedCallback(mRemoveItemListener)
         mStateManager.unregisterAppChangeStateListener(this)
     }
 }
