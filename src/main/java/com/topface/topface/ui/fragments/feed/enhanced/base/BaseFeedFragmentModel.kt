@@ -238,9 +238,11 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
 
     protected fun remove(id: Int) {
         if (data.isNotEmpty()) {
-            with(data.listIterator()) {
-                while (hasNext()) {
-                    if (next().getUserId() == id) remove()
+            val iterator = data.listIterator()
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (item.getUserId() == id) {
+                    iterator.remove()
                 }
             }
         }
