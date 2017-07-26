@@ -7,6 +7,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.AdmirationPurchasePopupBinding
 import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.analytics.TrackedFragmentActivity
+import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewModel
@@ -18,7 +19,7 @@ import rx.Subscription
  * Это активити попата восхищения. Такие дела.
  * Created by siberia87 on 01.11.16.
  */
-class AdmirationPurchasePopupActivity : ToolbarActivity<AdmirationPurchasePopupBinding>(), IAdmirationPurchasePopupHide {
+class AdmirationPurchasePopupActivity : ToolbarActivity<AdmirationPurchasePopupBinding>(), IAdmirationPurchasePopupHide, IDialogCloser {
 
     override fun getToolbarBinding(binding: AdmirationPurchasePopupBinding): ToolbarViewBinding = binding.toolbarInclude
 
@@ -36,7 +37,7 @@ class AdmirationPurchasePopupActivity : ToolbarActivity<AdmirationPurchasePopupB
 
     private val mAdmirationPurchasePopupViewModel by lazy {
         AdmirationPurchasePopupViewModel(viewBinding, mAdmirationPurchasePopupHide = this, mNavigator = mNavigator,
-                currentUser = intent.getParcelableExtra(CURRENT_USER))
+                currentUser = intent.getParcelableExtra(CURRENT_USER), iDialogCloser = this)
     }
 
     private val mNavigator by lazy {
@@ -120,4 +121,6 @@ class AdmirationPurchasePopupActivity : ToolbarActivity<AdmirationPurchasePopupB
         super.onDestroy()
         mAdmirationPurchasePopupViewModel.release()
     }
+
+    override fun closeIt() = onBackPressed()
 }

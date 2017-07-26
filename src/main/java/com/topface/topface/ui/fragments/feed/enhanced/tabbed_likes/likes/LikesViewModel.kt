@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.enhanced.tabbed_likes.likes
 
+import android.content.Intent
 import android.databinding.ObservableField
 import android.databinding.ObservableFloat
 import android.os.Bundle
@@ -16,8 +17,10 @@ import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedUser
+import com.topface.topface.ui.UserProfileActivity
 import com.topface.topface.ui.fragments.dating.mutual_popup.PopupMutualViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
+import com.topface.topface.ui.fragments.profile.AbstractProfileFragment
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
@@ -87,9 +90,7 @@ class LikesViewModel(private val mApi: IApi) : BaseFeedFragmentModel<FeedBookmar
     override fun onLeftCardExit(dataObject: Any?) {
         data.removeAt(0)
         (dataObject as? FeedBookmark)?.let {
-            it.user?.id?.let {
-                mApi.callReadLikeRequest(it)
-            }
+            sendReadLikeRequest(it)
         }
     }
 
@@ -105,6 +106,7 @@ class LikesViewModel(private val mApi: IApi) : BaseFeedFragmentModel<FeedBookmar
                     }
                 })
             }
+            sendReadLikeRequest(it)
         }
     }
 
@@ -126,9 +128,29 @@ class LikesViewModel(private val mApi: IApi) : BaseFeedFragmentModel<FeedBookmar
         }
     }
 
+    private fun sendReadLikeRequest(item: FeedBookmark) = item.user?.id?.let {
+        mApi.callReadLikeRequest(it)
+    }
+
     override fun release() {
         super.release()
         mUpdateSubscriber = null
         mSendLikeSubscriptions.safeUnsubscribe()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        data?.let {
+            if (requestCode == UserProfileActivity.REQUEST_USER_PROFILE && it.getBooleanExtra(UserProfileActivity.IS_LIKE_SEND, false)) {
+                val uid = it.getIntExtra(AbstractProfileFragment.INTENT_UID, 0)
+                this@LikesViewModel.data.observableList.getOrNull(0)?.let { item ->
+                    item.user?.let {
+                        if (it.id == uid) {
+                            this@LikesViewModel.data.observableList.remove(item)
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -1062,4 +1062,10 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
     <string name="payment_ninja_currency_notice">* Bir ödeme zamanındaki fiyat, döviz kurları sebebiyle değişebilir</string>
     <string name="get_free">Ücretsiz Al</string>
     <string name="product_coast">%s ücretinde</string>
+    <string name="you_have_not_sympathies">Henüz Beğeniniz yok</string>
+    <string name="you_have_not_admirations">Henüz Hayranlığınız yok</string>
+    <string name="go_to_dating">Flörte Git</string>
+    <string name="go_to_guests">Misafirlere Git</string>
+    <string name="go_to_dating_and_rate_people">Flörte Git ve insanları oyla!</string>
+    <string name="go_to_sypmathies">Beğenilere Git</string>
 </resources>
