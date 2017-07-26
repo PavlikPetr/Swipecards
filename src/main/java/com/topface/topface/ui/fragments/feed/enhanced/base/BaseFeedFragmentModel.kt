@@ -115,7 +115,6 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
     private var mDeleteSubscription: Subscription? = null
     private var mBlackListSubscription: Subscription? = null
     private var mCountersSubscription: Subscription? = null
-    private var mDataLastItemSubscription: Subscription? = null
 
     private val mAtomicUpdaterSubscription = AtomicReference<Subscription>()
 
@@ -197,8 +196,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
 
             override fun onItemRangeRemoved(p0: ObservableArrayList<T>?, p1: Int, p2: Int) {
                 if (p0?.size == 0) {
-                    stubView?.onEmptyFeed()
-                    lockerStubLastState = LockerStubLastState(BaseFeedLockerController.EMPTY_FEED, -666)
+                    switchLockerStubView(EMPTY_FEED, stubView)
                 }
             }
 
@@ -522,12 +520,13 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         unbind()
         arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver()
         arrayOf(mUpdaterSubscription, mDeleteSubscription, mBlackListSubscription, mCountersSubscription,
-                mAppDayRequestSubscription, mDataLastItemSubscription).safeUnsubscribe()
+                mAppDayRequestSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {
             if (data.isNotEmpty()) {
                 mCache.saveToCache(ArrayList<T>(data as List<T>))
             }
         }
+        data.removeListener()
         mStateManager.unregisterAppChangeStateListener(this)
     }
 }
