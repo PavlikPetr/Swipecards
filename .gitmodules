@@ -16,3 +16,9 @@
 [submodule "libs/scruffy-android"]
 	path = libs/scruffy-android
 	url = git@github.com:Topface/scruffy-android.git
+[submodule "libs/Swipecards"]
+	path = libs/Swipecards
+	url = git@github.com:Topface/Swipecards.git
+[submodule "libs\\Swipecards"]
+	path = libs\\Swipecards
+	url = git@github.com:Topface/Swipecards.git

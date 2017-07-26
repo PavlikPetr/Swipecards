@@ -9,5 +9,6 @@ include ':libs:odnoklassniki'
 //Topface Offerwall
 include ':libs:tf-offerwall:sdk'
 include ':libs:scruffy-android:scruffy'
+include ':libs:Swipecards:library'
 
 include ':libs:statistics-android:processor'
