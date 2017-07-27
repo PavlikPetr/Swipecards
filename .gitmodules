@@ -19,6 +19,3 @@
 [submodule "libs/Swipecards"]
 	path = libs/Swipecards
 	url = git@github.com:Topface/Swipecards.git
-[submodule "libs\\Swipecards"]
-	path = libs\\Swipecards
-	url = git@github.com:Topface/Swipecards.git

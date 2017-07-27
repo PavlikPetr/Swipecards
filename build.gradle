@@ -563,6 +563,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2' //for Inmobi
     /*APPODEAL end*/
     compile 'com.android.support.constraint:constraint-layout:1.0.0-beta2'
+    // Временно переходим на использование подмодуля
 //    /*swipe-cards*/
 //    compile 'com.lorentzos.swipecards:library:1.0.9'
 }
@@ -575,11 +576,11 @@ processorTask.dependsOn(':libs:statistics-android:processor:build')
 preBuild.dependsOn(processorTask)
 
 project(':libs:Swipecards') {
-//    apply plugin: 'com.android.library'
+    apply plugin: 'com.android.library'
     android.sourceSets.main {
-        manifest.srcFile 'library/src/main/AndroidManifest.xml'
-        java.srcDirs = ['library/src/main']
-        res.srcDirs = ['library/src/main/res']
+        manifest.srcFile 'src/main/AndroidManifest.xml'
+        java.srcDirs = ['src/main']
+        res.srcDirs = ['src/main/res']
     }
 }
 
