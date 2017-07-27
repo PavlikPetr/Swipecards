@@ -578,9 +578,9 @@ preBuild.dependsOn(processorTask)
 project(':libs:Swipecards') {
     apply plugin: 'com.android.library'
     android.sourceSets.main {
-        manifest.srcFile 'src/main/AndroidManifest.xml'
-        java.srcDirs = ['src/main']
-        res.srcDirs = ['src/main/res']
+        manifest.srcFile 'library/src/main/AndroidManifest.xml'
+        java.srcDirs = ['library/src/main']
+        res.srcDirs = ['library/src/main/res']
     }
 }
 
